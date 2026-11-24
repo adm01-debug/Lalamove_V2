@@ -560,9 +560,11 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 
 ### 102 — [~] M2 Confirmação com prazo
 - [x] Pedido de confirmação ao motorista 2 min depois do M1, quando o pedido ainda não tem `driver_pickup_confirmed_at`
-- [ ] Sem resposta em `reply_timeout_min` → alerta interno `DRIVER_NO_CONFIRMATION` (tipo novo com linha em `alert_configurations`)
+- [x] Sem resposta em `reply_timeout_min` → alerta interno `DRIVER_NO_CONFIRMATION` no painel (`alerts`), um por pedido
+- [ ] Linha em `alert_configurations` para o novo tipo (só então o operador recebe push/canal, não apenas o painel)
 - **Evidência (emissor):** `sendConfirmationNudges` (`_shared/messaging/auto-notices.ts`) roda no cron de 2 min do `check-driver-alerts`; a base é a linha outbound de `DRIVER_ASSIGNED` no ledger (não o pedido com motorista) e a janela é `now-6h .. now-2min`. Ledger e `client_message_id` determinístico são a trava de duplicidade. Testes em `auto-notices.test.ts` (janelas, já-confirmado, já-cobrado, status bloqueados, pedido ausente).
-- **Falta:** o alerta de timeout (item acima) e o `DRIVER_NO_CONFIRMATION` ainda só nasce da resposta "2 = problema" (`zapp-callback/inbound-exec.ts:57`), não da ausência de resposta.
+- **Evidência (prazo):** `sendConfirmationEscalations` fecha o mesmo ciclo: cobrança outbound mais velha que o `reply_timeout_min` da rota (5 min em produção), **sem nenhuma linha inbound depois dela**, sem `driver_pickup_confirmed_at` e sem status bloqueado vira uma linha em `alerts` (`DRIVER_NO_CONFIRMATION`, `metadata.source = confirmation_timeout`). O alerta aberto é a trava do cron; o retorno da função expõe `noConfirmations`. 6 testes novos cobrem prazo da rota/padrão, resposta depois da cobrança, alerta aberto × arquivado, status bloqueados e janela.
+- **Limite conhecido:** o alerta nasce no painel; para o operador ser avisado por canal, falta a linha em `alert_configurations` (configuração de produção, não DDL). O `DRIVER_NO_CONFIRMATION` da resposta "2 = problema" (`zapp-callback/inbound-exec.ts:57`) continua existindo e é o mesmo tipo — as duas origens convivem.
 
 ### 103 — [~] M3 Localização e contato
 - [~] `send-location` da coleta + `send-contact` do responsável

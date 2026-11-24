@@ -6,7 +6,8 @@
  *   M5 (pos-coleta) ja entrega o endereco da entrega, entao o M6 nao entra.
  * - M11 (etapa 111): lembrete do pedido agendado, 30 min antes da coleta.
  * - M2 (etapa 102): pedido de confirmacao ao motorista 2 min depois do aviso de
- *   atribuicao (M1), quando ninguem confirmou a coleta ainda.
+ *   atribuicao (M1), quando ninguem confirmou a coleta ainda, e o alerta interno
+ *   quando o prazo de resposta vence sem nenhuma resposta.
  *
  * Ficam aqui, e nao dentro dos handlers, porque `serve()` roda no import e
  * impediria o teste. Ver auto-notices.test.ts.
@@ -20,6 +21,10 @@ export const SCHEDULED_REMINDER_WINDOW_MIN = 30;
 export const CONFIRMATION_DUE_MIN = 2;
 /** Varredura do cron: ninguem cobra confirmacao de aviso velho. */
 export const CONFIRMATION_LOOKBACK_HOURS = 6;
+/** Prazo de resposta quando a rota do evento nao define `reply_timeout_min`. */
+export const CONFIRMATION_TIMEOUT_DEFAULT_MIN = 5;
+/** Alerta de timeout so vale para cobranca recente. */
+export const ESCALATION_LOOKBACK_HOURS = 6;
 
 /**
  * M6: `true` quando a parada recem-concluida deixa outra em aberto e o pedido
@@ -182,4 +187,122 @@ export async function sendConfirmationNudges(
   }
 
   return { checked: orderIds.length, sent };
+}
+
+interface NudgeLedgerRow {
+  order_id: string | null;
+  created_at: string | null;
+}
+
+interface EscalationOrderRow {
+  id: string;
+  driver_id: string | null;
+  status: string | null;
+  metadata: Record<string, unknown> | null;
+  internal_order_id: string | null;
+}
+
+export interface ConfirmationEscalationResult {
+  checked: number;
+  alerted: number;
+  timeoutMin: number;
+}
+
+/**
+ * M2 (etapa 102): vencido o prazo de resposta da cobranca de confirmacao, o
+ * pedido vira alerta interno para a operacao.
+ *
+ * So conta como resposta o que chegou **depois** da cobranca — o
+ * `zapp-callback` ja transforma "1 = sim" em carimbo e "2 = problema" em alerta
+ * proprio; aqui o alvo e o silencio. Uma linha por pedido: o alerta aberto no
+ * banco e a trava do cron de 2 min.
+ */
+export async function sendConfirmationEscalations(
+  supabase: MessagingClient,
+  now: Date,
+): Promise<ConfirmationEscalationResult> {
+  const { data: route } = await supabase
+    .from("notification_routes")
+    .select("reply_timeout_min")
+    .eq("event", "DRIVER_CONFIRMATION_DUE")
+    .limit(1)
+    .maybeSingle();
+
+  const configured = Number(
+    (route as { reply_timeout_min?: number | null } | null)?.reply_timeout_min ?? 0,
+  );
+  const timeoutMin = configured > 0 ? configured : CONFIRMATION_TIMEOUT_DEFAULT_MIN;
+
+  const since = new Date(now.getTime() - ESCALATION_LOOKBACK_HOURS * 3_600_000).toISOString();
+  const deadline = new Date(now.getTime() - timeoutMin * 60_000).toISOString();
+
+  const { data: nudgeRows } = await supabase
+    .from("notification_messages")
+    .select("order_id, created_at")
+    .eq("event", "DRIVER_CONFIRMATION_DUE")
+    .eq("direction", "outbound")
+    .gte("created_at", since)
+    .lte("created_at", deadline)
+    .not("order_id", "is", null)
+    .limit(50);
+
+  const nudgeAt = new Map<string, string>();
+  for (const row of ((nudgeRows ?? []) as NudgeLedgerRow[])) {
+    if (!row.order_id) continue;
+    const at = String(row.created_at ?? "");
+    const previous = nudgeAt.get(row.order_id);
+    if (!previous || at > previous) nudgeAt.set(row.order_id, at);
+  }
+
+  let alerted = 0;
+  for (const [orderId, cobrancaAt] of nudgeAt) {
+    const { data: order } = await supabase
+      .from("lalamove_orders")
+      .select("id, driver_id, status, metadata, internal_order_id")
+      .eq("id", orderId)
+      .maybeSingle();
+
+    const row = order as EscalationOrderRow | null;
+    if (!row?.driver_id) continue;
+    if (REMINDER_BLOCKED_STATUS.includes(String(row.status ?? "").toUpperCase())) continue;
+    if (row.metadata?.driver_pickup_confirmed_at) continue;
+
+    const { data: reply } = await supabase
+      .from("notification_messages")
+      .select("id")
+      .eq("order_id", orderId)
+      .eq("direction", "inbound")
+      .gte("created_at", cobrancaAt)
+      .limit(1)
+      .maybeSingle();
+    if (reply) continue;
+
+    const { data: existing } = await supabase
+      .from("alerts")
+      .select("id, is_dismissed")
+      .eq("order_id", orderId)
+      .eq("type", "DRIVER_NO_CONFIRMATION")
+      .limit(20);
+    const open = ((existing ?? []) as Array<{ is_dismissed?: boolean | null }>)
+      .filter((alert) => alert.is_dismissed !== true);
+    if (open.length > 0) continue;
+
+    const ref = row.internal_order_id || orderId;
+    await supabase.from("alerts").insert({
+      type: "DRIVER_NO_CONFIRMATION",
+      severity: "WARNING",
+      title: "Motorista nao confirmou o pedido",
+      message: `Pedido ${ref} sem resposta do motorista ha mais de ${timeoutMin} min (M2).`,
+      order_id: orderId,
+      driver_id: row.driver_id,
+      metadata: {
+        source: "confirmation_timeout",
+        nudge_at: cobrancaAt,
+        reply_timeout_min: timeoutMin,
+      },
+    });
+    alerted++;
+  }
+
+  return { checked: nudgeAt.size, alerted, timeoutMin };
 }

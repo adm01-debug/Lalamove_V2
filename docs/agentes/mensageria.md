@@ -68,6 +68,23 @@ Sintoma: mensagem aparece como `sent` e nunca vira `delivered`/`read`.
   `is_phone_opted_out()`, chamado no `send-notification` antes de qualquer envio.
 - Reativar um número é feito pela tela Admin > Opt-outs (etapa 136, pendente de DDL).
 
+## Avisos que não vêm da Lalamove (cron do Guardian)
+
+`check-driver-alerts` roda no pg_cron a cada 2 min (`cron.job` 29) e é quem dispara o que não nasce de
+webhook. As regras ficam em `_shared/messaging/auto-notices.ts`:
+
+- **M2 — confirmação com prazo (etapa 102):** 2 min depois do aviso de atribuição (a linha
+  `DRIVER_ASSIGNED` outbound do ledger é a base, não o pedido com motorista), o motor pede
+  "1 = coletado / 2 = problema" ao motorista que ainda não tem `driver_pickup_confirmed_at`.
+  Vencido o `reply_timeout_min` da rota (5 min em produção) **sem nenhuma resposta inbound**, o pedido
+  vira alerta interno `DRIVER_NO_CONFIRMATION` no painel — uma linha por pedido, o alerta aberto é a
+  trava do cron. O JSON de retorno da função expõe `confirmations` e `noConfirmations` para conferir
+  em runtime.
+- **M11 — lembrete do agendado (etapa 111):** 30 min antes da coleta.
+- **M6 — próxima parada (etapa 106):** só em pedido com 3+ paradas.
+
+Pedido coletado, cancelado, concluído ou sem motorista não gera nada disso.
+
 ## O que ainda não existe
 
 Não prometa o que não está no ar: tela Admin > Mensageria (133), editor de templates (134), matriz
