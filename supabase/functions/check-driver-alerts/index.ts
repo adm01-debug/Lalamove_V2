@@ -9,6 +9,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { MAX_TRACKING_AGE_MIN, POD_ALERT_LOOKBACK_HOURS, isTrackingFresh, isWithinLookbackHours } from "../_shared/guardian-freshness.ts";
 import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
 import {
   sendConfirmationEscalations,
@@ -146,8 +147,16 @@ serve(async (req) => {
     }> = [];
 
     const now = new Date();
+    let skippedStale = 0;
 
     for (const tracking of trackingData || []) {
+      // Tracking sem atualizacao recente nao pode virar alerta: os registros
+      // nunca encerrados da sincronizacao antiga gerariam "parado ha meses".
+      if (!isTrackingFresh(tracking.last_updated, now)) {
+        skippedStale++;
+        continue;
+      }
+
       const driver = tracking.driver;
       const order = tracking.order;
       
@@ -258,7 +267,9 @@ serve(async (req) => {
           const deliveredAt = new Date(order.actual_delivery);
           const minutesSinceDelivery = Math.floor((now.getTime() - deliveredAt.getTime()) / (1000 * 60));
 
-          if (minutesSinceDelivery >= POD_DEADLINE) {
+          // Pedido entregue fora da janela e historico: cobrar POD dele geraria
+          // alerta critico de meses atras quando a configuracao fosse ligada.
+          if (minutesSinceDelivery >= POD_DEADLINE && isWithinLookbackHours(order.actual_delivery, now, POD_ALERT_LOOKBACK_HOURS)) {
             const { data: existingAlerts } = await supabase
               .from('alerts')
               .select('id')
@@ -295,6 +306,10 @@ serve(async (req) => {
       }
     }
 
+    if (skippedStale > 0) {
+      logger.log(`[Guardian] ${skippedStale} tracking(s) ignorado(s) por falta de atualizacao ha mais de ${MAX_TRACKING_AGE_MIN} min`);
+    }
+
     // M11 (etapa 111): lembrete do pedido agendado 30 min antes da coleta.
     // O cron roda a cada 2 min; o ledger de mensagens garante um por pedido.
     const reminders = await sendScheduledReminders(
@@ -329,7 +344,7 @@ serve(async (req) => {
       await supabase.from('alerts').insert(alertsToCreate);
     }
 
-    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length, reminders: reminders.sent, confirmations: nudges.sent, noConfirmations: escalations.alerted }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length, reminders: reminders.sent, confirmations: nudges.sent, noConfirmations: escalations.alerted, skippedStale }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error: unknown) {
     logger.error('Guardian check error:', error);
