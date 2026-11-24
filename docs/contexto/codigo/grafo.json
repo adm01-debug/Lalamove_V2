@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 536,
- "arestas": 1785,
+ "nos": 537,
+ "arestas": 1786,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",

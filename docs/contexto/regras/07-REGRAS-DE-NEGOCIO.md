@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `53d34963d7` · branch `main` · 2026-11-24 13:11 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `49c9a83f5b` · branch `main` · 2026-11-24 13:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1506,6 +1506,8 @@ _nenhum item encontrado_
 | `DEDUP_WINDOW_MS` | `30` | `src/services/errorMonitoring.ts` |
 | `DEFAULT_VERSION` | `"v1"` | `supabase/functions/_shared/contract.ts` |
 | `RECOMMENDED_VERSION` | `"v2"` | `supabase/functions/_shared/contract.ts` |
+| `MAX_TRACKING_AGE_MIN` | `15` | `supabase/functions/_shared/guardian-freshness.ts` |
+| `POD_ALERT_LOOKBACK_HOURS` | `24` | `supabase/functions/_shared/guardian-freshness.ts` |
 | `DEFAULT_TIMEOUT_MS` | `10` | `supabase/functions/_shared/channels/sms.ts` |
 | `DEFAULT_TIMEOUT_MS` | `15` | `supabase/functions/_shared/channels/zapp.ts` |
 | `DEFAULT_TTL_MINUTES` | `30` | `supabase/functions/_shared/channels/zapp.ts` |
@@ -2068,7 +2070,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1514 testes em 133 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1524 testes em 134 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2129,6 +2131,7 @@ _nenhum item encontrado_
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
 | `src/pages/MessagingSettingsPage.test.tsx` | 10 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
+| `supabase/functions/_shared/guardian-freshness.test.ts` | 10 | tracking atualizado agora conta como fresco · tracking dentro da janela conta como fresco (limite inclusive) · tracking orfao de meses e recusado · um minuto alem da janela recusa … |
 | `supabase/functions/_shared/messaging/inbound-event.test.ts` | 10 | M4: responder 1 e coleta confirmada · M4: responder 2 e problema · M2: responder 1 e confirmacao de que esta a caminho · M10: 1 e transito, 2 e problema no veiculo … |
 | `supabase/functions/_shared/messaging/notify-driver.test.ts` | 10 | etapa 86: pedido vira variaveis do catalogo · etapa 86: pedido incompleto nao inventa valor nem placeholder vazio · etapa 86: pedido sem uuid nao consulta nada · motorista desconhecido nao gera mensagem … |
 | `supabase/functions/_shared/messaging/registry.test.ts` | 10 | etapa 88: tabela ausente devolve o catalogo do codigo · etapa 88: tabela vazia tambem cai no catalogo do codigo · etapa 88: rota do banco e lida e canal desconhecido e descartado · etapa 145: rota desligada continua vindo do banco com is_enabled falso … |
@@ -2442,6 +2445,8 @@ _nenhum item encontrado_
 | * Mesma validação de `parseJsonBody`, mas sobre um corpo JÁ LIDO. Usada pelos | `supabase/functions/_shared/contract.ts` |
 | (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. | `supabase/functions/_shared/geo-precision.ts` |
 | * Mapeamento oficial Mapbox Geocoding v6 `accuracy` -> precisao de negocio. */ | `supabase/functions/_shared/geo-precision.ts` |
+| * `true` somente quando o dado tem no maximo `maxAgeMin` minutos. */ | `supabase/functions/_shared/guardian-freshness.ts` |
+| * `true` somente quando o tracking foi atualizado dentro da janela aceitavel. | `supabase/functions/_shared/guardian-freshness.ts` |
 | Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway | `supabase/functions/_shared/schemas.ts` |
 | validação (ou derrubava a função em 500, quando `req.json()` falhava). O | `supabase/functions/_shared/schemas.ts` |
 | index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp | `supabase/functions/_shared/schemas.ts` |
@@ -2470,6 +2475,7 @@ _nenhum item encontrado_
 | testar os casos de borda que custam dinheiro — limite por motorista, silencio | `supabase/functions/_shared/messaging/router.ts` |
 | * Etapa 90: quando o fallback temporizado deve disparar. Sem `sentAt` nao ha o | `supabase/functions/_shared/messaging/router.ts` |
 | * Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */ | `supabase/functions/_shared/messaging/router.ts` |
+| Tracking sem atualizacao recente nao pode virar alerta: os registros | `supabase/functions/check-driver-alerts/index.ts` |
 | If order is COMPLETED but no POD received after deadline | `supabase/functions/check-driver-alerts/index.ts` |
 | M2 (etapa 102): vencido o prazo de resposta da cobranca, a operacao recebe | `supabase/functions/check-driver-alerts/index.ts` |
 | Geocoda um endereço fixo e devolve latência, SKU e o saldo de rate limit do | `supabase/functions/check-external-api/index.ts` |

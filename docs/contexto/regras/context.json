@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "53d34963d70f8ca12de31ac42a7429934ab4f68f",
+  "sha": "49c9a83f5bee9584e78708f94abdbeeae0ecea30",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 13:11 UTC",
-  "files_total": 1106,
-  "code_files": 925,
-  "code_lines": 162600
+  "generated_at": "2026-11-24 13:30 UTC",
+  "files_total": 1108,
+  "code_files": 927,
+  "code_lines": 162729
  },
  "version": "1.3.2",
- "facts_hash": "43992796503349bd",
+ "facts_hash": "b70cb9bbe6ffb356",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 357,
+   ".ts": 359,
    ".tsx": 242,
    ".sql": 204,
    ".mjs": 109,
@@ -22791,8 +22791,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 117,
-   "lines": 28927,
+   "files": 119,
+   "lines": 29056,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22848,6 +22848,7 @@
     "contract.ts: ContractVersion, SUPPORTED_VERSIONS, DEFAULT_VERSION, RECOMMENDED_VERSION, DEPRECATED_VERSIONS, DEPRECATION_SCHEDULE",
     "cors.ts: corsHeaders",
     "geo-precision.ts: GeoPrecision, ACCURACY_TO_PRECISION, precisionFromAccuracy",
+    "guardian-freshness.ts: MAX_TRACKING_AGE_MIN, POD_ALERT_LOOKBACK_HOURS, trackingAgeMinutes, isRecent, isTrackingFresh, isWithinLookbackHours",
     "logger.ts: logger",
     "phone.ts: normalizePhone, maskPhone, isDeliverablePhone, resolveGeoRecipient",
     "schemas.ts: ContractName, CONTRACT_REGISTRY, OPTIONAL_BODY_CONTRACTS, getSchema",
@@ -22882,8 +22883,7 @@
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
     "normalize.ts: normalizeLalamoveV3Payload",
     "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
-    "message-id.ts: MessageIdParts, buildClientMessageId, buildCorrelation",
-    "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime"
+    "message-id.ts: MessageIdParts, buildClientMessageId, buildCorrelation"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -22891,7 +22891,7 @@
     "contract.ts: ============================================================================ Contract Layer — Validação de schema + formato único de erro para todas as Edge Functions e webhooks. Objetivos (Front-End/Back-End Sênior): - Formato de erro 422 CONSISTENTE em TODOS os endpoints: { error: { code, message, …",
     "cors.ts: Shared CORS headers for Edge Functions In production, you should ideally restrict 'Access-Control-Allow-Origin' to your specific frontend domain(s).",
     "geo-precision.ts: Precisao de geocodificacao — fonte unica do mapeamento `accuracy` do Mapbox (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. Etapa 13 do plano de 100 etapas: o mapa vivia so dentro de `geo-gateway/providers/mapbox.ts`. Extraido para ca porque o `geo-gateway` nao e o …",
-    "schemas.ts: ============================================================================ Schemas de Contrato — Fonte única de verdade para os payloads de TODOS os webhooks e Edge Functions. Versionados (v1/v2) para permitir evolução com compatibilidade retroativa. Convenção de versionamento: - v1: contrato orig …"
+    "guardian-freshness.ts: Atualidade do dado antes de virar alerta. O cron do Guardian roda a cada 2 min e lia TODO registro de `active_tracking`, sem olhar quando o dado foi atualizado. Com trackings orfaos (nunca encerrados depois que a sincronizacao parou) ligar DRIVER_STOPPED/ROUTE_DEVIATION gerava alerta CRITICO falso d …"
    ],
    "deps": [
     "https:",
@@ -22910,6 +22910,8 @@
     "supabase/functions/_shared/cors.ts",
     "supabase/functions/_shared/geo-precision.test.ts",
     "supabase/functions/_shared/geo-precision.ts",
+    "supabase/functions/_shared/guardian-freshness.test.ts",
+    "supabase/functions/_shared/guardian-freshness.ts",
     "supabase/functions/_shared/logger.ts",
     "supabase/functions/_shared/phone.test.ts",
     "supabase/functions/_shared/phone.ts",
@@ -22980,9 +22982,7 @@
     "supabase/functions/lalamove-api/coordinates.ts",
     "supabase/functions/lalamove-api/geocode-fallback.test.ts",
     "supabase/functions/lalamove-api/geocode-fallback.ts",
-    "supabase/functions/lalamove-api/index.ts",
-    "supabase/functions/lalamove-gateway/index.ts",
-    "supabase/functions/lalamove-gateway/route.test.ts"
+    "supabase/functions/lalamove-api/index.ts"
    ]
   },
   {
@@ -28440,6 +28440,14 @@
     "text": "* Mapeamento oficial Mapbox Geocoding v6 `accuracy` -> precisao de negocio. */"
    },
    {
+    "file": "supabase/functions/_shared/guardian-freshness.ts",
+    "text": "* `true` somente quando o dado tem no maximo `maxAgeMin` minutos. */"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.ts",
+    "text": "* `true` somente quando o tracking foi atualizado dentro da janela aceitavel."
+   },
+   {
     "file": "supabase/functions/_shared/schemas.ts",
     "text": "Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway"
    },
@@ -28550,6 +28558,10 @@
    {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "text": "* Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */"
+   },
+   {
+    "file": "supabase/functions/check-driver-alerts/index.ts",
+    "text": "Tracking sem atualizacao recente nao pode virar alerta: os registros"
    },
    {
     "file": "supabase/functions/check-driver-alerts/index.ts",
@@ -32275,6 +32287,16 @@
     "file": "supabase/functions/_shared/contract.ts",
     "name": "RECOMMENDED_VERSION",
     "value": "\"v2\""
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.ts",
+    "name": "MAX_TRACKING_AGE_MIN",
+    "value": "15"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.ts",
+    "name": "POD_ALERT_LOOKBACK_HOURS",
+    "value": "24"
    },
    {
     "file": "supabase/functions/_shared/channels/sms.ts",
@@ -41716,6 +41738,46 @@
    {
     "file": "supabase/functions/_shared/geo-precision.test.ts",
     "name": "ACCURACY_TO_PRECISION: cobre exatamente as 7 chaves do provedor"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "tracking atualizado agora conta como fresco"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "tracking dentro da janela conta como fresco (limite inclusive)"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "tracking orfao de meses e recusado"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "um minuto alem da janela recusa"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "data ausente ou invalida recusa"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "relogio adiantado (data no futuro) nao vira alerta"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "trackingAgeMinutes devolve a idade em minutos"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "pedido entregue ha 1h continua dentro da janela de POD"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "pedido entregue em agosto fica fora da janela de POD"
+   },
+   {
+    "file": "supabase/functions/_shared/guardian-freshness.test.ts",
+    "name": "janela de POD aceita valor de horas customizado"
    },
    {
     "file": "supabase/functions/_shared/phone.test.ts",
@@ -72857,6 +72919,50 @@
    ],
    "doc": "Precisao de geocodificacao — fonte unica do mapeamento `accuracy` do Mapbox (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. Etapa 13 do plano de 100 etapas: o mapa vivia so dentro de `geo-gateway/providers/mapbox.ts`. Extraido para ca porque o `geo-gateway` nao e o …"
   },
+  "supabase/functions/_shared/guardian-freshness.test.ts": {
+   "path": "supabase/functions/_shared/guardian-freshness.test.ts",
+   "lines": 61,
+   "is_test": true,
+   "tests": [
+    "tracking atualizado agora conta como fresco",
+    "tracking dentro da janela conta como fresco (limite inclusive)",
+    "tracking orfao de meses e recusado",
+    "um minuto alem da janela recusa",
+    "data ausente ou invalida recusa",
+    "relogio adiantado (data no futuro) nao vira alerta",
+    "trackingAgeMinutes devolve a idade em minutos",
+    "pedido entregue ha 1h continua dentro da janela de POD",
+    "pedido entregue em agosto fica fora da janela de POD",
+    "janela de POD aceita valor de horas customizado"
+   ]
+  },
+  "supabase/functions/_shared/guardian-freshness.ts": {
+   "path": "supabase/functions/_shared/guardian-freshness.ts",
+   "lines": 53,
+   "exports": [
+    "const MAX_TRACKING_AGE_MIN",
+    "const POD_ALERT_LOOKBACK_HOURS",
+    "function trackingAgeMinutes",
+    "function isRecent",
+    "function isTrackingFresh",
+    "function isWithinLookbackHours"
+   ],
+   "params": [
+    {
+     "name": "MAX_TRACKING_AGE_MIN",
+     "value": "15"
+    },
+    {
+     "name": "POD_ALERT_LOOKBACK_HOURS",
+     "value": "24"
+    }
+   ],
+   "rule_comments": [
+    "* `true` somente quando o dado tem no maximo `maxAgeMin` minutos. */",
+    "* `true` somente quando o tracking foi atualizado dentro da janela aceitavel."
+   ],
+   "doc": "Atualidade do dado antes de virar alerta. O cron do Guardian roda a cada 2 min e lia TODO registro de `active_tracking`, sem olhar quando o dado foi atualizado. Com trackings orfaos (nunca encerrados depois que a sincronizacao parou) ligar DRIVER_STOPPED/ROUTE_DEVIATION gerava alerta CRITICO falso d …"
+  },
   "supabase/functions/_shared/logger.ts": {
    "path": "supabase/functions/_shared/logger.ts",
    "lines": 18,
@@ -74410,7 +74516,7 @@
   },
   "supabase/functions/check-driver-alerts/index.ts": {
    "path": "supabase/functions/check-driver-alerts/index.ts",
-   "lines": 339,
+   "lines": 354,
    "tables": [
     {
      "table": "alert_configurations",
@@ -74549,6 +74655,7 @@
     }
    ],
    "rule_comments": [
+    "Tracking sem atualizacao recente nao pode virar alerta: os registros",
     "If order is COMPLETED but no POD received after deadline",
     "M2 (etapa 102): vencido o prazo de resposta da cobranca, a operacao recebe"
    ],
@@ -79263,10 +79370,21 @@
   }
  },
  "git": {
-  "sha": "53d34963d70f8ca12de31ac42a7429934ab4f68f",
+  "sha": "49c9a83f5bee9584e78708f94abdbeeae0ecea30",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "49c9a83",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)",
+    "files": [
+     "supabase/functions/_shared/guardian-freshness.test.ts",
+     "supabase/functions/_shared/guardian-freshness.ts",
+     "supabase/functions/check-driver-alerts/index.ts"
+    ]
+   },
    {
     "sha": "53d3496",
     "date": "2026-11-24",
@@ -79638,18 +79756,6 @@
      "src/pages/ProfilePage.tsx",
      "src/utils/logger.ts"
     ]
-   },
-   {
-    "sha": "60a68d0",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: lote 14 - remover as any e tipar canal de teste (#327)",
-    "files": [
-     "src/hooks/useCacheViews.ts",
-     "src/hooks/useTestNotification.ts",
-     "src/pages/LiveMapPage.tsx",
-     "src/pages/alert-configurations/AlertConfigCard.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -79659,7 +79765,7 @@
    ],
    [
     "supabase/functions/check-driver-alerts/index.ts",
-    5
+    6
    ],
    [
     "src/pages/NotificationHistoryPage.tsx",
@@ -79671,10 +79777,6 @@
    ],
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
-    3
-   ],
-   [
-    "src/pages/LiveMapPage.tsx",
     3
    ],
    [
@@ -79694,10 +79796,6 @@
     3
    ],
    [
-    "src/pages/alert-configurations/AlertConfigCard.tsx",
-    2
-   ],
-   [
     "docs/agentes/mensageria.md",
     2
    ],
@@ -79707,6 +79805,10 @@
    ],
    [
     "src/hooks/useRealtimeSubscriptions.ts",
+    2
+   ],
+   [
+    "src/pages/LiveMapPage.tsx",
     2
    ],
    [
@@ -79731,6 +79833,10 @@
    ],
    [
     "supabase/functions/zapp-callback/ledger.ts",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-webhook/index.ts",
     2
    ]
   ]

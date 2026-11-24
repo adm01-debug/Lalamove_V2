@@ -2356,6 +2356,7 @@
   ],
   "supabase/functions/check-driver-alerts/index.ts": [
    "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/guardian-freshness.ts",
    "supabase/functions/_shared/logger.ts",
    "supabase/functions/_shared/messaging/auto-notices.ts",
    "supabase/functions/_shared/messaging/notify-driver.ts",

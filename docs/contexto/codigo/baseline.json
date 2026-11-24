@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "53d34963d70f8ca12de31ac42a7429934ab4f68f",
+  "commit": "49c9a83f5bee9584e78708f94abdbeeae0ecea30",
   "branch": "main",
-  "data_commit": "2026-11-24T10:09:33-03:00",
+  "data_commit": "2026-11-24T10:29:40-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "49c9a83",
+    "data": "2026-11-24",
+    "assunto": "fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)"
+   },
    {
     "sha": "53d3496",
     "data": "2026-11-24",
@@ -126,18 +131,13 @@
     "sha": "f5779da",
     "data": "2026-11-23",
     "assunto": "fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)"
-   },
-   {
-    "sha": "e918dd6",
-    "data": "2026-11-23",
-    "assunto": "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)"
    }
   ],
-  "arquivos_mudados_7d": 485,
+  "arquivos_mudados_7d": 487,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 65
+    "mudancas": 67
    },
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -270,16 +270,16 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "mudancas": 10
+   },
+   {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 10
    },
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
-    "mudancas": 9
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 255
+    "commits": 256
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1112,
-  "arquivos_codigo": 712,
-  "linhas_codigo": 140929,
+  "arquivos_total": 1114,
+  "arquivos_codigo": 714,
+  "linhas_codigo": 141058,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 183,
+  "testes": 184,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 117,
-   "linhas": 28927
+   "arquivos": 119,
+   "linhas": 29056
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -686,7 +686,7 @@
   "console_log": 415,
   "ts_ignore": 0,
   "eslint_disable": 1,
-  "todos": 4,
+  "todos": 5,
   "arquivos_acima_500_linhas": 25
  },
  "todos": [
@@ -707,6 +707,12 @@
    "linha": 4,
    "tipo": "TODO",
    "texto": "indicador de status use"
+  },
+  {
+   "arquivo": "supabase/functions/_shared/guardian-freshness.ts",
+   "linha": 4,
+   "tipo": "TODO",
+   "texto": "registro de `active_tracking`,"
   },
   {
    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",

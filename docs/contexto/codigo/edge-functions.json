@@ -22,6 +22,8 @@
   "supabase/functions/_shared/cors.ts",
   "supabase/functions/_shared/geo-precision.test.ts",
   "supabase/functions/_shared/geo-precision.ts",
+  "supabase/functions/_shared/guardian-freshness.test.ts",
+  "supabase/functions/_shared/guardian-freshness.ts",
   "supabase/functions/_shared/logger.ts",
   "supabase/functions/_shared/messaging/auto-notices.test.ts",
   "supabase/functions/_shared/messaging/auto-notices.ts",
@@ -175,7 +177,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/check-driver-alerts/index.ts",
    "arquivos": 1,
-   "linhas": 339,
+   "linhas": 354,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -201,6 +203,7 @@
    "usa_shared": [
     "auto-notices.ts",
     "contract.ts",
+    "guardian-freshness.ts",
     "logger.ts",
     "notify-driver.ts",
     "schemas.ts",
