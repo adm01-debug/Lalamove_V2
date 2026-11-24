@@ -237,16 +237,27 @@ async function main() {
   console.log(`sessao UAPI: user_fid=${session.user_fid ?? '?'} cidade=${city}`);
 
   const chromium = await loadChromium();
-  const context = await chromium.launchPersistentContext(PROFILE_DIR, {
-    headless: !LOGIN_MODE,
-    executablePath: CHROMIUM_PATH,
-    args: ['--no-sandbox', '--disable-dev-shm-usage'],
-    locale: 'pt-BR',
-    timezoneId: 'America/Sao_Paulo',
-    userAgent:
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36',
-    viewport: { width: 1280, height: 900 },
-  });
+  let context;
+  try {
+    context = await chromium.launchPersistentContext(PROFILE_DIR, {
+      headless: !LOGIN_MODE,
+      executablePath: CHROMIUM_PATH,
+      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+      locale: 'pt-BR',
+      timezoneId: 'America/Sao_Paulo',
+      userAgent:
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36',
+      viewport: { width: 1280, height: 900 },
+    });
+  } catch (err) {
+    // O perfil e unico: enquanto a janela de `--login` estiver aberta o Chromium
+    // recusa a segunda instancia. Nao e falha de coleta — o snapshot ainda vale.
+    if (/ProcessSingleton|already in use/.test(String(err))) {
+      console.log('perfil do coletor em uso (login manual em andamento): coleta adiada');
+      process.exit(0);
+    }
+    throw err;
+  }
 
   // O proprio site chama a UAPI o tempo todo; essas requisicoes carregam o token
   // vivo da sessao e sao observadas aqui.
