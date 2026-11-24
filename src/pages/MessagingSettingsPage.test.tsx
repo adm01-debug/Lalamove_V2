@@ -9,6 +9,7 @@ const mockTemplates = vi.fn();
 const mockOptouts = vi.fn();
 const mockLedger = vi.fn();
 const mockSendTest = vi.fn();
+const mockUpdateRoute = vi.fn();
 
 vi.mock('@/hooks/useMessaging', async () => {
   const actual = await vi.importActual<typeof import('@/hooks/useMessaging')>('@/hooks/useMessaging');
@@ -18,7 +19,7 @@ vi.mock('@/hooks/useMessaging', async () => {
     useUpdateMessagingSettings: () => ({ mutate: vi.fn(), isPending: false }),
     useMessagingUsage: () => mockUsage(),
     useNotificationRoutes: () => mockRoutes(),
-    useUpdateNotificationRoute: () => ({ mutate: vi.fn(), isPending: false }),
+    useUpdateNotificationRoute: () => ({ mutate: mockUpdateRoute, isPending: false }),
     useMessageTemplates: () => mockTemplates(),
     useSaveTemplateVersion: () => ({ mutate: vi.fn(), isPending: false }),
     useNotificationOptouts: () => mockOptouts(),
@@ -153,5 +154,69 @@ describe('MessagingSettingsPage (etapas 141-151 do plano de mensageria)', () => 
 
     expect(mockSendTest).toHaveBeenCalledTimes(1);
     expect(mockSendTest.mock.calls[0][0]).toEqual({ phone: '41999998888' });
+  });
+});
+
+const ROUTE_ROW = {
+  event: 'ORDER_CANCELLED',
+  role: 'driver',
+  channels: ['whatsapp', 'sms'],
+  fallback_after_min: 0,
+  requires_reply: false,
+  reply_timeout_min: null,
+  is_enabled: true,
+  updated_at: '2026-11-24T00:00:00Z',
+  updated_by: null,
+};
+
+describe('rotas de notificacao (etapas 133/135)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockSettings.mockReturnValue({ ...IDLE, data: SETTINGS_ROW });
+    mockUsage.mockReturnValue(IDLE);
+    mockRoutes.mockReturnValue({ ...IDLE, data: [ROUTE_ROW] });
+    mockTemplates.mockReturnValue(IDLE);
+    mockOptouts.mockReturnValue(IDLE);
+    mockLedger.mockReturnValue(IDLE);
+  });
+
+  it('salva role, canais reordenados e manda timeout vazio como null', () => {
+    renderPage();
+    fireEvent.mouseDown(screen.getByRole('tab', { name: 'Rotas' }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'mover sms para cima' }));
+    fireEvent.click(screen.getByRole('button', { name: /Salvar/ }));
+
+    expect(mockUpdateRoute).toHaveBeenCalledTimes(1);
+    expect(mockUpdateRoute.mock.calls[0][0]).toEqual({
+      event: 'ORDER_CANCELLED',
+      role: 'driver',
+      patch: {
+        channels: ['sms', 'whatsapp'],
+        requires_reply: false,
+        fallback_after_min: 0,
+        reply_timeout_min: null,
+      },
+    });
+  });
+
+  it('exigir resposta sem prazo bloqueia o salvamento', () => {
+    renderPage();
+    fireEvent.mouseDown(screen.getByRole('tab', { name: 'Rotas' }));
+
+    fireEvent.click(screen.getByLabelText('exige resposta'));
+    fireEvent.click(screen.getByRole('button', { name: /Salvar/ }));
+
+    expect(mockUpdateRoute).not.toHaveBeenCalled();
+  });
+
+  it('canal pode ser removido e adicionado na ordem escolhida', () => {
+    renderPage();
+    fireEvent.mouseDown(screen.getByRole('tab', { name: 'Rotas' }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'remover whatsapp' }));
+    fireEvent.click(screen.getByRole('button', { name: /Salvar/ }));
+
+    expect(mockUpdateRoute.mock.calls[0][0].patch.channels).toEqual(['sms']);
   });
 });

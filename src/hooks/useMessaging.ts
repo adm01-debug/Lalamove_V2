@@ -139,6 +139,7 @@ export function useUpdateNotificationRoute() {
   return useMutation({
     mutationFn: async (input: {
       event: string;
+      role: string;
       patch: Partial<
         Pick<
           NotificationRouteRow,
@@ -151,6 +152,7 @@ export function useUpdateNotificationRoute() {
         .from('notification_routes')
         .update({ ...input.patch, updated_by: auth.user?.id ?? null, updated_at: new Date().toISOString() })
         .eq('event', input.event)
+        .eq('role', input.role)
         .select()
         .single();
       if (error) throw error;
