@@ -27,6 +27,10 @@ const EXPIRY_HOURS = 24;
 const CLAIM_WINDOW_SECONDS = 1_800; // 30 min entre tentativas
 const ALERT_DEDUP_WINDOW_SECONDS = 86_400; // 1 aviso/dia por condicao (repeticao vira contador)
 const TIMEOUT_MS = 25_000;
+// O coletor roda a cada 30 min e o snapshot vale 6 h (`SNAPSHOT_TTL_HOURS`).
+// 2 h sem coleta ainda deixa 4 h de margem antes de o painel passar a receber
+// o erro cru do gateway.
+const SNAPSHOT_STALE_MINUTES = 120;
 
 interface ActiveToken {
   access_token: string;
@@ -80,6 +84,7 @@ async function raiseAlert(
   title: string,
   message: string,
   metadata: Record<string, unknown>,
+  subtype = 'UAPI_TOKEN_REFRESH',
 ): Promise<void> {
   const dedupKey = `uapi_token_refresh:${severity}:${title}`;
   const { data: claim } = await admin.rpc('claim_alert_notification', {
@@ -101,8 +106,55 @@ async function raiseAlert(
     severity,
     title,
     message,
-    metadata: { subtype: 'UAPI_TOKEN_REFRESH', ...metadata },
+    metadata: { subtype, ...metadata },
   });
+}
+
+// A renovacao do token nao e o unico jeito de a carteira/extrato/cupons/frota
+// pararem: se a coleta por navegador morrer (perfil expirado, gateway novo,
+// tarefa agendada removida), o snapshot envelhece em silencio ate a edge
+// `lalamove-uapi` parar de servir (`expires_at`) e o painel voltar ao erro do
+// gateway, sem ninguem ser avisado. Este watchdog roda de hora em hora junto do
+// worker e transforma esse silencio em alerta.
+async function checkSnapshotFreshness(admin: Admin): Promise<number | null> {
+  try {
+    const { data, error } = await admin
+      .from('lalamove_uapi_snapshot')
+      .select('updated_at')
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+
+    const updatedAt = data?.updated_at ? new Date(data.updated_at as string) : null;
+    const ageMinutes = updatedAt ? (Date.now() - updatedAt.getTime()) / 60_000 : null;
+
+    if (updatedAt && (ageMinutes as number) <= SNAPSHOT_STALE_MINUTES) {
+      return Number((ageMinutes as number).toFixed(1));
+    }
+
+    await raiseAlert(
+      admin,
+      'CRITICAL',
+      'Snapshot UAPI desatualizado',
+      updatedAt
+        ? `A coleta da UAPI não grava nada há ${Math.round(ageMinutes as number)} min (última: ${updatedAt.toISOString()}). Carteira, extrato, cupons e frota estão congelados e passam a dar erro quando o snapshot vencer. Verifique a tarefa agendada LalamoveUapiCollector.`
+        : 'O snapshot da UAPI está vazio: carteira, extrato, cupons e frota não têm de onde ser servidos. Verifique a tarefa agendada LalamoveUapiCollector.',
+      {
+        last_updated_at: updatedAt?.toISOString() ?? null,
+        age_minutes: updatedAt ? Number((ageMinutes as number).toFixed(1)) : null,
+        stale_after_minutes: SNAPSHOT_STALE_MINUTES,
+      },
+      'UAPI_SNAPSHOT_STALE',
+    );
+
+    return updatedAt ? Number((ageMinutes as number).toFixed(1)) : null;
+  } catch (err) {
+    // Watchdog nao pode derrubar o worker de refresh.
+    console.error('watchdog do snapshot falhou:', err instanceof Error ? err.message : err);
+    return null;
+  }
 }
 
 Deno.serve(async (req) => {
@@ -128,6 +180,9 @@ Deno.serve(async (req) => {
       contractVersion,
     );
     if (!contract.ok) return errorResponse(contract, corsHeaders);
+
+    // ── 0. Watchdog do snapshot (independe da sessão) ──────────────────────
+    await checkSnapshotFreshness(admin);
 
     // ── 1. Sessão ativa ────────────────────────────────────────────────────
     const { data: sessions, error: sessionError } = await admin
