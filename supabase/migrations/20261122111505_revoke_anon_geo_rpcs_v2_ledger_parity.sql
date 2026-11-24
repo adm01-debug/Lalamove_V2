@@ -1,0 +1,8 @@
+-- Reconciliacao de historico (nao executa DDL).
+--
+-- Esta versao foi aplicada diretamente no banco de producao (via MCP/dashboard)
+-- antes de existir arquivo no repositorio. O check "Supabase Preview" falhava
+-- com "Remote migration versions not found in local migrations directory"
+-- justamente por causa destas versoes.
+--
+-- DDL equivalente no repositorio: supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql

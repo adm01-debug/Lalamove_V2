@@ -1,0 +1,8 @@
+-- Reconciliacao de historico (nao executa DDL).
+--
+-- Esta versao foi aplicada diretamente no banco de producao (via MCP/dashboard)
+-- antes de existir arquivo no repositorio. O check "Supabase Preview" falhava
+-- com "Remote migration versions not found in local migrations directory"
+-- justamente por causa destas versoes.
+--
+-- Criou mcp_exec/mcp_exec_many/mcp_introspect (SECURITY DEFINER). Conferido em producao: EXECUTE so para postgres/service_role; mcp_introspect tambem para authenticated, mas valida admin em can_run_db_diagnostics(auth.uid()) e so le o schema public.
