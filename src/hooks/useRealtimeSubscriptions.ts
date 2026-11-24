@@ -29,6 +29,19 @@ interface SubscriptionCallback {
 
 // No singleton logic here currently used
 
+let channelSequence = 0;
+
+/**
+ * `RealtimeClient.channel()` devolve o canal existente quando o topic repete
+ * (realtime-js 2.x), e `RealtimeChannel.on()` lanca apos o `subscribe()`.
+ * Como varios componentes montam os mesmos hooks, um topic por montagem evita
+ * o erro "cannot add `postgres_changes` callbacks ... after `subscribe()`".
+ */
+function uniqueTopic(base: string): string {
+  channelSequence += 1;
+  return `${base}-${channelSequence}`;
+}
+
 /**
  * Core Realtime Manager Hook
  * Manages a single consolidated channel for all table subscriptions
@@ -59,7 +72,7 @@ export function useRealtimeManager() {
     if (import.meta.env.DEV) logger.log('[RealtimeManager] Initializing consolidated channel...');
 
     const channel = supabase
-      .channel('consolidated-realtime', {
+      .channel(uniqueTopic('consolidated-realtime'), {
         config: {
           broadcast: { self: true },
           presence: { key: 'user' },
@@ -161,7 +174,7 @@ export function useAlertsRealtime(enabled = true) {
     enableAudioOnInteraction();
 
     const channel = supabase
-      .channel('alerts-consolidated')
+      .channel(uniqueTopic('alerts-consolidated'))
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'alerts' },
@@ -285,7 +298,7 @@ export function useApprovalsRealtime() {
     enableAudioOnInteraction();
 
     const channel = supabase
-      .channel('approvals-consolidated')
+      .channel(uniqueTopic('approvals-consolidated'))
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'driver_approval_queue' },
@@ -379,7 +392,7 @@ export function useSidebarCountsRealtime(onUpdate: () => void) {
     if (import.meta.env.DEV) logger.log('[SidebarRealtime] Setting up counts subscription...');
 
     const channel = supabase
-      .channel('sidebar-counts-consolidated')
+      .channel(uniqueTopic('sidebar-counts-consolidated'))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_approval_queue' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_incidents' }, onUpdate);
@@ -409,7 +422,7 @@ export function useSLAMetricsRealtime(onUpdate: () => void) {
     if (import.meta.env.DEV) logger.log('[SLARealtime] Setting up SLA subscription...');
 
     const channel = supabase
-      .channel('sla-metrics-consolidated')
+      .channel(uniqueTopic('sla-metrics-consolidated'))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'lalamove_orders' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'active_tracking' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, onUpdate);
@@ -439,7 +452,7 @@ export function useLiveMapRealtime(onUpdate: (payload: RealtimePostgresChangesPa
     if (import.meta.env.DEV) logger.log('[LiveMapRealtime] Setting up tracking subscription...');
 
     const channel = supabase
-      .channel('live-map-consolidated')
+      .channel(uniqueTopic('live-map-consolidated'))
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'active_tracking' },

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { VehicleFilter, StatusFilter } from '../types';
 
+let trackingChannelSequence = 0;
+
 export interface TrackingData {
   id: string;
   order_id: string;
@@ -93,7 +95,7 @@ export function useTrackingData(vehicleFilter: VehicleFilter, statusFilter: Stat
     fetchTrackingData();
 
     const channel = supabase
-      .channel('active-tracking-changes')
+      .channel(`active-tracking-changes-${++trackingChannelSequence}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'active_tracking' }, () => {
         fetchTrackingData();
       })
