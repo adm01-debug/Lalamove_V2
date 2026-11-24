@@ -195,6 +195,13 @@ export function planInboundAction(
       break;
     }
     case "collected": {
+      // Confirmar coleta e o que tira o pedido da duvida na operacao: carimba no
+      // pedido (nao mexe em `status`, que dispara sincronia Bitrix24).
+      effects.push({
+        kind: "order_metadata",
+        key: "driver_pickup_confirmed_at",
+        value: "@now",
+      });
       if (canTrack(ctx)) {
         effects.push({ kind: "tracking_event", eventType: "COLLECTED" });
       } else {

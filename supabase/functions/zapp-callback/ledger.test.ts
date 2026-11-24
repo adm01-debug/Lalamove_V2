@@ -223,3 +223,46 @@ Deno.test("erro do update e reportado, nao engolido", async () => {
   assertEquals(result.outcome, "ignored");
   assertEquals(result.reason, "update_falhou: boom");
 });
+Deno.test("etapa 114: responder 1 ao M4 carimba a coleta no pedido", async () => {
+  const calls: Call[] = [];
+  const client = fakeClient({
+    selectResult: {
+      id: "msg-m4",
+      status: "delivered",
+      order_id: "ord-1",
+      driver_id: "drv-1",
+      stop_id: null,
+      event: "DRIVER_ARRIVED_PICKUP",
+      metadata: {},
+    },
+    writeResult: { data: { id: "in-1" }, error: null },
+    calls,
+  });
+  const write = parseCallback({ event: "message.inbound", message_id: "in-m4", text: "1" });
+  const result = await applyCallback({ client, write, senderPhone: "5541988887777" });
+
+  assertEquals(result.outcome, "inserted");
+  assertEquals(result.effects?.includes("order_metadata:driver_pickup_confirmed_at"), true);
+  // Sem posicao no fake, o evento de rastreio fica de fora — e isso e dito.
+  assertEquals(result.skipped?.some((s) => s.reason === "sem_posicao"), true);
+  // A linha inbound nasce amarrada ao pedido: e o que a faz aparecer no cartao.
+  const inbound = calls.find((c) => c.op === "insert" && c.table === "notification_messages");
+  assertEquals(inbound?.values?.order_id, "ord-1");
+  assertEquals(inbound?.values?.driver_id, "drv-1");
+});
+
+Deno.test("etapa 114: texto livre nao vira incidente nem alerta", async () => {
+  const calls: Call[] = [];
+  const client = fakeClient({
+    selectResult: { id: "msg-x", status: "delivered", order_id: "ord-2", driver_id: "drv-2", event: "DRIVER_ASSIGNED" },
+    writeResult: { data: { id: "in-2" }, error: null },
+    calls,
+  });
+  const write = parseCallback({ event: "message.inbound", message_id: "in-x", text: "obrigado bom dia" });
+  const result = await applyCallback({ client, write });
+
+  assertEquals(result.outcome, "inserted");
+  assertEquals(result.effects?.length, 0);
+  const incident = calls.find((c) => c.table === "driver_incidents");
+  assertEquals(incident, undefined);
+});
