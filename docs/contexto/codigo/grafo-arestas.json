@@ -789,6 +789,10 @@
    "src/components/ui/button.tsx",
    "src/lib/utils.ts"
   ],
+  "src/components/ui/data-error-banner.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx"
+  ],
   "src/components/ui/data-refresh-indicator.tsx": [
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
@@ -1453,6 +1457,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/data-refresh-indicator.tsx",
    "src/components/ui/empty-state.tsx",
    "src/components/ui/pull-to-refresh.tsx",
@@ -1532,6 +1537,7 @@
    "src/components/dashboard/UAPIStatusCards.tsx",
    "src/components/ui/accessible-card.tsx",
    "src/components/ui/activity-timeline.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/prediction-card.tsx",
    "src/components/ui/pull-to-refresh.tsx",
    "src/hooks/use-mobile.tsx",
@@ -1602,6 +1608,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/input.tsx",
    "src/components/ui/query-state.tsx",
    "src/components/ui/skeleton.tsx",
@@ -1634,6 +1641,7 @@
   "src/pages/HeatmapPage.tsx": [
    "src/components/map/hooks/useMapboxToken.ts",
    "src/components/ui/button.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/motion.tsx",
    "src/hooks/useDeliveryHeatmapData.ts",
    "src/lib/geo-gateway.ts",
@@ -1781,6 +1789,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/dialog.tsx",
    "src/components/ui/select.tsx",
    "src/components/ui/skeleton.tsx",
@@ -1836,6 +1845,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/scroll-area.tsx",
    "src/components/ui/search-help-tooltip.tsx",
    "src/components/ui/skeleton.tsx",
@@ -1849,6 +1859,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/input.tsx",
    "src/hooks/useAuth.tsx",
    "src/hooks/useAuthLogs.ts",

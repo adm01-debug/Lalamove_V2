@@ -1174,12 +1174,14 @@
   {
    "arquivo": "src/pages/error-state.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 80,
+   "linhas": 147,
    "testa": [
     "src/pages/ContactsPage.tsx",
+    "src/pages/ExternalDataPage.tsx",
+    "src/pages/PermissionsPage.tsx",
     "src/pages/SystemHealthPage.tsx"
    ],
-   "casos": 3
+   "casos": 5
   },
   {
    "arquivo": "src/pages/MessagingSettingsPage.test.tsx",
@@ -1790,8 +1792,10 @@
   "src/lib/utils.ts": 1,
   "src/pages/AdminTelemetriaPage.tsx": 1,
   "src/pages/ContactsPage.tsx": 1,
+  "src/pages/ExternalDataPage.tsx": 1,
   "src/pages/MessagingSettingsPage.tsx": 1,
   "src/pages/NotificationHistoryPage.tsx": 1,
+  "src/pages/PermissionsPage.tsx": 1,
   "src/pages/SystemHealthPage.tsx": 1,
   "src/pages/alert-configurations/AlertConfigCard.tsx": 1,
   "src/types/index.ts": 2,
@@ -1858,7 +1862,6 @@
    "src/pages/DriversPage.tsx",
    "src/pages/ErrorMonitoringPage.tsx",
    "src/pages/EvaluationsPage.tsx",
-   "src/pages/ExternalDataPage.tsx",
    "src/pages/ForgotPasswordPage.tsx",
    "src/pages/GeoBlockingPage.tsx",
    "src/pages/HeatmapPage.tsx",
@@ -1878,7 +1881,6 @@
    "src/pages/OrdersPage.tsx",
    "src/pages/PasswordResetApprovalsPage.tsx",
    "src/pages/PerformanceDashboardPage.tsx",
-   "src/pages/PermissionsPage.tsx",
    "src/pages/ProfilePage.tsx",
    "src/pages/RateLimitDashboardPage.tsx",
    "src/pages/ReportsPage.tsx",

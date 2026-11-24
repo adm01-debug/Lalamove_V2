@@ -1903,7 +1903,7 @@
    "hooks_exportados": [
     "usePermissions"
    ],
-   "linhas": 189,
+   "linhas": 194,
    "dominio": "hooks",
    "tabelas": [
     "permissions",
@@ -2532,7 +2532,7 @@
    "hooks_exportados": [
     "useUserDevices"
    ],
-   "linhas": 107,
+   "linhas": 109,
    "dominio": "hooks",
    "tabelas": [
     "user_devices"

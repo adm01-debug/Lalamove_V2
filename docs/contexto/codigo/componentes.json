@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 221,
+ "total": 222,
  "orfaos": 5,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -1342,7 +1342,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 131,
+   "usado_por": 132,
    "orfao": false
   },
   {
@@ -1362,7 +1362,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 98,
+   "usado_por": 99,
    "orfao": false
   },
   {
@@ -1437,6 +1437,20 @@
    "tabelas": [],
    "edges": [],
    "usado_por": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/ui/data-error-banner.tsx",
+   "exports": [
+    "DataErrorBanner"
+   ],
+   "export_default": null,
+   "linhas": 38,
+   "dominio": "components/ui",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 7,
    "orfao": false
   },
   {
@@ -2382,7 +2396,7 @@
     "ApprovalsPage"
    ],
    "export_default": null,
-   "linhas": 146,
+   "linhas": 149,
    "dominio": "pages",
    "hooks_locais": [
     "useApprovalActions",
@@ -2505,7 +2519,7 @@
     "DashboardRedesigned"
    ],
    "export_default": null,
-   "linhas": 459,
+   "linhas": 476,
    "dominio": "pages",
    "hooks_locais": [
     "useActiveAlerts",
@@ -2663,7 +2677,7 @@
     "ExternalDataPage"
    ],
    "export_default": "ExternalDataPage",
-   "linhas": 237,
+   "linhas": 245,
    "dominio": "pages",
    "hooks_locais": [
     "useDebouncedValue",
@@ -2743,7 +2757,7 @@
     "HeatmapPage"
    ],
    "export_default": null,
-   "linhas": 109,
+   "linhas": 111,
    "dominio": "pages",
    "hooks_locais": [
     "useDeliveryHeatmapData",
@@ -2896,7 +2910,7 @@
     "LalamoveSettingsPage"
    ],
    "export_default": "LalamoveSettingsPage",
-   "linhas": 486,
+   "linhas": 492,
    "dominio": "pages",
    "hooks_locais": [
     "useLalamoveStatus",
@@ -3196,7 +3210,7 @@
     "NotificationHistoryPage"
    ],
    "export_default": null,
-   "linhas": 521,
+   "linhas": 529,
    "dominio": "pages",
    "hooks_locais": [
     "useNotificationHistory",
@@ -3294,7 +3308,7 @@
     "PermissionsPage"
    ],
    "export_default": "PermissionsPage",
-   "linhas": 235,
+   "linhas": 248,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches",
@@ -3313,7 +3327,7 @@
     "ProfilePage"
    ],
    "export_default": "ProfilePage",
-   "linhas": 410,
+   "linhas": 416,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",

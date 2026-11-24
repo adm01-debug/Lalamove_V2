@@ -206,6 +206,7 @@
     "ai_route_optimization"
    ],
    "papeis": [
+    "alert",
     "assistant",
     "img",
     "list",
@@ -217,7 +218,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 100
+   "arquivos_puxados": 101
   },
   {
    "caminho": "/*",
@@ -492,9 +493,10 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [
+    "alert",
     "status"
    ],
-   "arquivos_puxados": 42
+   "arquivos_puxados": 43
   },
   {
    "caminho": "/auth",
@@ -946,6 +948,7 @@
     "ai_route_optimization"
    ],
    "papeis": [
+    "alert",
     "assistant",
     "img",
     "list",
@@ -957,7 +960,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 100
+   "arquivos_puxados": 101
   },
   {
    "caminho": "/delivery-metrics",
@@ -1201,8 +1204,10 @@
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 16
+   "papeis": [
+    "alert"
+   ],
+   "arquivos_puxados": 17
   },
   {
    "caminho": "/forgot-password",
@@ -1315,8 +1320,10 @@
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 16
+   "papeis": [
+    "alert"
+   ],
+   "arquivos_puxados": 18
   },
   {
    "caminho": "/incidents",
@@ -1956,8 +1963,10 @@
    "edges": [],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 15
+   "papeis": [
+    "alert"
+   ],
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/orders",
@@ -2241,10 +2250,11 @@
    "flags": [],
    "papeis": [
     "admin",
+    "alert",
     "manager",
     "operator"
    ],
-   "arquivos_puxados": 21
+   "arquivos_puxados": 22
   },
   {
    "caminho": "/preferences",
@@ -2339,9 +2349,10 @@
    "flags": [],
    "papeis": [
     "admin",
+    "alert",
     "manager"
    ],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/rate-limiting",
@@ -3786,7 +3797,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 284
+   "arquivos_puxados": 285
   }
  ],
  "menu": [
