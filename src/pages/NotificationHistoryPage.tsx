@@ -19,6 +19,9 @@ import {
   MapPinOff,
   UserX,
   Hourglass,
+  Ban,
+  Eye,
+  MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNotificationHistory, useNotificationStats, usePendingGeoEvents, NotificationSent } from '@/hooks/useNotificationHistory';
@@ -57,6 +60,7 @@ import {
 
 const channelIcons: Record<string, React.ElementType> = {
   whatsapp: MessageCircle,
+  sms: MessageSquare,
   email: Mail,
   slack: Hash,
   bitrix24: Briefcase,
@@ -65,6 +69,7 @@ const channelIcons: Record<string, React.ElementType> = {
 
 const channelLabels: Record<string, string> = {
   whatsapp: 'WhatsApp',
+  sms: 'SMS',
   email: 'Email',
   slack: 'Slack',
   bitrix24: 'Bitrix24',
@@ -73,6 +78,7 @@ const channelLabels: Record<string, string> = {
 
 const channelColors: Record<string, string> = {
   whatsapp: 'bg-success/10 text-success border-success/30',
+  sms: 'bg-primary/10 text-primary border-primary/30',
   email: 'bg-info/10 text-info border-info/30',
   slack: 'bg-accent/10 text-accent border-accent/30',
   bitrix24: 'bg-warning/10 text-warning border-warning/30',
@@ -84,6 +90,11 @@ const statusConfig: Record<string, { icon: React.ElementType; color: string; lab
   sent: { icon: Send, color: 'text-info', label: 'Enviado' },
   delivered: { icon: CheckCircle2, color: 'text-success', label: 'Entregue' },
   failed: { icon: XCircle, color: 'text-destructive', label: 'Falhou' },
+  queued: { icon: Hourglass, color: 'text-info', label: 'Na fila' },
+  read: { icon: Eye, color: 'text-success', label: 'Lida' },
+  uncertain: { icon: AlertTriangle, color: 'text-warning', label: 'Incerta' },
+  expired: { icon: Clock, color: 'text-muted-foreground', label: 'Expirada' },
+  suppressed: { icon: Ban, color: 'text-muted-foreground', label: 'Suprimida' },
 };
 
 const alertTypeLabels: Record<string, string> = {
@@ -279,6 +290,21 @@ function NotificationRow({ notification }: { notification: NotificationSent }) {
               </div>
             )}
 
+            {typeof notification.metadata?.body_preview === 'string' &&
+              notification.metadata.body_preview && (
+                <div className="p-3 rounded-lg bg-muted/50 border">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Corpo enviado
+                    {typeof notification.metadata.provider === 'string'
+                      ? ` \u00b7 ${notification.metadata.provider}`
+                      : ''}
+                  </p>
+                  <p className="mt-1 text-sm whitespace-pre-wrap">
+                    {notification.metadata.body_preview}
+                  </p>
+                </div>
+              )}
+
             {notification.alert && (
               <div className="p-3 rounded-lg bg-muted/50 border">
                 <p className="text-sm font-medium text-muted-foreground">Alerta Relacionado</p>
@@ -408,6 +434,7 @@ export function NotificationHistoryPage() {
                 <SelectContent>
                   <SelectItem value="ALL">Todos os Canais</SelectItem>
                   <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                  <SelectItem value="sms">SMS</SelectItem>
                   <SelectItem value="email">Email</SelectItem>
                   <SelectItem value="slack">Slack</SelectItem>
                   <SelectItem value="bitrix24">Bitrix24</SelectItem>
@@ -426,6 +453,11 @@ export function NotificationHistoryPage() {
                   <SelectItem value="sent">Enviado</SelectItem>
                   <SelectItem value="delivered">Entregue</SelectItem>
                   <SelectItem value="failed">Falhou</SelectItem>
+                  <SelectItem value="queued">Na fila</SelectItem>
+                  <SelectItem value="read">Lida</SelectItem>
+                  <SelectItem value="uncertain">Incerta</SelectItem>
+                  <SelectItem value="expired">Expirada</SelectItem>
+                  <SelectItem value="suppressed">Suprimida</SelectItem>
                 </SelectContent>
               </Select>
             </div>

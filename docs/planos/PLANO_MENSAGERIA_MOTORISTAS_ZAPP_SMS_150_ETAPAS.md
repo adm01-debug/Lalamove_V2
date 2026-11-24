@@ -737,7 +737,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
   **Estado real:** aba **Uso e custo** consome `messaging_month_cost_cents()` e os ultimos 60 registros de `messaging_usage` (mensagens, segmentos, custo por dia/canal) com barra do teto e aviso de teto nao definido.
 
 ### 138 — [L] Histórico de notificações no ledger
-- [ ] `NotificationHistoryPage` passa a ler `notification_messages`; `alerts_sent` fica só como legado
+- [x] `NotificationHistoryPage` passa a ler `notification_messages`; `alerts_sent` fica só como legado
+  **Estado real:** `useNotificationHistory` busca o ledger (`notification_messages`) e o legado (`alerts_sent`) em paralelo, mapeia o ledger para a timeline (`mapLedgerRow`, com evento, papel, provedor, tentativa e corpo) e une as duas fontes ordenadas por data, limitadas a 200 linhas - nenhum envio antigo sumiu da tela. Os cards de `useNotificationStats` somam as duas fontes (`read` conta como entregue; `expired`/`uncertain`/`suppressed` como falha). A pagina ganhou canal **SMS** (icone, cor, filtro), os status novos (`Na fila`, `Lida`, `Incerta`, `Expirada`, `Suprimida`) no badge e no filtro, e mostra o **corpo enviado** com o provedor no detalhe. Producao hoje: `notification_messages` = 0 linhas, `alerts_sent` = 0 linhas - migracao sem regressao de historico; o legado continua na uniao para quando voltar a ser escrito.
 - **Evidência:** `NotificationHistoryPage.geo.test.tsx` adaptado e verde
 
 ### 139 — [L] Estados e testes das telas
