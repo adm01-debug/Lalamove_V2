@@ -15,6 +15,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { notifyDriver } from '../_shared/messaging/notify-driver.ts';
 
 // ============================================================================
 // TIPOS
@@ -670,6 +671,38 @@ async function snapDriverPosition(
 }
 
 /**
+ * Aviso ao motorista pelo motor do Bloco 7 do plano de mensageria (etapas 96 e
+ * 110). Quem decide canal e horario e a rota do painel (`notification_routes`)
+ * consultada dentro de `notifyDriver`.
+ */
+export type DriverAvisoFn = (
+  event: string,
+  driverId: string,
+  orderId: string,
+  variables?: Record<string, string | number | null | undefined>,
+) => Promise<void>;
+
+/**
+ * Mesma forma do `notifyDriverEvent` do `lalamove-webhook`: mensagem e efeito
+ * colateral, nunca derruba o job. `notifyDriver` respeita rota desligada, modo
+ * sombra, horario silencioso e dedup por `client_message_id`.
+ */
+export async function avisarMotorista(
+  supabase: any,
+  event: string,
+  driverId: string,
+  orderId: string,
+  variables?: Record<string, string | number | null | undefined>,
+): Promise<void> {
+  try {
+    const result = await notifyDriver(supabase, { event, driverId, orderId, variables });
+    logger.log(`[JobWorker] Aviso ${event} ao motorista: ${result.outcome}${result.reason ? ` (${result.reason})` : ''}${result.channel ? ` via ${result.channel}` : ''}`);
+  } catch (error) {
+    logger.error(`[JobWorker] Aviso ${event} ao motorista falhou:`, error);
+  }
+}
+
+/**
  * ETA_DELAY (etapa 50 do plano Google): o ETA e o melhor lugar para prever atraso
  * — `geo_evaluate_tracking` so roda quando lat/lng/eta mudam, e o atraso depende
  * de `scheduled_at` versus `now() + eta_minutes`. Dispara pelo mesmo
@@ -692,6 +725,8 @@ export async function maybeEmitEtaDelay(
     lng: number;
     /** Instante de referência; injetável para testes de fronteira de tempo. */
     nowMs?: number;
+    /** Injetável nos testes; sem ele o aviso vai por `avisarMotorista`. */
+    notifyDriver?: DriverAvisoFn;
   },
 ): Promise<boolean> {
   const { data: order } = await supabase
@@ -757,6 +792,14 @@ export async function maybeEmitEtaDelay(
     // Nao derruba o refresh do ETA: o alerta e efeito colateral.
     internalLogger('warn', 'ETA_DELAY nao emitido', { tracking_id: args.trackingId, error: error.message });
     return false;
+  }
+  // M10 (etapa 110): o motorista recebe a checagem "esta tudo bem?" pelo motor
+  // novo. O dedup do `geo_emit_event` (NULL nas repeticoes) limita a um aviso
+  // por pedido e parada; rota desligada e modo sombra ficam em `notifyDriver`.
+  if (emitted != null && args.driverId) {
+    const avisar = args.notifyDriver ??
+      ((event, driverId, orderId, variables) => avisarMotorista(supabase, event, driverId, orderId, variables));
+    await avisar('ETA_DELAY', args.driverId, args.orderId);
   }
   return emitted != null;
 }
