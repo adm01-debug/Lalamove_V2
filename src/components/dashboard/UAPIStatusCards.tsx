@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useNavigate } from 'react-router-dom';
 
 export function UAPIStatusCards() {
-  const { data: wallet, isLoading: walletLoading } = useWallet();
+  const { data: wallet, isLoading: walletLoading, isError: walletError } = useWallet();
   const { data: status, isLoading: statusLoading } = useLalamoveStatus();
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ export function UAPIStatusCards() {
       {/* Wallet */}
       <Card
         className="cursor-pointer hover:shadow-md transition-shadow border-border/50"
-        onClick={() => navigate('/settings/lalamove')}
+        onClick={() => navigate(walletError ? '/settings/uapi' : '/settings/lalamove')}
       >
         <CardContent className="p-4 flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
@@ -29,6 +29,13 @@ export function UAPIStatusCards() {
             <p className="text-xs text-muted-foreground">Saldo Lalamove</p>
             {walletLoading ? (
               <Skeleton className="h-6 w-24 mt-0.5" />
+            ) : walletError ? (
+              <p
+                className="text-sm font-semibold text-destructive truncate"
+                title="A carteira depende da sessão UAPI. Clique para abrir Configurações → UAPI e salvar o token e o refresh_token do portal."
+              >
+                Indisponível — ver sessão
+              </p>
             ) : (
               <p className="text-lg font-bold text-foreground truncate">
                 {wallet?.formatted ?? '—'}

@@ -100,3 +100,52 @@ export function resolveUapiError(ret: number, rawMessage?: string | null): UapiE
 export function isUapiAuthFailure(ret: number): boolean {
   return UAPI_ERROR_MAP[ret]?.critical === true;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Falta de sessão: não é falha, é configuração pendente
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Mensagens da edge `lalamove-uapi` quando não há sessão ativa. Ela responde
+ * 401 com `{ error: 'No active UAPI session', message: '... set-token' }`, ou
+ * seja: fora do formato único de erro (que usa `error` como objeto), sem `code`.
+ */
+const UAPI_SESSION_MISSING_PATTERNS: readonly RegExp[] = [
+  /no active uapi session/i,
+  /configure a uapi session token/i,
+  /nenhuma sess[ãa]o uapi/i,
+  /sess[ãa]o uapi (n[ãa]o )?(ativa|configurada|expirada|inv[áa]lida)/i,
+];
+
+/** `ret` da UAPI que significam "sem sessão válida". */
+const UAPI_SESSION_MISSING_CODES: readonly number[] = [10001, 10007];
+
+export const UAPI_SESSION_MISSING_MESSAGE = 'Sessão UAPI não configurada.';
+
+export const UAPI_SESSION_MISSING_HINT =
+  'Carteira, extrato, cupons e frota dependem dos 2 tokens do portal Lalamove ' +
+  '(token e raw.refresh_token). Salve-os em Configurações → UAPI — depois disso a ' +
+  'renovação é automática a cada 20 h.';
+
+/**
+ * `true` quando o erro é "não existe sessão UAPI" — caso em que a tela deve
+ * mandar o operador configurar, e não sugerir um bug.
+ */
+export function isUapiSessionMissing(input: unknown): boolean {
+  if (typeof input === 'string') {
+    return UAPI_SESSION_MISSING_PATTERNS.some((pattern) => pattern.test(input));
+  }
+
+  if (!input || typeof input !== 'object') return false;
+
+  const candidate = input as { message?: unknown; hint?: unknown; code?: unknown };
+  if (typeof candidate.code === 'number' && UAPI_SESSION_MISSING_CODES.includes(candidate.code)) {
+    return true;
+  }
+
+  return [candidate.message, candidate.hint].some(
+    (text) =>
+      typeof text === 'string' &&
+      UAPI_SESSION_MISSING_PATTERNS.some((pattern) => pattern.test(text)),
+  );
+}

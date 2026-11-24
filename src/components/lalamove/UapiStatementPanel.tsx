@@ -6,12 +6,15 @@ import { Receipt, ChevronLeft, ChevronRight, FileSpreadsheet, FileDown } from 'l
 import { useUapiWalletStatement, UapiError } from '@/hooks/useLalamoveUapi';
 import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
 import { toAccountingRows, summarizeAccountingRows } from '@/lib/uapiStatement';
+import { isUapiSessionMissing } from '@/lib/uapiErrors';
+import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import { exportToCSV, exportToExcel } from '@/utils/exportUtils';
 
 /** Etapa 21 — extrato financeiro da carteira Lalamove. */
 export function UapiStatementPanel() {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isError, error, isFetching } = useUapiWalletStatement(page);
+  const { data, isLoading, isError, error, isFetching, refetch } = useUapiWalletStatement(page);
 
   const rows = data ?? [];
   const accountingRows = useMemo(() => toAccountingRows(rows), [rows]);
@@ -37,10 +40,17 @@ export function UapiStatementPanel() {
           </div>
         )}
 
-        {isError && (
-          <p className="text-sm text-destructive">
-            {error instanceof UapiError ? error.message : 'Falha ao carregar o extrato.'}
-          </p>
+        {isError && isUapiSessionMissing(error) && (
+          <UapiSessionRequired onRetry={() => void refetch()} retrying={isFetching} />
+        )}
+
+        {isError && !isUapiSessionMissing(error) && (
+          <DataErrorBanner
+            message={error instanceof UapiError ? error.message : 'Falha ao carregar o extrato.'}
+            details={error instanceof UapiError ? error.hint : undefined}
+            onRetry={() => void refetch()}
+            retrying={isFetching}
+          />
         )}
 
         {!isLoading && !isError && rows.length === 0 && (

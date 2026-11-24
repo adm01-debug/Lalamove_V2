@@ -11,10 +11,13 @@ import {
   UapiError,
 } from '@/hooks/useLalamoveUapi';
 import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
+import { isUapiSessionMissing } from '@/lib/uapiErrors';
+import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 /** Etapa 20 + 21 — histórico com cursor real e download de comprovante. */
 export function UapiOrderHistoryPanel() {
-  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useUapiOrderHistory();
   const receipt = useDownloadReceipt();
 
@@ -50,10 +53,19 @@ export function UapiOrderHistoryPanel() {
           </div>
         )}
 
-        {isError && (
-          <p className="text-sm text-destructive">
-            {error instanceof UapiError ? error.message : 'Falha ao carregar o histórico.'}
-          </p>
+        {isError && isUapiSessionMissing(error) && (
+          <UapiSessionRequired onRetry={() => void refetch()} retrying={isFetchingNextPage} />
+        )}
+
+        {isError && !isUapiSessionMissing(error) && (
+          <DataErrorBanner
+            message={
+              error instanceof UapiError ? error.message : 'Falha ao carregar o histórico.'
+            }
+            details={error instanceof UapiError ? error.hint : undefined}
+            onRetry={() => void refetch()}
+            retrying={isFetchingNextPage}
+          />
         )}
 
         {!isLoading && !isError && orders.length === 0 && (

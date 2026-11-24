@@ -32,6 +32,20 @@ export async function parseEdgeError(error: unknown): Promise<EdgeErrorInfo | nu
 
   if (!body || typeof body !== 'object') return null;
   const err = (body as { error?: unknown }).error;
+
+  // Formato legado das edges mais antigas: `{ error: 'texto', message?: 'detalhe' }`
+  // (ex.: `lalamove-uapi` responde 401 com `error: 'No active UAPI session'`).
+  // Sem tratar isso, o operador via só "Edge Function returned a non-2xx status code".
+  if (typeof err === 'string' && err.trim()) {
+    const legacyMessage = (body as { message?: unknown }).message;
+    return {
+      code: 'LEGACY_ERROR',
+      message:
+        typeof legacyMessage === 'string' && legacyMessage.trim() ? legacyMessage : err.trim(),
+      fields: [],
+    };
+  }
+
   if (!err || typeof err !== 'object') return null;
 
   const e = err as { code?: unknown; message?: unknown; fields?: unknown };

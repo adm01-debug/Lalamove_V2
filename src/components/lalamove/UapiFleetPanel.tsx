@@ -12,6 +12,9 @@ import {
   UapiError,
   type FleetKind,
 } from '@/hooks/useLalamoveUapi';
+import { isUapiSessionMissing } from '@/lib/uapiErrors';
+import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 interface FleetListProps {
   kind: FleetKind;
@@ -19,7 +22,10 @@ interface FleetListProps {
 }
 
 function FleetList({ kind, search }: FleetListProps) {
-  const { data, isLoading, isError, error } = useUapiFleet(kind, search || undefined);
+  const { data, isLoading, isError, error, isFetching, refetch } = useUapiFleet(
+    kind,
+    search || undefined,
+  );
   const mutate = useFleetMutation();
 
   const drivers = data ?? [];
@@ -36,10 +42,16 @@ function FleetList({ kind, search }: FleetListProps) {
 
   if (isLoading) return <Skeleton className="h-24 w-full" />;
   if (isError) {
+    if (isUapiSessionMissing(error)) {
+      return <UapiSessionRequired onRetry={() => void refetch()} retrying={isFetching} />;
+    }
     return (
-      <p className="text-sm text-destructive">
-        {error instanceof UapiError ? error.message : 'Falha ao carregar a frota.'}
-      </p>
+      <DataErrorBanner
+        message={error instanceof UapiError ? error.message : 'Falha ao carregar a frota.'}
+        details={error instanceof UapiError ? error.hint : undefined}
+        onRetry={() => void refetch()}
+        retrying={isFetching}
+      />
     );
   }
   if (drivers.length === 0) {

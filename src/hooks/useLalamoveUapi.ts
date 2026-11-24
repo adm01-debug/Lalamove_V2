@@ -7,7 +7,7 @@ import {
   keepPreviousData,
 } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { resolveUapiError } from '@/lib/uapiErrors';
+import { resolveUapiError, isUapiSessionMissing, UAPI_SESSION_MISSING_HINT, UAPI_SESSION_MISSING_MESSAGE } from '@/lib/uapiErrors';
 import { isLalamoveConfigured } from '@/lib/lalamove-config';
 import { parseEdgeError } from '@/lib/edge-error';
 
@@ -42,12 +42,21 @@ async function invokeUapi<T>(action: string, body: Record<string, unknown> = {})
 
   if (error) {
     const edge = await parseEdgeError(error);
-    throw new UapiError(-1, edge?.message || error.message || 'Falha ao contatar a Lalamove');
+    const raw = edge?.message || error.message || 'Falha ao contatar a Lalamove';
+    if (isUapiSessionMissing(raw)) {
+      throw new UapiError(-1, UAPI_SESSION_MISSING_MESSAGE, UAPI_SESSION_MISSING_HINT);
+    }
+    throw new UapiError(-1, raw);
   }
 
   const envelope = data as (UapiEnvelope<T> & { error?: string }) | null;
   if (!envelope) throw new UapiError(-1, 'Resposta vazia da Lalamove');
-  if (typeof envelope.error === 'string') throw new UapiError(-1, envelope.error);
+  if (typeof envelope.error === 'string') {
+    if (isUapiSessionMissing(envelope.error)) {
+      throw new UapiError(-1, UAPI_SESSION_MISSING_MESSAGE, UAPI_SESSION_MISSING_HINT);
+    }
+    throw new UapiError(-1, envelope.error);
+  }
 
   if (typeof envelope.ret === 'number' && envelope.ret !== 0) {
     const info = resolveUapiError(envelope.ret, envelope.msg);

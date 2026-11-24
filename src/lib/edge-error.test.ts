@@ -34,8 +34,8 @@ describe('parseEdgeError', () => {
     expect(info).toBeNull();
   });
 
-  it('retorna null quando o body não segue o formato único', async () => {
-    const err = httpErrorWithBody({ error: 'simple string' });
+  it('retorna null quando o body não traz nem `error` objeto nem `error` string', async () => {
+    const err = httpErrorWithBody({ foo: 'bar', message: 'sem erro' });
     const info = await parseEdgeError(err);
     expect(info).toBeNull();
   });
@@ -47,6 +47,27 @@ describe('parseEdgeError', () => {
     }));
     const info = await parseEdgeError(err);
     expect(info).toBeNull();
+  });
+
+  it('lê o formato legado `{ error: string, message }` (edge lalamove-uapi sem sessão)', async () => {
+    const err = new FunctionsHttpError(new Response(JSON.stringify({
+      error: 'No active UAPI session',
+      message: 'Configure a UAPI session token first using action: set-token',
+    }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    }));
+    const info = await parseEdgeError(err);
+    expect(info?.message).toBe('Configure a UAPI session token first using action: set-token');
+  });
+
+  it('usa o texto de `error` quando o formato legado não traz `message`', async () => {
+    const err = new FunctionsHttpError(new Response(JSON.stringify({ error: 'No active UAPI session' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    }));
+    const info = await parseEdgeError(err);
+    expect(info?.message).toBe('No active UAPI session');
   });
 });
 
