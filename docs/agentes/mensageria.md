@@ -11,10 +11,15 @@ Vale para quem está de plantão e precisa decidir em minutos, sem ler código.
 3. O canal é o Zapp (WhatsApp) por padrão. SMS só entra como contingência: número inválido, contato
    bloqueado, opt-out, instância fora do ar.
 4. O que foi enviado e o que voltou fica no ledger `notification_messages` (migration
-   `20261125120000_notification_ledger.sql`). `alerts_sent` é legado até a tela migrar (etapa 138).
-5. A resposta do motorista chega pelo `zapp-callback`, é classificada (`_shared/messaging/inbound.ts`)
-   e vira efeito (`_shared/messaging/inbound-actions.ts`): carimbo no pedido, evento de rastreio,
-   incidente ou badge para o operador.
+   `20261125120000_notification_ledger.sql`). O envio só sai **depois** de a linha nascer `queued`
+   (`_shared/messaging/notify-driver.ts`): evento repetido devolve `duplicate` sem chamar o provedor.
+   `alerts_sent` é legado até a tela migrar (etapa 138).
+5. A resposta do motorista chega pelo `zapp-callback`. O dígito do template ("1 = coletado /
+   2 = problema") não casa com palavra-chave nenhuma, então `_shared/messaging/inbound-event.ts`
+   traduz a opção para a frase canônica antes de classificar (`_shared/messaging/inbound.ts`). O plano
+   sai de `_shared/messaging/inbound-actions.ts` e quem grava é `zapp-callback/inbound-exec.ts`:
+   carimbo no pedido, evento de rastreio, incidente, opt-out ou badge para o operador. Efeito que
+   falha fica registrado no log e não derruba o webhook (o Zapp não reenvia).
 
 ## Número banido ou instância caída no Zapp
 
