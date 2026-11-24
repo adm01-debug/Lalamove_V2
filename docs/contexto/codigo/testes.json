@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 177,
+ "total": 178,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 39,
+  "edge (deno)": 40,
   "guard (node --test)": 34,
   "unit (vitest)": 86
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 41
+   "arquivos": 42
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1273,6 +1273,15 @@
    "casos": 3
   },
   {
+   "arquivo": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 139,
+   "testa": [
+    "supabase/functions/_shared/messaging/auto-notices.ts"
+   ],
+   "casos": 7
+  },
+  {
    "arquivo": "supabase/functions/_shared/messaging/dispatch.test.ts",
    "tipo": "edge (deno)",
    "linhas": 331,
@@ -1454,11 +1463,11 @@
   {
    "arquivo": "supabase/functions/job-worker/eta-delay.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 185,
+   "linhas": 249,
    "testa": [
     "supabase/functions/job-worker/index.ts"
    ],
-   "casos": 14
+   "casos": 18
   },
   {
    "arquivo": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
@@ -1734,6 +1743,7 @@
   "supabase/functions/_shared/channels/zapp.ts": 1,
   "supabase/functions/_shared/contract.ts": 3,
   "supabase/functions/_shared/geo-precision.ts": 1,
+  "supabase/functions/_shared/messaging/auto-notices.ts": 1,
   "supabase/functions/_shared/messaging/dispatch.ts": 1,
   "supabase/functions/_shared/messaging/inbound-actions.ts": 1,
   "supabase/functions/_shared/messaging/inbound.ts": 2,

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "f242d426c0d5ffe7c252e2121d9bc5cd54058eed",
+  "sha": "d882d051a4556762f042a3f744369411a80e2224",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 03:16 UTC",
-  "files_total": 1096,
-  "code_files": 915,
-  "code_lines": 160627
+  "generated_at": "2026-11-24 03:50 UTC",
+  "files_total": 1098,
+  "code_files": 917,
+  "code_lines": 161014
  },
  "version": "1.3.2",
- "facts_hash": "b42cc00fba93e8d9",
+ "facts_hash": "3ba117cc99b4b107",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 347,
+   ".ts": 349,
    ".tsx": 242,
    ".sql": 204,
    ".mjs": 109,
@@ -18828,7 +18828,14 @@
     "tables": [
      "active_tracking",
      "alert_configurations",
-     "alerts"
+     "alerts",
+     "drivers",
+     "lalamove_orders",
+     "lalamove_stops",
+     "message_templates",
+     "messaging_settings",
+     "notification_messages",
+     "notification_routes"
     ],
     "env": [
      "ALLOWED_ORIGINS",
@@ -18844,10 +18851,11 @@
     "side_effects": [
      "invoke(",
      "notify",
+     "notifyDriver",
      "notifying"
     ],
     "webhook_events": [],
-    "idempotency": false
+    "idempotency": true
    },
    {
     "name": "check-external-api",
@@ -19082,8 +19090,13 @@
      "active_tracking",
      "alert_configurations",
      "driver_locations",
+     "drivers",
      "lalamove_orders",
      "lalamove_stops",
+     "message_templates",
+     "messaging_settings",
+     "notification_messages",
+     "notification_routes",
      "tracking_events"
     ],
     "env": [
@@ -19109,7 +19122,10 @@
      "pod_fetch: pedido ${key} não encontrado em lalamove_orders"
     ],
     "side_effects": [
-     "invoke("
+     "invoke(",
+     "notify",
+     "notifyDriver",
+     "notifyDriverEvent"
     ],
     "webhook_events": [],
     "idempotency": true
@@ -22763,8 +22779,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 110,
-   "lines": 27039,
+   "files": 112,
+   "lines": 27426,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22827,6 +22843,7 @@
     "sms.ts: TextChannelResult, DeliveryStatus, SmsSendResult, SmsInbound, SmsChannel, toGsm7",
     "whatsapp-test.ts: WhatsAppTestSender, EnvReader, WHATSAPP_TEST_MISSING_CONFIG, whatsAppTestSender",
     "zapp.ts: ErrorAction, ERROR_CODE_ACTIONS, actionForErrorCode, SendOptions, TextChannelResult, TextChannel",
+    "auto-notices.ts: MULTI_STOP_MIN, SCHEDULED_REMINDER_WINDOW_MIN, shouldSendNextStop, ScheduledReminderResult, sendScheduledReminders",
     "dispatch.ts: DriverSnapshot, PlanAction, DriverMessageReason, MessagePlan, PlanInput, planDriverMessage",
     "inbound-actions.ts: InboundContext, IncidentType, InboundEffect, InboundPlan, planInboundAction",
     "inbound.ts: InboundChoice, InboundIntent, InboundResult, OPTOUT_KEYWORDS, isOptOutKeyword, InboundMediaKind",
@@ -22844,7 +22861,7 @@
     "google.ts: GoogleOptions, GoogleProvider",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoValidation, GeoSuggestion",
-    "index.ts: processGeoBackfillOrders, maybeEmitEtaDelay, haversineM, avgSpeedMps, localEtaMinutes, costGuardSkipReason",
+    "index.ts: processGeoBackfillOrders, DriverAvisoFn, avisarMotorista, maybeEmitEtaDelay, haversineM, avgSpeedMps",
     "coordinates.ts: stopsCoords, persistOrderCoordinates",
     "geocode-fallback.ts: GeocodeFallbackResult, GeocodeFallbackDeps, geocodeAddress, geocodeOrderFallback",
     "index.ts: CHANGE_DRIVER_REASONS",
@@ -22853,8 +22870,7 @@
     "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
     "message-id.ts: MessageIdParts, buildClientMessageId, buildCorrelation",
     "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime",
-    "recipients.ts: RecipientRole, NotificationRecipient, recipientKey, normalizeRecipients, unionRecipients, firstByRole",
-    "sms-dispatch.ts: SmsDispatchInput, SmsDispatchResult, buildSmsBody, dispatchSms"
+    "recipients.ts: RecipientRole, NotificationRecipient, recipientKey, normalizeRecipients, unionRecipients, firstByRole"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -22894,6 +22910,8 @@
     "supabase/functions/_shared/channels/whatsapp-test.ts",
     "supabase/functions/_shared/channels/zapp.test.ts",
     "supabase/functions/_shared/channels/zapp.ts",
+    "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "supabase/functions/_shared/messaging/auto-notices.ts",
     "supabase/functions/_shared/messaging/dispatch.test.ts",
     "supabase/functions/_shared/messaging/dispatch.ts",
     "supabase/functions/_shared/messaging/inbound-actions.test.ts",
@@ -22951,9 +22969,7 @@
     "supabase/functions/lalamove-gateway/route.test.ts",
     "supabase/functions/lalamove-gateway/route.ts",
     "supabase/functions/lalamove-token-refresh/index.ts",
-    "supabase/functions/lalamove-uapi/index.ts",
-    "supabase/functions/lalamove-webhook/index.ts",
-    "supabase/functions/lalamove-webhook/normalize.ts"
+    "supabase/functions/lalamove-uapi/index.ts"
    ]
   },
   {
@@ -23555,6 +23571,7 @@
      "src/hooks/useRecentOrders.ts",
      "src/hooks/useSLAMetrics.ts",
      "src/pages/reports/useReportData.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/_shared/messaging/notify-driver.ts",
      "supabase/functions/bitrix24-sync/index.ts",
      "supabase/functions/evaluate-driver/index.ts",
@@ -23616,6 +23633,7 @@
     "select": [
      "scripts/seed-database.ts",
      "src/components/orders/OrderDetailModal.tsx",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/_shared/messaging/notify-driver.ts",
      "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-webhook/index.ts"
@@ -23685,6 +23703,7 @@
     "select": [
      "src/hooks/useMessaging.ts",
      "src/hooks/useNotificationHistory.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/_shared/messaging/notify-driver.ts",
      "supabase/functions/zapp-callback/index.ts",
      "supabase/functions/zapp-callback/ledger.ts"
@@ -32252,6 +32271,16 @@
     "value": "30"
    },
    {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "name": "MULTI_STOP_MIN",
+    "value": "3"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "name": "SCHEDULED_REMINDER_WINDOW_MIN",
+    "value": "30"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/notify-driver.ts",
     "name": "RATE_WINDOW_MS",
     "value": "10"
@@ -36887,6 +36916,12 @@
     "name": "calculatePerformanceScore",
     "params": "metrics: Record<string, Metric>",
     "body": "const weights = { LCP: 0.25, INP: 0.30, // INP is now a Core Web Vital CLS: 0.25, FCP: 0.10, TTFB: 0.10, }; let score = 0; let totalWeight = 0; for (const [name, weight] of Object.entries(weights)) { const metric = metrics[name]; if (metric) { const metricRating = metric.rating; const metricScore = metricRating === 'good' ? 100 : metricRating === 'needs-improvement' ? 50 : 0; score += metricScore * weight; totalWeight += weight; } } return totalWeight > 0 ? Math.round(score / totalWeight * 100) …"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "name": "shouldSendNextStop",
+    "params": "supabase: MessagingClient, orderId: string,",
+    "body": "const { count: total } = await supabase .from(\"lalamove_stops\") .select(\"id\", { count: \"exact\", head: true }) .eq(\"order_id\", orderId); if ((total ?? 0) < MULTI_STOP_MIN) return false; const { count: open } = await supabase .from(\"lalamove_stops\") .select(\"id\", { count: \"exact\", head: true }) .eq(\"order_id\", orderId) .is(\"completed_at\", null); return (open ?? 0) > 0;"
    },
    {
     "file": "supabase/functions/_shared/messaging/inbound-actions.ts",
@@ -41841,6 +41876,34 @@
     "name": "etapa 86: código desconhecido pede alerta à operação"
    },
    {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M6: pedido de 2 paradas nao gera aviso de proxima parada"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M6: multi-parada com parada em aberto gera aviso"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M6: multi-parada sem parada em aberto nao gera aviso"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M11: avisa uma vez o pedido agendado dentro de 30 min"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M11: segunda passada do cron nao repete o lembrete"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M11: pedido cancelado, concluido, coletado ou sem motorista nao avisa"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M11: janela de busca e now até now+30min"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/dispatch.test.ts",
     "name": "etapa 145: modo sombra decide o canal e nao envia nada"
    },
@@ -42759,6 +42822,22 @@
    {
     "file": "supabase/functions/job-worker/eta-delay.test.ts",
     "name": "ETA_DELAY: entrega usa destinatario de entrega no metadata"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-delay.test.ts",
+    "name": "M10: ETA_DELAY avisa o motorista pelo motor novo uma vez"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-delay.test.ts",
+    "name": "M10: pedido sem motorista nao tenta avisar"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-delay.test.ts",
+    "name": "M10: alerta ja emitido (dedup do geo_emit_event) nao repete o aviso"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-delay.test.ts",
+    "name": "M10: falha no aviso nao derruba o refresh do ETA"
    },
    {
     "file": "supabase/functions/job-worker/eta-delay.test.ts",
@@ -43690,6 +43769,10 @@
    },
    {
     "file": "supabase/functions/check-driver-alerts/index.ts",
+    "call": "notifyDriver"
+   },
+   {
+    "file": "supabase/functions/check-driver-alerts/index.ts",
     "call": "notifying"
    },
    {
@@ -43699,6 +43782,18 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "call": "invoke("
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "call": "notify"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "call": "notifyDriver"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "call": "notifyDriverEvent"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -48329,6 +48424,14 @@
    {
     "file": "src/pages/EvaluationsPage.tsx",
     "limit": "500"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "limit": "1"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "limit": "50"
    },
    {
     "file": "supabase/functions/_shared/messaging/notify-driver.ts",
@@ -73031,6 +73134,93 @@
    ],
    "doc": "Etapa 69 do plano Google Maps (decisão D2): canal Zapp Web. O Zapp é o provedor de WhatsApp Web da Promo Brindes. A interface é deliberadamente igual à do Evolution em `send-notification` — mesma assinatura `sendText(number, text)` devolvendo `{success, error?}` — para que o despacho troque de canal …"
   },
+  "supabase/functions/_shared/messaging/auto-notices.test.ts": {
+   "path": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+   "lines": 139,
+   "is_test": true,
+   "errors": [
+    "tabela inesperada: ${table}"
+   ],
+   "tests": [
+    "M6: pedido de 2 paradas nao gera aviso de proxima parada",
+    "M6: multi-parada com parada em aberto gera aviso",
+    "M6: multi-parada sem parada em aberto nao gera aviso",
+    "M11: avisa uma vez o pedido agendado dentro de 30 min",
+    "M11: segunda passada do cron nao repete o lembrete",
+    "M11: pedido cancelado, concluido, coletado ou sem motorista nao avisa",
+    "M11: janela de busca e now até now+30min"
+   ]
+  },
+  "supabase/functions/_shared/messaging/auto-notices.ts": {
+   "path": "supabase/functions/_shared/messaging/auto-notices.ts",
+   "lines": 96,
+   "exports": [
+    "const MULTI_STOP_MIN",
+    "const SCHEDULED_REMINDER_WINDOW_MIN",
+    "function shouldSendNextStop",
+    "interface ScheduledReminderResult",
+    "function sendScheduledReminders"
+   ],
+   "tables": [
+    {
+     "table": "lalamove_stops",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_stops",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "lalamove_stops": [
+     "completed_at",
+     "id",
+     "order_id"
+    ],
+    "lalamove_orders": [
+     "driver_id",
+     "id",
+     "scheduled_at",
+     "status"
+    ],
+    "notification_messages": [
+     "direction",
+     "event",
+     "id",
+     "order_id"
+    ]
+   },
+   "params": [
+    {
+     "name": "MULTI_STOP_MIN",
+     "value": "3"
+    },
+    {
+     "name": "SCHEDULED_REMINDER_WINDOW_MIN",
+     "value": "30"
+    }
+   ],
+   "doc": "Avisos automaticos que nao nascem de um webhook da Lalamove: - M6 (etapa 106 do plano de mensageria): proxima parada depois de concluir uma parada num pedido multi-parada (3+ paradas). No fluxo de 2 paradas o M5 (pos-coleta) ja entrega o endereco da entrega, entao o M6 nao entra. - M11 (etapa 111): …",
+   "calc_fns": [
+    {
+     "name": "shouldSendNextStop",
+     "params": "supabase: MessagingClient, orderId: string,",
+     "body": "const { count: total } = await supabase .from(\"lalamove_stops\") .select(\"id\", { count: \"exact\", head: true }) .eq(\"order_id\", orderId); if ((total ?? 0) < MULTI_STOP_MIN) return false; const { count: open } = await supabase .from(\"lalamove_stops\") .select(\"id\", { count: \"exact\", head: true }) .eq(\"order_id\", orderId) .is(\"completed_at\", null); return (open ?? 0) > 0;"
+    }
+   ],
+   "pagination": [
+    "1",
+    "50"
+   ]
+  },
   "supabase/functions/_shared/messaging/dispatch.test.ts": {
    "path": "supabase/functions/_shared/messaging/dispatch.test.ts",
    "lines": 331,
@@ -73798,7 +73988,7 @@
   },
   "supabase/functions/check-driver-alerts/index.ts": {
    "path": "supabase/functions/check-driver-alerts/index.ts",
-   "lines": 281,
+   "lines": 314,
    "tables": [
     {
      "table": "alert_configurations",
@@ -73942,6 +74132,7 @@
    "side_effects": [
     "invoke(",
     "notify",
+    "notifyDriver",
     "notifying"
    ],
    "pagination": [
@@ -75171,7 +75362,7 @@
   },
   "supabase/functions/job-worker/eta-delay.test.ts": {
    "path": "supabase/functions/job-worker/eta-delay.test.ts",
-   "lines": 185,
+   "lines": 249,
    "is_test": true,
    "errors": [
     "tabela inesperada: ${table}"
@@ -75197,9 +75388,16 @@
     "ETA_DELAY: dedup do geo_emit_event (NULL) nao reporta disparo",
     "ETA_DELAY: erro no RPC nao propaga (alerta e efeito colateral)",
     "ETA_DELAY: entrega usa destinatario de entrega no metadata",
+    "M10: ETA_DELAY avisa o motorista pelo motor novo uma vez",
+    "M10: pedido sem motorista nao tenta avisar",
+    "M10: alerta ja emitido (dedup do geo_emit_event) nao repete o aviso",
+    "M10: falha no aviso nao derruba o refresh do ETA",
     "etapa 49: ETA longo nao paga a SKU com transito",
     "etapa 49: ETA na janela de aproximacao usa transito",
     "etapa 49: sem ETA conhecido a primeira medicao sai sem transito"
+   ],
+   "side_effects": [
+    "notifyDriver"
    ]
   },
   "supabase/functions/job-worker/geo-backfill-orders.test.ts": {
@@ -75226,9 +75424,11 @@
   },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 1248,
+   "lines": 1291,
    "exports": [
     "function processGeoBackfillOrders",
+    "type DriverAvisoFn",
+    "function avisarMotorista",
     "function maybeEmitEtaDelay",
     "function haversineM",
     "function avgSpeedMps",
@@ -75568,7 +75768,10 @@
    ],
    "doc": "============================================================================ EDGE FUNCTION: Job Worker Descrição: Processa jobs da fila de forma assíncrona Versão: 1.0.0 Data: 2025-12-26 ============================================================================",
    "side_effects": [
-    "invoke("
+    "invoke(",
+    "notify",
+    "notifyDriver",
+    "notifyDriverEvent"
    ],
    "pagination": [
     "5",
@@ -76132,7 +76335,7 @@
   },
   "supabase/functions/lalamove-webhook/index.ts": {
    "path": "supabase/functions/lalamove-webhook/index.ts",
-   "lines": 1062,
+   "lines": 1074,
    "tables": [
     {
      "table": "webhook_events",
@@ -78499,10 +78702,33 @@
   }
  },
  "git": {
-  "sha": "f242d426c0d5ffe7c252e2121d9bc5cd54058eed",
+  "sha": "d882d051a4556762f042a3f744369411a80e2224",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d882d05",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: lembrete de pedido agendado e aviso de proxima parada (#344)",
+    "files": [
+     "supabase/functions/_shared/messaging/auto-notices.test.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
+     "supabase/functions/check-driver-alerts/index.ts",
+     "supabase/functions/lalamove-webhook/index.ts"
+    ]
+   },
+   {
+    "sha": "b77ccd9",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: motor avisa o motorista em atraso de ETA e falta de comprovante (#343)",
+    "files": [
+     "supabase/functions/check-driver-alerts/index.ts",
+     "supabase/functions/job-worker/eta-delay.test.ts",
+     "supabase/functions/job-worker/index.ts"
+    ]
+   },
    {
     "sha": "f242d42",
     "date": "2026-11-24",
@@ -78890,42 +79116,6 @@
      "src/pages/JobQueuePage.tsx",
      "supabase/functions/_shared/messaging/router.test.ts"
     ]
-   },
-   {
-    "sha": "b6d8b23",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "security(repo): remove os 11 arquivos com credencial de producao da Lalamove (#312)",
-    "files": [
-     "docs/qa/03-ACHADOS.md",
-     "docs/qa/04-PLANO.md",
-     "docs/qa/05-PROGRESSO.md",
-     "lalamove_bundle_import.json",
-     "lalamove_documentacao_completa.docx",
-     "lalamove_documentacao_completa.html",
-     "lalamove_documentacao_completa.md",
-     "lalamove_f00_bootstrap.json",
-     "lalamove_f01_cotacao.json",
-     "lalamove_f02_pedido.json",
-     "lalamove_f03_rastreamento.json",
-     "lalamove_f04_pod.json",
-     "lalamove_suplemento_v2.html",
-     "lalamove_suplemento_v2.md"
-    ]
-   },
-   {
-    "sha": "d3f974b",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)",
-    "files": [
-     "docs/qa/00-RESUMO.md",
-     "docs/qa/01-INVENTARIO.md",
-     "docs/qa/02-CENARIOS.md",
-     "docs/qa/03-ACHADOS.md",
-     "docs/qa/04-PLANO.md",
-     "docs/qa/05-PROGRESSO.md"
-    ]
    }
   ],
   "hot_files": [
@@ -78956,6 +79146,22 @@
    [
     "src/hooks/useDashboardStats.ts",
     3
+   ],
+   [
+    "supabase/functions/check-driver-alerts/index.ts",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-webhook/index.ts",
+    2
+   ],
+   [
+    "supabase/functions/job-worker/eta-delay.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/job-worker/index.ts",
+    2
    ],
    [
     "supabase/functions/_shared/messaging/dispatch.test.ts",
@@ -78991,22 +79197,6 @@
    ],
    [
     "src/pages/ProfilePage.tsx",
-    2
-   ],
-   [
-    "src/utils/logger.ts",
-    2
-   ],
-   [
-    "src/hooks/useCacheViews.ts",
-    2
-   ],
-   [
-    "package.json",
-    2
-   ],
-   [
-    "src/pages/AlertsPage.tsx",
     2
    ]
   ]

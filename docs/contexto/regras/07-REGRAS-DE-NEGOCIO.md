@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f242d426c0` · branch `main` · 2026-11-24 03:16 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d882d051a4` · branch `main` · 2026-11-24 03:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1318,6 +1318,10 @@ _nenhum item encontrado_
   ```
   const weights = { LCP: 0.25, INP: 0.30, // INP is now a Core Web Vital CLS: 0.25, FCP: 0.10, TTFB: 0.10, }; let score = 0; let totalWeight = 0; for (const [name, weight] of Object.entries(weights)) { const metric = metrics[name]; if (metric) { const metricRating = metric.rating; const metricScore = metricRating === 'good' ? 100 : metricRating === 'needs-improvement' ? 50 : 0; score += metricScore * weight; totalWeight += weight; } } return totalWeight > 0 ? Math.round(score / totalWeight * 100) …
   ```
+- **shouldSendNextStop(supabase: MessagingClient, orderId: string,)** — `supabase/functions/_shared/messaging/auto-notices.ts`
+  ```
+  const { count: total } = await supabase .from("lalamove_stops") .select("id", { count: "exact", head: true }) .eq("order_id", orderId); if ((total ?? 0) < MULTI_STOP_MIN) return false; const { count: open } = await supabase .from("lalamove_stops") .select("id", { count: "exact", head: true }) .eq("order_id", orderId) .is("completed_at", null); return (open ?? 0) > 0;
+  ```
 - **canTrack(ctx: InboundContext)** — `supabase/functions/_shared/messaging/inbound-actions.ts`
   ```
   return Boolean(ctx.driverId) && ctx.hasDriverPosition;
@@ -1493,6 +1497,8 @@ _nenhum item encontrado_
 | `DEFAULT_TIMEOUT_MS` | `10` | `supabase/functions/_shared/channels/sms.ts` |
 | `DEFAULT_TIMEOUT_MS` | `15` | `supabase/functions/_shared/channels/zapp.ts` |
 | `DEFAULT_TTL_MINUTES` | `30` | `supabase/functions/_shared/channels/zapp.ts` |
+| `MULTI_STOP_MIN` | `3` | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| `SCHEDULED_REMINDER_WINDOW_MIN` | `30` | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | `RATE_WINDOW_MS` | `10` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `DEFAULT_STOPPED_WARNING_MINUTES` | `5` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
@@ -1679,6 +1685,8 @@ _nenhum item encontrado_
 | 100 | `src/hooks/useWebhookEvents.ts` |
 | 5000 | `src/hooks/useWebhookSecurityMetrics.ts` |
 | 500 | `src/pages/EvaluationsPage.tsx` |
+| 1 | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| 50 | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | 1 | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | 1 | `supabase/functions/bitrix24-process-queue/index.ts` |
 | 10 | `supabase/functions/bitrix24-process-queue/index.ts` |
@@ -2041,7 +2049,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1459 testes em 127 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1470 testes em 128 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2064,6 +2072,7 @@ _nenhum item encontrado_
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
 | `src/lib/__tests__/lalamoveCanonical.test.ts` | 18 | lalamoveCatalog · cobre os 14 serviceTypes oficiais · valida type guards · respeita disponibilidade por cidade … |
+| `supabase/functions/job-worker/eta-delay.test.ts` | 18 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
 | `supabase/functions/zapp-callback/payload.test.ts` | 18 | unwrapPayload desembrulha data e aceita raiz plana · message.status valido vira escrita de status · message.status com status desconhecido e ignorado sem perder id · status em maiuscula e normalizado … |
 | `supabase/functions/_shared/phone.test.ts` | 17 | normaliza celular com máscara · normaliza celular já com DDI · normaliza celular cru e remove zero de discagem · normaliza telefone fixo de 10 dígitos … |
 | `supabase/functions/lalamove-webhook/security.test.ts` | 17 | [HMAC] FAIL-CLOSED: secret ausente rejeita mesmo com assinatura válida presente · [HMAC] assinatura correta é aceita · [HMAC] assinatura incorreta é rejeitada · [HMAC] prefixo sha256= e caixa alta são normalizados … |
@@ -2080,7 +2089,6 @@ _nenhum item encontrado_
 | `src/lib/__tests__/lalamoveTimeline.test.ts` | 14 | normalizeOrderStatus · mapeia aliases legados e UAPI · retorna null para valores inválidos · buildOrderTimeline … |
 | `supabase/functions/_shared/messaging/inbound.test.ts` | 14 | etapa 113: id da opcao tem prioridade sobre qualquer palavra · etapa 113: digito escolhe a opcao oferecida no envio · etapa 113: digito sem mapa de opcoes nao vira escolha · etapa 113: variacoes de chegada caem na mesma intencao … |
 | `supabase/functions/geo-gateway/error-monitor.test.ts` | 14 | shouldAlert: taxa abaixo do limite não dispara · shouldAlert: taxa exatamente no limite não dispara (é > 5%, não >=) · shouldAlert: taxa acima do limite dispara · shouldAlert: amostra pequena não dispara mesmo com 100% de erro … |
-| `supabase/functions/job-worker/eta-delay.test.ts` | 14 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
@@ -2131,6 +2139,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useContractVersionUsageMonthly.test.ts` | 7 | aggregateMonthly — consolidação da série mensal de versões · retorna vazio para entrada vazia · soma múltiplos contratos por mês e versão · ordena os meses cronologicamente (ascendente) … |
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |
 | `src/lib/__tests__/html.test.ts` | 7 | escapeHtml · escapa as 5 entidades de HTML · escapa cada símbolo individualmente · não altera strings sem caracteres especiais … |
+| `supabase/functions/_shared/messaging/auto-notices.test.ts` | 7 | M6: pedido de 2 paradas nao gera aviso de proxima parada · M6: multi-parada com parada em aberto gera aviso · M6: multi-parada sem parada em aberto nao gera aviso · M11: avisa uma vez o pedido agendado dentro de 30 min … |
 | `supabase/functions/job-worker/route-fixture-replay.test.ts` | 7 | fixture: 40 pontos com sequencia e tempo crescentes · fixture: distancia total declarada bate com a soma dos segmentos · replay: todo ponto do trajeto esta sobre a propria rota (is_on_route=true) · replay: posicao a 600 m do trajeto conta como fora da rota … |
 | `supabase/functions/send-notification/recipients.test.ts` | 7 | normaliza o formato do trigger e descarta o que não tem canal ou destino · entrada que não é array devolve lista vazia, sem lançar · une pedido + configuração preservando os dois · mesmo destino no pedido e na configuração sai uma vez só … |
 | `supabase/functions/simulate-driver-movement/replay.test.ts` | 7 | replay: primeiro passo pula o ponto 0 (posicao inicial) e chega ao 1 · replay: e deterministico — mesma entrada, mesma saida · replay: percorre a fixture inteira e para no ultimo ponto · replay: ETA decresce ao longo do trajeto … |
@@ -2249,9 +2258,13 @@ _nenhum item encontrado_
 | `notifyDriver` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `invoke(` | `supabase/functions/check-driver-alerts/index.ts` |
 | `notify` | `supabase/functions/check-driver-alerts/index.ts` |
+| `notifyDriver` | `supabase/functions/check-driver-alerts/index.ts` |
 | `notifying` | `supabase/functions/check-driver-alerts/index.ts` |
 | `invoke(` | `supabase/functions/escalate-alerts/index.ts` |
 | `invoke(` | `supabase/functions/job-worker/index.ts` |
+| `notify` | `supabase/functions/job-worker/index.ts` |
+| `notifyDriver` | `supabase/functions/job-worker/index.ts` |
+| `notifyDriverEvent` | `supabase/functions/job-worker/index.ts` |
 | `notifyDeliveryContact` | `supabase/functions/lalamove-api/index.ts` |
 | `notify_delivery_contact` | `supabase/functions/lalamove-api/index.ts` |
 | `notify` | `supabase/functions/lalamove-webhook/index.ts` |

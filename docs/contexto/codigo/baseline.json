@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "f242d426c0d5ffe7c252e2121d9bc5cd54058eed",
+  "commit": "d882d051a4556762f042a3f744369411a80e2224",
   "branch": "main",
-  "data_commit": "2026-11-24T00:02:56-03:00",
+  "data_commit": "2026-11-24T00:50:11-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d882d05",
+    "data": "2026-11-24",
+    "assunto": "feat: lembrete de pedido agendado e aviso de proxima parada (#344)"
+   },
+   {
+    "sha": "b77ccd9",
+    "data": "2026-11-24",
+    "assunto": "feat: motor avisa o motorista em atraso de ETA e falta de comprovante (#343)"
+   },
    {
     "sha": "f242d42",
     "data": "2026-11-24",
@@ -121,19 +131,9 @@
     "sha": "ee920ac",
     "data": "2026-11-23",
     "assunto": "fix: validar contrato antes de criar cliente no new-device-alert (#328)"
-   },
-   {
-    "sha": "f20a3ea",
-    "data": "2026-11-23",
-    "assunto": "feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)"
-   },
-   {
-    "sha": "9c1ef6e",
-    "data": "2026-11-23",
-    "assunto": "feat: lote 10 - build es2022 + manualChunks + logger producao (#322)"
    }
   ],
-  "arquivos_mudados_7d": 473,
+  "arquivos_mudados_7d": 475,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 54
+    "mudancas": 56
    },
    {
     "pasta": "src/components/map",
@@ -172,6 +172,10 @@
     "mudancas": 17
    },
    {
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 17
+   },
+   {
     "pasta": ".github/workflows/ci.yml",
     "mudancas": 15
    },
@@ -181,10 +185,6 @@
    },
    {
     "pasta": "src/components/layout",
-    "mudancas": 15
-   },
-   {
-    "pasta": "supabase/functions/job-worker",
     "mudancas": 15
    },
    {
@@ -226,6 +226,10 @@
     "mudancas": 13
    },
    {
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 12
+   },
+   {
     "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 12
    },
@@ -246,10 +250,6 @@
     "mudancas": 11
    },
    {
-    "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 11
-   },
-   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
@@ -266,15 +266,15 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 10
+   },
+   {
     "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     "mudancas": 9
    },
    {
     "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 9
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 243
+    "commits": 245
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1102,
-  "arquivos_codigo": 702,
-  "linhas_codigo": 138956,
+  "arquivos_total": 1104,
+  "arquivos_codigo": 704,
+  "linhas_codigo": 139343,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 177,
+  "testes": 178,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 110,
-   "linhas": 27039
+   "arquivos": 112,
+   "linhas": 27426
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -590,7 +590,7 @@
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 1248
+   "linhas": 1291
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
@@ -606,7 +606,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 1062
+   "linhas": 1074
   },
   {
    "arquivo": "supabase/functions/_shared/schemas.ts",
@@ -682,7 +682,7 @@
   }
  ],
  "qualidade": {
-  "any": 134,
+  "any": 136,
   "console_log": 415,
   "ts_ignore": 0,
   "eslint_disable": 1,

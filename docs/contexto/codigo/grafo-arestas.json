@@ -2343,6 +2343,8 @@
   "supabase/functions/check-driver-alerts/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/messaging/auto-notices.ts",
+   "supabase/functions/_shared/messaging/notify-driver.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
   ],
@@ -2426,6 +2428,7 @@
   "supabase/functions/job-worker/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/messaging/notify-driver.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
   ],
@@ -2464,6 +2467,7 @@
   "supabase/functions/lalamove-webhook/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/messaging/auto-notices.ts",
    "supabase/functions/_shared/messaging/notify-driver.ts",
    "supabase/functions/_shared/phone.ts",
    "supabase/functions/_shared/schemas.ts",
