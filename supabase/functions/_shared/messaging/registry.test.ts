@@ -69,6 +69,37 @@ Deno.test("etapa 88: rota do banco e lida e canal desconhecido e descartado", as
   assertEquals(routes[0].requires_reply, true);
 });
 
+Deno.test("etapa 145: rota desligada continua vindo do banco com is_enabled falso", async () => {
+  const routes = await loadRoutes(client({
+    notification_routes: {
+      data: [
+        {
+          event: "ORDER_CANCELLED",
+          role: "driver",
+          channels: ["whatsapp"],
+          fallback_after_min: 0,
+          requires_reply: false,
+          reply_timeout_min: 0,
+          is_enabled: false,
+        },
+        {
+          event: "ETA_DELAY",
+          role: "driver",
+          channels: ["sms"],
+          fallback_after_min: 0,
+          requires_reply: false,
+          reply_timeout_min: 0,
+          is_enabled: true,
+        },
+      ],
+      error: null,
+    },
+  }));
+  assertEquals(routes.length, 2);
+  assertEquals(routes[0].is_enabled, false);
+  assertEquals(routes[1].is_enabled, true);
+});
+
 Deno.test("etapa 75: erro na leitura da configuracao nao liga nenhum provedor", async () => {
   const settings = await loadMessagingSettings(
     client({ messaging_settings: { data: null, error: { message: "offline" } } }),
