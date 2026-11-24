@@ -10,7 +10,11 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
-import { sendConfirmationNudges, sendScheduledReminders } from "../_shared/messaging/auto-notices.ts";
+import {
+  sendConfirmationEscalations,
+  sendConfirmationNudges,
+  sendScheduledReminders,
+} from "../_shared/messaging/auto-notices.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -313,12 +317,19 @@ serve(async (req) => {
       logger.log(`[Guardian] Confirmacao (M2): avisados ${nudges.sent} de ${nudges.checked} pedido(s) com aviso de atribuicao`);
     }
 
+    // M2 (etapa 102): vencido o prazo de resposta da cobranca, a operacao recebe
+    // o alerta interno. Rodar depois dos avisos mantem a ordem do fluxo.
+    const escalations = await sendConfirmationEscalations(supabase, now);
+    if (escalations.alerted > 0) {
+      logger.log(`[Guardian] Confirmacao (M2): ${escalations.alerted} de ${escalations.checked} pedido(s) sem resposta viraram alerta interno`);
+    }
+
     // Insert remaining new alerts (not handled individually above)
     if (alertsToCreate.length > 0) {
       await supabase.from('alerts').insert(alertsToCreate);
     }
 
-    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length, reminders: reminders.sent, confirmations: nudges.sent }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length, reminders: reminders.sent, confirmations: nudges.sent, noConfirmations: escalations.alerted }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error: unknown) {
     logger.error('Guardian check error:', error);

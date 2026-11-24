@@ -2,7 +2,10 @@ import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import {
   CONFIRMATION_DUE_MIN,
   CONFIRMATION_LOOKBACK_HOURS,
+  CONFIRMATION_TIMEOUT_DEFAULT_MIN,
+  ESCALATION_LOOKBACK_HOURS,
   SCHEDULED_REMINDER_WINDOW_MIN,
+  sendConfirmationEscalations,
   sendConfirmationNudges,
   sendScheduledReminders,
   shouldSendNextStop,
@@ -289,5 +292,230 @@ Deno.test("M2: janela = aviso entre now-6h e now-2min", async () => {
   assertEquals(
     opts.windowArgs?.lte,
     new Date(NOW.getTime() - CONFIRMATION_DUE_MIN * 60_000).toISOString(),
+  );
+});
+
+/* ------------------------------------------------------------------ */
+/* M2 (etapa 102) — prazo vencido sem resposta vira alerta interno.    */
+/* ------------------------------------------------------------------ */
+
+interface EscalationOpts {
+  nudges: Array<{ order_id: string | null; created_at: string | null }>;
+  orders: Record<string, Record<string, unknown>>;
+  /** Pedidos com resposta inbound depois da cobranca. */
+  replied: Set<string>;
+  /** Alertas `DRIVER_NO_CONFIRMATION` ja existentes no banco, por pedido. */
+  alerts: Record<string, Array<{ id: string; is_dismissed: boolean | null }>>;
+  /** `reply_timeout_min` da rota; `null` = sem linha de rota. */
+  route?: number | null;
+  windowArgs?: Record<string, string>;
+}
+
+function escalationClient(opts: EscalationOpts) {
+  const inserted: Array<Record<string, unknown>> = [];
+  let ledgerCall = 0;
+  let alertOrder = "";
+  const client = {
+    from(table: string) {
+      if (table === "notification_routes") {
+        const chain = {
+          select: () => chain,
+          eq: () => chain,
+          limit: () => chain,
+          maybeSingle: () =>
+            Promise.resolve({
+              data: opts.route == null ? null : { reply_timeout_min: opts.route },
+            }),
+        };
+        return chain;
+      }
+      if (table === "notification_messages") {
+        ledgerCall++;
+        const buscaDeCobrancas = ledgerCall === 1;
+        let orderId = "";
+        const chain = {
+          select: () => chain,
+          eq: (col: string, value: string) => {
+            if (col === "order_id") orderId = value;
+            return chain;
+          },
+          gte: (_col: string, value: string) => {
+            if (buscaDeCobrancas) opts.windowArgs = { ...(opts.windowArgs ?? {}), gte: value };
+            return chain;
+          },
+          lte: (_col: string, value: string) => {
+            if (buscaDeCobrancas) opts.windowArgs = { ...(opts.windowArgs ?? {}), lte: value };
+            return chain;
+          },
+          not: () => chain,
+          limit: () => (buscaDeCobrancas ? Promise.resolve({ data: opts.nudges }) : chain),
+          maybeSingle: () =>
+            Promise.resolve({ data: opts.replied.has(orderId) ? { id: "inbound-1" } : null }),
+        };
+        return chain;
+      }
+      if (table === "lalamove_orders") {
+        let id = "";
+        const chain = {
+          select: () => chain,
+          eq: (_col: string, value: string) => {
+            id = value;
+            return chain;
+          },
+          maybeSingle: () => Promise.resolve({ data: opts.orders[id] ?? null }),
+        };
+        return chain;
+      }
+      if (table === "alerts") {
+        const chain: any = {
+          select: () => chain,
+          eq: (col: string, value: string) => {
+            if (col === "order_id") alertOrder = value;
+            return chain;
+          },
+          limit: () => Promise.resolve({ data: opts.alerts[alertOrder] ?? [] }),
+          insert: (payload: Record<string, unknown>) => {
+            inserted.push(payload);
+            return Promise.resolve({ error: null });
+          },
+        };
+        return chain;
+      }
+      throw new Error(`tabela inesperada: ${table}`);
+    },
+  };
+  return { client, inserted };
+}
+
+const NUDGE_6MIN_ATRAS = new Date(NOW.getTime() - 6 * 60_000).toISOString();
+
+Deno.test("M2: cobranca vencida sem resposta vira alerta interno", async () => {
+  const opts: EscalationOpts = {
+    nudges: [{ order_id: "o1", created_at: NUDGE_6MIN_ATRAS }],
+    orders: {
+      o1: {
+        id: "o1",
+        driver_id: "d1",
+        status: "MATCHED",
+        metadata: {},
+        internal_order_id: "PED-1",
+      },
+    },
+    replied: new Set<string>(),
+    alerts: {},
+    route: 5,
+  };
+  const { client, inserted } = escalationClient(opts);
+  const r = await sendConfirmationEscalations(client as never, NOW);
+  assertEquals(r, { checked: 1, alerted: 1, timeoutMin: 5 });
+  assertEquals(inserted.length, 1);
+  assertEquals(inserted[0].type, "DRIVER_NO_CONFIRMATION");
+  assertEquals(inserted[0].severity, "WARNING");
+  assertEquals(inserted[0].order_id, "o1");
+  assertEquals(inserted[0].driver_id, "d1");
+  assertEquals(
+    (inserted[0].metadata as Record<string, unknown>).source,
+    "confirmation_timeout",
+  );
+});
+
+Deno.test("M2: resposta do motorista depois da cobranca nao vira alerta", async () => {
+  const opts: EscalationOpts = {
+    nudges: [{ order_id: "o1", created_at: NUDGE_6MIN_ATRAS }],
+    orders: { o1: { id: "o1", driver_id: "d1", status: "MATCHED", metadata: {} } },
+    replied: new Set<string>(["o1"]),
+    alerts: {},
+    route: 5,
+  };
+  const { client, inserted } = escalationClient(opts);
+  const r = await sendConfirmationEscalations(client as never, NOW);
+  assertEquals(r, { checked: 1, alerted: 0, timeoutMin: 5 });
+  assertEquals(inserted.length, 0);
+});
+
+Deno.test("M2: alerta aberto nao duplica, alerta arquivado nao bloqueia", async () => {
+  const opts: EscalationOpts = {
+    nudges: [
+      { order_id: "o1", created_at: NUDGE_6MIN_ATRAS },
+      { order_id: "o2", created_at: NUDGE_6MIN_ATRAS },
+    ],
+    orders: {
+      o1: { id: "o1", driver_id: "d1", status: "MATCHED", metadata: {} },
+      o2: { id: "o2", driver_id: "d2", status: "MATCHED", metadata: {} },
+    },
+    replied: new Set<string>(),
+    alerts: {
+      o1: [{ id: "a1", is_dismissed: false }],
+      o2: [{ id: "a2", is_dismissed: true }],
+    },
+    route: 5,
+  };
+  const { client, inserted } = escalationClient(opts);
+  const r = await sendConfirmationEscalations(client as never, NOW);
+  assertEquals(r, { checked: 2, alerted: 1, timeoutMin: 5 });
+  assertEquals(inserted.map((a) => a.order_id), ["o2"]);
+});
+
+Deno.test("M2: coletado, confirmado, cancelado e sem motorista nao alertam", async () => {
+  const opts: EscalationOpts = {
+    nudges: [
+      { order_id: "p", created_at: NUDGE_6MIN_ATRAS },
+      { order_id: "c", created_at: NUDGE_6MIN_ATRAS },
+      { order_id: "k", created_at: NUDGE_6MIN_ATRAS },
+      { order_id: "n", created_at: NUDGE_6MIN_ATRAS },
+    ],
+    orders: {
+      p: { id: "p", driver_id: "d1", status: "PICKED_UP", metadata: {} },
+      c: { id: "c", driver_id: "d1", status: "CANCELLED", metadata: {} },
+      k: {
+        id: "k",
+        driver_id: "d1",
+        status: "MATCHED",
+        metadata: { driver_pickup_confirmed_at: NUDGE_6MIN_ATRAS },
+      },
+      n: { id: "n", driver_id: null, status: "PENDING", metadata: {} },
+    },
+    replied: new Set<string>(),
+    alerts: {},
+    route: 5,
+  };
+  const { client, inserted } = escalationClient(opts);
+  const r = await sendConfirmationEscalations(client as never, NOW);
+  assertEquals(r, { checked: 4, alerted: 0, timeoutMin: 5 });
+  assertEquals(inserted.length, 0);
+});
+
+Deno.test("M2: prazo vem da rota e a janela vai de now-6h a now-prazo", async () => {
+  const opts: EscalationOpts = {
+    nudges: [],
+    orders: {},
+    replied: new Set<string>(),
+    alerts: {},
+    route: 15,
+  };
+  const { client } = escalationClient(opts);
+  const r = await sendConfirmationEscalations(client as never, NOW);
+  assertEquals(r.timeoutMin, 15);
+  assertEquals(
+    opts.windowArgs?.gte,
+    new Date(NOW.getTime() - ESCALATION_LOOKBACK_HOURS * 3_600_000).toISOString(),
+  );
+  assertEquals(opts.windowArgs?.lte, new Date(NOW.getTime() - 15 * 60_000).toISOString());
+});
+
+Deno.test("M2: sem linha de rota o prazo cai no padrao de 5 min", async () => {
+  const opts: EscalationOpts = {
+    nudges: [],
+    orders: {},
+    replied: new Set<string>(),
+    alerts: {},
+    route: null,
+  };
+  const { client } = escalationClient(opts);
+  const r = await sendConfirmationEscalations(client as never, NOW);
+  assertEquals(r.timeoutMin, CONFIRMATION_TIMEOUT_DEFAULT_MIN);
+  assertEquals(
+    opts.windowArgs?.lte,
+    new Date(NOW.getTime() - CONFIRMATION_TIMEOUT_DEFAULT_MIN * 60_000).toISOString(),
   );
 });
