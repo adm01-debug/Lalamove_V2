@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "a741f0d69b45a9459681259b68b5ba1302bf458a",
+  "sha": "8d7ec0f0e3b90f83f141f933ca7c714804682503",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 11:29 UTC",
+  "generated_at": "2026-11-24 12:30 UTC",
   "files_total": 1105,
   "code_files": 924,
   "code_lines": 162172
@@ -79102,10 +79102,19 @@
   }
  },
  "git": {
-  "sha": "a741f0d69b45a9459681259b68b5ba1302bf458a",
+  "sha": "8d7ec0f0e3b90f83f141f933ca7c714804682503",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "8d7ec0f",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: retorno do Guardian expoe quantas confirmacoes (M2) foram pedidas (#351)",
+    "files": [
+     "supabase/functions/check-driver-alerts/index.ts"
+    ]
+   },
    {
     "sha": "a741f0d",
     "date": "2026-11-24",
@@ -79484,16 +79493,6 @@
      "src/pages/ProfilePage.tsx",
      "src/pages/drivers/DriverCard.tsx"
     ]
-   },
-   {
-    "sha": "680e653",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)",
-    "files": [
-     "src/hooks/useSystemHealth.ts",
-     "src/pages/OrdersPage.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -79502,12 +79501,12 @@
     10
    ],
    [
-    "src/pages/LiveMapPage.tsx",
+    "supabase/functions/check-driver-alerts/index.ts",
     4
    ],
    [
-    "supabase/functions/check-driver-alerts/index.ts",
-    3
+    "src/pages/LiveMapPage.tsx",
+    4
    ],
    [
     "supabase/functions/job-worker/index.ts",

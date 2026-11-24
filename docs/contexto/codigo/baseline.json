@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a741f0d69b45a9459681259b68b5ba1302bf458a",
+  "commit": "8d7ec0f0e3b90f83f141f933ca7c714804682503",
   "branch": "main",
-  "data_commit": "2026-11-24T08:29:11-03:00",
+  "data_commit": "2026-11-24T09:30:15-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "8d7ec0f",
+    "data": "2026-11-24",
+    "assunto": "fix: retorno do Guardian expoe quantas confirmacoes (M2) foram pedidas (#351)"
+   },
    {
     "sha": "a741f0d",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "21ba6a5",
     "data": "2026-11-23",
     "assunto": "fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)"
-   },
-   {
-    "sha": "84fad61",
-    "data": "2026-11-23",
-    "assunto": "feat: itens 68/75/80/81/89/92 frontend hardening lote4 (#316)"
    }
   ],
   "arquivos_mudados_7d": 484,
@@ -282,6 +282,10 @@
     "mudancas": 8
    },
    {
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "mudancas": 8
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 8
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/integrations/supabase/types.ts",
     "mudancas": 7
-   },
-   {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
-    "mudancas": 7
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 251
+    "commits": 252
    },
    {
     "autor": "dependabot[bot]",

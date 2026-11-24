@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a741f0d69b45a9459681259b68b5ba1302bf458a` (2026-11-24T08:29:11-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `8d7ec0f0e3b90f83f141f933ca7c714804682503` (2026-11-24T09:30:15-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -292,7 +292,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9871 nós · 20455 arestas · 691 comunidades · grafo do commit `a741f0d6`
+- 9871 nós · 20455 arestas · 691 comunidades · grafo do commit `8d7ec0f0`
 - comunidades maiores: cn (196), lucide-react (131), App.tsx (123), react (117), NotificationHistoryPage.tsx (113), snapshot.py (104), badge.tsx (102), ref_https (100), EvaluationsPage.tsx (97), ref_node_path (96), AlertsPage.tsx (92), geo-gateway/index.ts (86)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `8d7ec0f` fix: retorno do Guardian expoe quantas confirmacoes (M2) foram pedidas (#351)
 - 2026-11-24 `a741f0d` feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)
 - 2026-11-24 `520a9a2` docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)
 - 2026-11-24 `49e4bc3` fix: topic unico em todo canal realtime de nome fixo (#348)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `3153586` feat: rotas editaveis com ordem de canais e exige resposta (#339)
 - 2026-11-23 `7c71244` fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)
 - 2026-11-23 `562d0de` feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)
-- 2026-11-23 `5adbf84` fix: topic unico por montagem nos canais realtime (#336)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
