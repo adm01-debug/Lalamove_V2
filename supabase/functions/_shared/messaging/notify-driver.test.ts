@@ -261,7 +261,24 @@ Deno.test("etapa 89: evento repetido nao vira segunda mensagem", async () => {
     },
   });
   assertEquals(result.outcome, "duplicate");
-  assertEquals(envios, 1);
+  // O claim precisa acontecer antes do envio: com o insert duplicado o provedor
+  // nao pode nem ser chamado, senao o motorista recebe a mesma mensagem duas vezes.
+  assertEquals(envios, 0);
+  assertEquals(db.writes.filter((w) => w.op === "update").length, 0);
+});
+
+Deno.test("falha de envio fecha a reserva como failed (nao fica queued)", async () => {
+  const db = fakeDb({});
+  const result = await notifyDriver(db.client, REQ, {
+    senders: {
+      sms: () => Promise.resolve({ success: false, error: "provedor fora do ar" }),
+    },
+  });
+  assertEquals(result.outcome, "failed");
+  assertEquals(result.ledgerId, "ledger-1");
+  const update = db.writes.find((w) => w.op === "update");
+  assertEquals(update?.payload.status, "failed");
+  assertEquals(update?.payload.metadata.reason, "provider_rejected");
 });
 
 Deno.test("opt-out registra a supressao sem chamar o provedor", async () => {
