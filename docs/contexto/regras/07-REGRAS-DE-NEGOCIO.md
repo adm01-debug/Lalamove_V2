@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1b18f657c1` · branch `main` · 2026-11-24 15:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d134764a6b` · branch `main` · 2026-11-24 15:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -830,7 +830,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `user` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx`<br>`supabase/functions/route-analyzer/index.ts` |
 | `role` | `viewer` | compara, escreve | `src/lib/roles.ts`<br>`src/pages/RolesPage.tsx` |
 | `last_status` | `succeeded` | compara | `src/components/health/CronJobsHealthPanel.tsx` |
-| `tracking_status` | `ACTIVE` | compara, filtra | `src/components/orders/OrderDetailModal.tsx`<br>`supabase/functions/check-driver-alerts/index.ts`<br>`supabase/functions/job-worker/index.ts` |
+| `tracking_status` | `ACTIVE` | compara, filtra | `src/components/map/hooks/useTrackingData.ts`<br>`src/components/orders/OrderDetailModal.tsx`<br>`src/hooks/useSLAMetrics.ts`<br>`src/pages/LiveMapPage.tsx`<br>`supabase/functions/check-driver-alerts/index.ts`<br>… +1 |
 | `notification_status` | `no_recipient` | compara | `src/components/orders/OrderGeoEvents.tsx` |
 | `notification_status` | `queued` | filtra | `supabase/functions/send-notification/index.ts` |
 | `state` | `CLOSED` | escreve | `src/utils/circuitBreaker.ts` |

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1b18f657c1d6e203cfbd40c357e50be7cf3bfc15",
+  "commit": "d134764a6be9aed8f549f09d762ea8bee1e3b30c",
   "branch": "main",
-  "data_commit": "2026-11-24T12:02:48-03:00",
+  "data_commit": "2026-11-24T12:12:22-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d134764",
+    "data": "2026-11-24",
+    "assunto": "fix: mapas e SLA so consideram tracking ativo (#361)"
+   },
    {
     "sha": "1b18f65",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "562d0de",
     "data": "2026-11-23",
     "assunto": "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)"
-   },
-   {
-    "sha": "5adbf84",
-    "data": "2026-11-23",
-    "assunto": "fix: topic unico por montagem nos canais realtime (#336)"
    }
   ],
-  "arquivos_mudados_7d": 493,
+  "arquivos_mudados_7d": 494,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 48
+    "mudancas": 50
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -246,6 +246,10 @@
     "mudancas": 11
    },
    {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 11
+   },
+   {
     "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 11
    },
@@ -274,10 +278,6 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 10
-   },
-   {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 10
    },
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 261
+    "commits": 262
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1117,
   "arquivos_codigo": 716,
-  "linhas_codigo": 141391,
+  "linhas_codigo": 141411,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 164,
-   "linhas": 29635
+   "linhas": 29653
   },
   "src/hooks": {
    "arquivos": 115,
-   "linhas": 19859
+   "linhas": 19860
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21611
+   "linhas": 21612
   },
   "src/services": {
    "arquivos": 1,

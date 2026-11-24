@@ -672,7 +672,7 @@
   {
    "arquivo": "src/components/map/hooks/__tests__/useTrackingData.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 129,
+   "linhas": 146,
    "testa": [
     "src/components/map/hooks/useTrackingData.ts"
    ],

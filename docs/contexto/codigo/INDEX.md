@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1b18f657c1d6e203cfbd40c357e50be7cf3bfc15` (2026-11-24T12:02:48-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d134764a6be9aed8f549f09d762ea8bee1e3b30c` (2026-11-24T12:12:22-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1117 |
 | arquivos_codigo | 716 |
-| linhas_codigo | 141391 |
+| linhas_codigo | 141411 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9907 nós · 20554 arestas · 687 comunidades · grafo do commit `1b18f657`
-- comunidades maiores: cn (265), lucide-react (184), App.tsx (176), react (137), AppLayout (125), ref_https (121), ref_node_path (113), snapshot.py (106), send-notification/index.ts (82), dependencies (81), gerar.mjs (76), 4. Componentes, hooks, libs e estado — **revisado** (74)
+- 9909 nós · 20558 arestas · 691 comunidades · grafo do commit `d134764a`
+- comunidades maiores: cn (263), AppLayout (176), react (164), App.tsx (138), ref_https (127), NotificationHistoryPage.tsx (119), useAuth (106), DashboardRedesigned.tsx (98), ref_node_path (97), client.ts (88), @tanstack/react-query (85), send-notification/index.ts (82)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -309,9 +309,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
 - src/components/orders/NewOrderDialog.tsx (11)
+- src/pages/LiveMapPage.tsx (11)
 - supabase/functions/_shared/schemas.ts (11)
 - supabase/functions/check-driver-alerts/index.ts (11)
-- supabase/functions/geo-gateway/index.ts (11)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `d134764` fix: mapas e SLA so consideram tracking ativo (#361)
 - 2026-11-24 `1b18f65` fix: guardian so avalia tracking ativo (#360)
 - 2026-11-24 `aacd178` fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)
 - 2026-11-24 `524a6f4` fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `520a9a2` docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)
 - 2026-11-24 `49e4bc3` fix: topic unico em todo canal realtime de nome fixo (#348)
 - 2026-11-24 `0e04753` fix: ledger reservado antes do envio ao motorista (#347)
-- 2026-11-24 `3f160c3` feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
