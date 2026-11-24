@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: guardian so avalia tracking ativo (#360)",
    "fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)",
    "fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)",
    "fix: rota/ETA so recalcula com posicao viva do motorista (#357)",
-   "fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)",
-   "fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)"
+   "fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

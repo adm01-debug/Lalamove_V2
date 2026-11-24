@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "aacd178270ca966abb46f2f4a7eb8ce57472dc20",
+  "commit": "1b18f657c1d6e203cfbd40c357e50be7cf3bfc15",
   "branch": "main",
-  "data_commit": "2026-11-24T11:46:31-03:00",
+  "data_commit": "2026-11-24T12:02:48-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1b18f65",
+    "data": "2026-11-24",
+    "assunto": "fix: guardian so avalia tracking ativo (#360)"
+   },
    {
     "sha": "aacd178",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "5adbf84",
     "data": "2026-11-23",
     "assunto": "fix: topic unico por montagem nos canais realtime (#336)"
-   },
-   {
-    "sha": "4040276",
-    "data": "2026-11-23",
-    "assunto": "chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)"
    }
   ],
   "arquivos_mudados_7d": 493,
@@ -250,6 +250,10 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
     "mudancas": 11
    },
@@ -271,10 +275,6 @@
    },
    {
     "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 10
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 260
+    "commits": 261
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1117,
   "arquivos_codigo": 716,
-  "linhas_codigo": 141387,
+  "linhas_codigo": 141391,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 120,
-   "linhas": 29210
+   "linhas": 29214
   },
   "tailwind.config.ts": {
    "arquivos": 1,

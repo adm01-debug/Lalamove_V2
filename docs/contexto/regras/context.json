@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "aacd178270ca966abb46f2f4a7eb8ce57472dc20",
+  "sha": "1b18f657c1d6e203cfbd40c357e50be7cf3bfc15",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 14:46 UTC",
+  "generated_at": "2026-11-24 15:03 UTC",
   "files_total": 1111,
   "code_files": 930,
-  "code_lines": 163147
+  "code_lines": 163151
  },
  "version": "1.3.2",
- "facts_hash": "09babe162e02754f",
+ "facts_hash": "e741a60ad5c5bf61",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22816,7 +22816,7 @@
   {
    "module": "supabase/functions",
    "files": 120,
-   "lines": 29210,
+   "lines": 29214,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -36090,6 +36090,12 @@
     "field": "status",
     "value": "COMPLETED",
     "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/check-driver-alerts/index.ts",
+    "field": "tracking_status",
+    "value": "ACTIVE",
+    "kind": "filtra"
    },
    {
     "file": "supabase/functions/check-driver-alerts/index.ts",
@@ -50077,6 +50083,7 @@
     "tracking_status": {
      "ACTIVE": [
       "compara:src/components/orders/OrderDetailModal.tsx",
+      "filtra:supabase/functions/check-driver-alerts/index.ts",
       "filtra:supabase/functions/job-worker/index.ts"
      ]
     },
@@ -74664,7 +74671,7 @@
   },
   "supabase/functions/check-driver-alerts/index.ts": {
    "path": "supabase/functions/check-driver-alerts/index.ts",
-   "lines": 354,
+   "lines": 358,
    "tables": [
     {
      "table": "alert_configurations",
@@ -74712,6 +74719,9 @@
      "alert_type",
      "config",
      "is_enabled"
+    ],
+    "active_tracking": [
+     "tracking_status"
     ],
     "alerts": [
      "driver_id",
@@ -74775,6 +74785,11 @@
      "field": "status",
      "value": "COMPLETED",
      "kind": "compara"
+    },
+    {
+     "field": "tracking_status",
+     "value": "ACTIVE",
+     "kind": "filtra"
     },
     {
      "field": "type",
@@ -79586,10 +79601,19 @@
   }
  },
  "git": {
-  "sha": "aacd178270ca966abb46f2f4a7eb8ce57472dc20",
+  "sha": "1b18f657c1d6e203cfbd40c357e50be7cf3bfc15",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "1b18f65",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: guardian so avalia tracking ativo (#360)",
+    "files": [
+     "supabase/functions/check-driver-alerts/index.ts"
+    ]
+   },
    {
     "sha": "aacd178",
     "date": "2026-11-24",
@@ -79956,17 +79980,6 @@
      "supabase/functions/job-worker/eta-delay.test.ts",
      "supabase/functions/job-worker/index.ts"
     ]
-   },
-   {
-    "sha": "e918dd6",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)",
-    "files": [
-     "src/hooks/__tests__/useDashboardStats.test.ts",
-     "src/hooks/useDashboardStats.ts",
-     "src/pages/DashboardRedesigned.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -79976,7 +79989,7 @@
    ],
    [
     "supabase/functions/check-driver-alerts/index.ts",
-    6
+    7
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -80009,10 +80022,6 @@
    [
     "src/pages/MessagingSettingsPage.tsx",
     3
-   ],
-   [
-    "src/pages/DashboardRedesigned.tsx",
-    2
    ],
    [
     "src/pages/ExternalDataPage.tsx",
@@ -80048,6 +80057,10 @@
    ],
    [
     "supabase/functions/_shared/messaging/notify-driver.ts",
+    2
+   ],
+   [
+    "supabase/functions/job-worker/eta-delay.test.ts",
     2
    ]
   ]
