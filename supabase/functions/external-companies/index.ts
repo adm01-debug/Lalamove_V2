@@ -211,6 +211,20 @@ serve(async (req) => {
           .or(buildSearchFilter(branchConfig, search))
           .limit(limit)) as { data: any[] | null };
 
+        // `suppliers` só trouxe quem casou com o termo buscado; a filial pode
+        // pertencer a um fornecedor que não casou. Sem isso o resultado aparece
+        // como "Matriz SP" e o operador não sabe de quem é o ponto de coleta.
+        const missingOwnerIds = [...new Set(
+          (branches ?? []).map((b: any) => b.supplier_id).filter((id: unknown): id is string => !!id && !supplierNames.has(id as string)),
+        )];
+        if (missingOwnerIds.length) {
+          const { data: owners } = (await externalClient
+            .from('suppliers')
+            .select('id, name')
+            .in('id', missingOwnerIds)) as { data: any[] | null };
+          for (const owner of owners ?? []) supplierNames.set(owner.id, owner.name);
+        }
+
         for (const branch of branches ?? []) {
           const fullAddress = formatAddress(branch, branchConfig.addressFields);
           if (!fullAddress) continue;
