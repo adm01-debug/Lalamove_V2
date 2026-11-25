@@ -95,3 +95,9 @@ verify_jwt = true
 # toda function declarada — com o diretorio ausente o deploy inteiro falha com "entrypoint path
 # does not exist". A function ainda esta deployada em producao (sem chamador) e sera removida la
 # quando autorizado; remover do painel nao depende deste arquivo.
+
+# telemetry-csp-report: coletor do header Content-Security-Policy-Report-Only de vercel.json.
+# O navegador nao envia JWT em relatorio de CSP, entao a funcao e publica por natureza; o
+# limite de corpo (8 KB), o rate limit por IP e a ausencia de persistencia estao no codigo.
+[functions.telemetry-csp-report]
+verify_jwt = false
