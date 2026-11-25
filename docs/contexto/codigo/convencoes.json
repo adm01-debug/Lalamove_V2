@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "chore: least privilege nas funcoes internas de manutencao (#378)",
    "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)",
    "fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)",
    "fix: renovacao do token UAPI pelo coletor via refresh_token (#374)",
-   "feat: alerta quando o snapshot da UAPI para de atualizar (#373)",
-   "chore: reconcilia versoes de migration aplicadas direto no banco (#372)"
+   "feat: alerta quando o snapshot da UAPI para de atualizar (#373)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

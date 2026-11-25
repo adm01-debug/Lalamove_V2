@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6736c92120` · branch `main` · 2026-11-25 11:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1ded4709ec` · branch `main` · 2026-11-25 12:06 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -115,7 +115,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 131 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 132 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -248,6 +248,7 @@
 - `supabase/migrations/20261126120000_messaging_foundation.sql`
 - `supabase/migrations/20261126130000_geo_jobs_freshness.sql`
 - `supabase/migrations/20261126140000_uapi_snapshot.sql`
+- `supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -412,7 +413,7 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +5 |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
 | grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants`, `cache_refresh_log`, `job_queue_processing_log` |
-| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +34 |
+| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +44 |
 | grant | service_role, authenticated | execute | `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `messaging_month_cost_cents` |
 | revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs`, `geo_budget_notify_if_needed`, `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `notification_messages_scrub_bodies`, `record_messaging_usage`, `messaging_month_cost_cents`, `refresh_geo_jobs` |
 | revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view`, `refresh_cache_view` |
@@ -431,7 +432,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | authenticated, anon, public | execute | `claim_alert_notification`, `get_pending_escalations` |
 | revoke | public | all | `increment_contract_usage` |
 | revoke | public, anon | execute | `geo_budget_status` |
-| revoke | public, anon, authenticated | execute | `geo_audit_config`, `geo_evaluate_tracking`, `geo_usage_increment` |
+| revoke | public, anon, authenticated | execute | `geo_audit_config`, `geo_evaluate_tracking`, `geo_usage_increment`, `process_job_queue`, `refresh_geo_jobs`, `cleanup_processing_logs`, `notification_messages_scrub_bodies`, `geo_budget_notify_if_needed`, `create_audit_log`, `cache_view_count`, `end_order_tracking`, `record_messaging_usage`, `trg_close_tracking_on_order_end` |
 
 ## Riscos de acesso detectados
 

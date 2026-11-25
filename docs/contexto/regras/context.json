@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6736c92120c64cbc305e2681469287d0d60cb9da",
+  "sha": "1ded4709ece7ccc32e706bee7bad8567a09f50c6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 11:30 UTC",
-  "files_total": 1133,
-  "code_files": 950,
-  "code_lines": 165045
+  "generated_at": "2026-11-25 12:06 UTC",
+  "files_total": 1134,
+  "code_files": 951,
+  "code_lines": 165127
  },
  "version": "1.3.2",
- "facts_hash": "34530e6f1cfb8e5a",
+ "facts_hash": "544363336e1781c8",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -189,7 +189,7 @@
   "languages": {
    ".ts": 366,
    ".tsx": 246,
-   ".sql": 215,
+   ".sql": 216,
    ".mjs": 110,
    ".py": 8,
    ".js": 4,
@@ -15491,6 +15491,7 @@
    "supabase/migrations/20261126120000_messaging_foundation.sql",
    "supabase/migrations/20261126130000_geo_jobs_freshness.sql",
    "supabase/migrations/20261126140000_uapi_snapshot.sql",
+   "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
    "supabase/tests/00_stubs.sql",
    "supabase/tests/01_functions.sql",
    "supabase/tests/02_scenarios.sql",
@@ -17869,6 +17870,166 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261126130000_geo_jobs_freshness.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "process_job_queue",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cleanup_processing_logs",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cache_view_count",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "trg_close_tracking_on_order_end",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "process_job_queue",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cleanup_processing_logs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cache_view_count",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "trg_close_tracking_on_order_end",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
    }
   ],
   "raises": [
@@ -23125,8 +23286,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 204,
-   "lines": 13921,
+   "files": 205,
+   "lines": 14003,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -29154,6 +29315,10 @@
    {
     "file": "supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql",
     "text": "_prefix_check` e aceitava `lalamove:` apenas em `lalamove_stops`. Isso ficou"
+   },
+   {
+    "file": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
+    "text": "process_job_queue(limit): dispara o dispatcher da fila com a chave do vault."
    }
   ],
   "db_constraints": [
@@ -52094,7 +52259,8 @@
    "supabase/migrations/20261125120000_notification_ledger.sql",
    "supabase/migrations/20261126120000_messaging_foundation.sql",
    "supabase/migrations/20261126130000_geo_jobs_freshness.sql",
-   "supabase/migrations/20261126140000_uapi_snapshot.sql"
+   "supabase/migrations/20261126140000_uapi_snapshot.sql",
+   "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
@@ -54460,6 +54626,166 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261126130000_geo_jobs_freshness.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "process_job_queue",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cleanup_processing_logs",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cache_view_count",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "trg_close_tracking_on_order_end",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "process_job_queue",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cleanup_processing_logs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cache_view_count",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "trg_close_tracking_on_order_end",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
    }
   ],
   "guards": [
@@ -80328,6 +80654,14 @@
    ],
    "uses_service_role": true
   },
+  "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql": {
+   "path": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
+   "lines": 82,
+   "rule_comments": [
+    "process_job_queue(limit): dispara o dispatcher da fila com a chave do vault."
+   ],
+   "uses_service_role": true
+  },
   "supabase/tests/00_stubs.sql": {
    "path": "supabase/tests/00_stubs.sql",
    "lines": 146,
@@ -80382,10 +80716,19 @@
   }
  },
  "git": {
-  "sha": "6736c92120c64cbc305e2681469287d0d60cb9da",
+  "sha": "1ded4709ece7ccc32e706bee7bad8567a09f50c6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "1ded470",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "chore: least privilege nas funcoes internas de manutencao (#378)",
+    "files": [
+     "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
+    ]
+   },
    {
     "sha": "6736c92",
     "date": "2026-11-25",
@@ -80733,16 +81076,6 @@
      "src/pages/LiveMapPage.tsx",
      "src/pages/PasswordResetApprovalsPage.tsx"
     ]
-   },
-   {
-    "sha": "0e04753",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: ledger reservado antes do envio ao motorista (#347)",
-    "files": [
-     "supabase/functions/_shared/messaging/notify-driver.test.ts",
-     "supabase/functions/_shared/messaging/notify-driver.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80819,11 +81152,11 @@
     2
    ],
    [
-    "src/components/lalamove/UapiSnapshotBadge.tsx",
+    "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
     1
    ],
    [
-    "src/lib/uapiSnapshot.test.ts",
+    "src/components/lalamove/UapiSnapshotBadge.tsx",
     1
    ]
   ]

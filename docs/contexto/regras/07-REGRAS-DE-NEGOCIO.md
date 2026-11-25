@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6736c92120` · branch `main` · 2026-11-25 11:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1ded4709ec` · branch `main` · 2026-11-25 12:06 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2598,3 +2598,4 @@ _nenhum item encontrado_
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql` |
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 | _prefix_check` e aceitava `lalamove:` apenas em `lalamove_stops`. Isso ficou | `supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql` |
+| process_job_queue(limit): dispara o dispatcher da fila com a chave do vault. | `supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql` |

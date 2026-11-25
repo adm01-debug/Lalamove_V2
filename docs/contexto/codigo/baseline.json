@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "6736c92120c64cbc305e2681469287d0d60cb9da",
+  "commit": "1ded4709ece7ccc32e706bee7bad8567a09f50c6",
   "branch": "main",
-  "data_commit": "2026-11-25T08:30:08-03:00",
+  "data_commit": "2026-11-25T09:03:40-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1ded470",
+    "data": "2026-11-25",
+    "assunto": "chore: least privilege nas funcoes internas de manutencao (#378)"
+   },
    {
     "sha": "6736c92",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "71cf6b0",
     "data": "2026-11-24",
     "assunto": "fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)"
-   },
-   {
-    "sha": "65473ca",
-    "data": "2026-11-24",
-    "assunto": "feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)"
    }
   ],
-  "arquivos_mudados_7d": 525,
+  "arquivos_mudados_7d": 526,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -242,10 +242,6 @@
     "mudancas": 12
    },
    {
-    "arquivo": "supabase/config.toml",
-    "mudancas": 12
-   },
-   {
     "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 12
    },
@@ -263,6 +259,10 @@
    },
    {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 11
+   },
+   {
+    "arquivo": "supabase/config.toml",
     "mudancas": 11
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 277
+    "commits": 278
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1139,
+  "arquivos_total": 1140,
   "arquivos_codigo": 726,
   "linhas_codigo": 143140,
   "rotas": 57,
@@ -322,7 +322,7 @@
   "hooks": 102,
   "edge_functions": 28,
   "tabelas": 94,
-  "migrations": 204,
+  "migrations": 205,
   "cron_jobs": 24,
   "testes": 189,
   "workflows": 5,
