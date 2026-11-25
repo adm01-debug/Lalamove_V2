@@ -1,17 +1,17 @@
 # Graph Report - Lalamove_V2  (2026-11-25)
 
 ## Corpus Check
-- 1109 files · ~1,153,285 words
+- 1110 files · ~1,153,610 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 16 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
 ## Summary
-- 10009 nodes · 20778 edges · 704 communities (487 shown, 217 thin omitted)
+- 10010 nodes · 20778 edges · 705 communities (487 shown, 218 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 1260 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `962d1b5b`
+- Built from commit: `0bd75b9b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -619,7 +619,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (704 total, 217 thin omitted)
+## Communities (705 total, 218 thin omitted)
 
 ### Community 0 - "cn"
 Cohesion: 0.02
@@ -2571,18 +2571,18 @@ Nodes (3): auth.users, public.geo_blocks, public.password_reset_requests
 
 ## Knowledge Gaps
 - **3849 isolated node(s):** `session-start.sh script`, `PATH`, `$schema`, `style`, `rsc` (+3844 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 4788 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **217 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 4789 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **218 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `useMetrics.ts`, `badge.tsx`, `lucide-react`, `4. Componentes, hooks, libs e estado — **revisado**`, `layout-guard.mjs`, `RateLimitDashboardPage.tsx`, `react`, `App.tsx`, `Sidebar`, `useRealtimeSubscriptions.ts`, `NotificationPreferences.tsx`, `types/index.ts`, `SLODashboardPage.tsx`, `useDrivers.ts`, `motion.tsx`, `useWebhookEvents.ts`, `ErrorBoundary`, `useCachedStats.ts`, `OrdersPage.tsx`, `AlertsPage.tsx`, `DriverProfileModal.tsx`, `AddressAutocomplete.tsx`, `LiveMapPage.tsx`, `useCommandPaletteSearch.ts`, `ProvidersTab`, `ContactPicker.tsx`, `OrdersTable.tsx`, `StatusTimeline.tsx`, `Bloco 7 — Integração: URL como estado, modais endereçáveis e multi-aba (145–164)`, `useIncidents.ts`, `chart.tsx`, `Bloco 8 — Métricas, telemetria e iteração (165–182)`, `useAlertConfigurations.ts`?**
-  _High betweenness centrality (0.130) - this node is a cross-community bridge._
+  _High betweenness centrality (0.128) - this node is a cross-community bridge._
 - **Why does `vitest` connect `client.ts` to `cn`, `Bloco 9 — Testes de navegação, documentação e rollout (183–200)`, `ref_node_fs`, `Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI)`, `roles.ts`, `useNotificationHistory.ts`, `package.json`, `useMapMarkers.test.ts`, `useRealtimeSubscriptions.ts`, `useMapProviderPolicy.ts`, `types/index.ts`, `ProtectedRoute`, `useMapbox.ts`, `useDrivers.ts`, `SLODashboardPage.tsx`, `Changelog`, `useMapMarkers.ts`, `useExternalData.ts`, `NewOrderDialog.tsx`, `OrderTrackingMap.tsx`, `lalamoveReasons.ts`, `useWebhookEvents.ts`, `useGeo.ts`, `MapsSettingsPage.tsx`, `LiveMap.tsx`, `AlertsPage.tsx`, `useAdvancedReports.ts`, `AddressAutocomplete.tsx`, `GoogleMapsCanvas.tsx`, `useCommandPaletteSearch.ts`, `useTrackingData.ts`, `ContactPicker.tsx`, `uapiErrors.ts`, `StatusTimeline.tsx`, `lalamoveOrderEdit.ts`, `useIncidents.ts`, `MessagingSettingsPage.test.tsx`, `lalamoveCanonical.test.ts`, `uapiSnapshot.ts`, `useContractVersionUsage.ts`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
+  _High betweenness centrality (0.059) - this node is a cross-community bridge._
 - **Why does `react` connect `react` to `cn`, `client.ts`, `badge.tsx`, `lucide-react`, `4. Componentes, hooks, libs e estado — **revisado**`, `RateLimitDashboardPage.tsx`, `App.tsx`, `useScheduledTheme.ts`, `Sidebar`, `webVitals.ts`, `package.json`, `useAchievementsSystem.tsx`, `useRealtimeSubscriptions.ts`, `NotificationPreferences.tsx`, `useMapProviderPolicy.ts`, `types/index.ts`, `SLODashboardPage.tsx`, `useMapbox.ts`, `useDrivers.ts`, `motion.tsx`, `Changelog`, `useMapMarkers.ts`, `NewOrderDialog.tsx`, `OrderTrackingMap.tsx`, `useWebhookEvents.ts`, `useGeo.ts`, `MapsSettingsPage.tsx`, `useCachedStats.ts`, `LiveMap.tsx`, `OrdersPage.tsx`, `AlertsPage.tsx`, `useAdvancedReports.ts`, `DriverProfileModal.tsx`, `AddressAutocomplete.tsx`, `GoogleMapsCanvas.tsx`, `LiveMapPage.tsx`, `useCommandPaletteSearch.ts`, `useErrorLogs.ts`, `useTrackingData.ts`, `errorMonitoring.ts`, `ContactPicker.tsx`, `OrdersTable.tsx`, `StatusTimeline.tsx`, `useIncidents.ts`, `useOfflineStorage.ts`, `Bloco 1 — Botão "Voltar" global (21–40)`, `chart.tsx`, `useLalamoveUapi.ts`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+  _High betweenness centrality (0.048) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `cn()` (e.g. with `Adicionado` and `layout-guard.mjs`) actually correct?**
   _`cn()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `session-start.sh script`, `PATH`, `$schema` to the rest of the system?**

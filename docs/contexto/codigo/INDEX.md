@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `962d1b5b640d8287318875f96eafa3bf6bf8e946` (2026-11-25T14:56:50-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `0bd75b9b3f1d9472f3db769679a254a62adf3c9a` (2026-11-25T15:06:17-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (613), SQL (217), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
+- linguagens: TypeScript (613), SQL (218), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1142 |
+| arquivos_total | 1143 |
 | arquivos_codigo | 727 |
 | linhas_codigo | 143379 |
 | rotas | 57 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 102 |
 | edge_functions | 28 |
 | tabelas | 94 |
-| migrations | 206 |
+| migrations | 207 |
 | cron_jobs | 24 |
 | testes | 190 |
 | workflows | 5 |
@@ -293,16 +293,16 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10009 nós · 20778 arestas · 704 comunidades · grafo do commit `962d1b5b`
+- 10010 nós · 20778 arestas · 705 comunidades · grafo do commit `0bd75b9b`
 - comunidades maiores: cn (262), client.ts (157), badge.tsx (127), lucide-react (121), ref_https (120), 4. Componentes, hooks, libs e estado — **revisado** (113), RateLimitDashboardPage.tsx (106), App.tsx (91), react (89), ref_node_path (85), dependencies (81), job-worker/index.ts (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (40)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- package.json (20)
+- package.json (19)
 - .github/workflows/ci.yml (18)
-- package-lock.json (18)
+- package-lock.json (17)
 - supabase/functions/job-worker/index.ts (15)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-25 `0bd75b9` fix: religa alertas que nasceram desligados e morriam em silencio (#387)
 - 2026-11-25 `962d1b5` fix: limita "hoje" do dashboard ao fuso de São Paulo (#388)
 - 2026-11-25 `3d6697c` feat: painel lista as filiais dos fornecedores (#386)
 - 2026-11-25 `9a49234` chore: CI executa os testes do lalamove-token-refresh (#376)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `6736c92` feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)
 - 2026-11-25 `18c1aff` fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)
 - 2026-11-25 `3ce0ba6` fix: renovacao do token UAPI pelo coletor via refresh_token (#374)
-- 2026-11-24 `1d31dac` feat: alerta quando o snapshot da UAPI para de atualizar (#373)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

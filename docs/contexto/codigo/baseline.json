@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "962d1b5b640d8287318875f96eafa3bf6bf8e946",
+  "commit": "0bd75b9b3f1d9472f3db769679a254a62adf3c9a",
   "branch": "main",
-  "data_commit": "2026-11-25T14:56:50-03:00",
+  "data_commit": "2026-11-25T15:06:17-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "0bd75b9",
+    "data": "2026-11-25",
+    "assunto": "fix: religa alertas que nasceram desligados e morriam em silencio (#387)"
+   },
    {
     "sha": "962d1b5",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "569b237",
     "data": "2026-11-24",
     "assunto": "fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)"
-   },
-   {
-    "sha": "42b967e",
-    "data": "2026-11-24",
-    "assunto": "chore: docs do gateway e do refresh uapi sem proxy inexistente (#363)"
    }
   ],
-  "arquivos_mudados_7d": 529,
+  "arquivos_mudados_7d": 530,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 20
+    "mudancas": 19
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 18
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 288
+    "commits": 289
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1142,
+  "arquivos_total": 1143,
   "arquivos_codigo": 727,
   "linhas_codigo": 143379,
   "rotas": 57,
@@ -322,7 +322,7 @@
   "hooks": 102,
   "edge_functions": 28,
   "tabelas": 94,
-  "migrations": 206,
+  "migrations": 207,
   "cron_jobs": 24,
   "testes": 190,
   "workflows": 5,

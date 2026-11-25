@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `962d1b5b64` · branch `main` · 2026-11-25 17:57 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0bd75b9b3f` · branch `main` · 2026-11-25 18:06 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2362,6 +2362,8 @@ _nenhum item encontrado_
 | `notify` | `supabase/migrations/20261123120000_geo_budget_cron.sql` |
 | `notify_slack` | `supabase/migrations/20261124120000_internal_alert_channels.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261124120000_internal_alert_channels.sql` |
+| `notify_` | `supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql` |
+| `notify_whatsapp` | `supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql` |
 
 ## N. Regras citadas em comentários do código
 

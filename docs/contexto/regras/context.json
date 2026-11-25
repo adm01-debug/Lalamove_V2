@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "962d1b5b640d8287318875f96eafa3bf6bf8e946",
+  "sha": "0bd75b9b3f1d9472f3db769679a254a62adf3c9a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 17:57 UTC",
-  "files_total": 1136,
-  "code_files": 953,
-  "code_lines": 165417
+  "generated_at": "2026-11-25 18:06 UTC",
+  "files_total": 1137,
+  "code_files": 954,
+  "code_lines": 165462
  },
  "version": "1.3.2",
- "facts_hash": "bcbc40f2fd895499",
+ "facts_hash": "8f71544825ad75b2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -189,7 +189,7 @@
   "languages": {
    ".ts": 367,
    ".tsx": 246,
-   ".sql": 217,
+   ".sql": 218,
    ".mjs": 110,
    ".py": 8,
    ".js": 4,
@@ -15493,6 +15493,7 @@
    "supabase/migrations/20261126140000_uapi_snapshot.sql",
    "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
    "supabase/migrations/20261126160000_revoke_anon_metric_views.sql",
+   "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql",
    "supabase/tests/00_stubs.sql",
    "supabase/tests/01_functions.sql",
    "supabase/tests/02_scenarios.sql",
@@ -23310,8 +23311,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 206,
-   "lines": 14054,
+   "files": 207,
+   "lines": 14099,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -44977,6 +44978,14 @@
    },
    {
     "file": "supabase/migrations/20261124120000_internal_alert_channels.sql",
+    "call": "notify_whatsapp"
+   },
+   {
+    "file": "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql",
+    "call": "notify_"
+   },
+   {
+    "file": "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql",
     "call": "notify_whatsapp"
    }
   ],
@@ -80604,6 +80613,14 @@
    "path": "supabase/migrations/20261126160000_revoke_anon_metric_views.sql",
    "lines": 51
   },
+  "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql": {
+   "path": "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql",
+   "lines": 45,
+   "side_effects": [
+    "notify_",
+    "notify_whatsapp"
+   ]
+  },
   "supabase/tests/00_stubs.sql": {
    "path": "supabase/tests/00_stubs.sql",
    "lines": 146,
@@ -80658,10 +80675,19 @@
   }
  },
  "git": {
-  "sha": "962d1b5b640d8287318875f96eafa3bf6bf8e946",
+  "sha": "0bd75b9b3f1d9472f3db769679a254a62adf3c9a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "0bd75b9",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: religa alertas que nasceram desligados e morriam em silencio (#387)",
+    "files": [
+     "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql"
+    ]
+   },
    {
     "sha": "962d1b5",
     "date": "2026-11-25",
@@ -80984,15 +81010,6 @@
      "supabase/functions/lalamove-webhook/security.test.ts",
      "supabase/functions/lalamove-webhook/security.ts"
     ]
-   },
-   {
-    "sha": "524a6f4",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)",
-    "files": [
-     "supabase/migrations/20261126130000_geo_jobs_freshness.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -81037,6 +81054,10 @@
     2
    ],
    [
+    "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql",
+    1
+   ],
+   [
     "src/hooks/__tests__/useDashboardStats.test.ts",
     1
    ],
@@ -81070,10 +81091,6 @@
    ],
    [
     "src/lib/bitrix-config.test.ts",
-    1
-   ],
-   [
-    "src/lib/bitrix-config.ts",
     1
    ]
   ]
