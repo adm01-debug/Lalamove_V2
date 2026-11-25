@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
+import { requireRole } from "../_shared/auth.ts";
 import {
   errorResponse,
   parseJsonBody,
@@ -13,40 +14,6 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
-
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
-const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
-
-// Ordem de precedência: admin > manager > operator > viewer. ">= operator"
-// significa que admin, manager e operator passam; apenas viewer é negado.
-const ROLE_PRIORITY: Record<string, number> = {
-  admin: 4,
-  manager: 3,
-  operator: 2,
-  viewer: 1,
-};
-
-// Exige JWT válido e papel >= operator (admin/manager/operator).
-// Retorna { error } se não autorizado, { error: null } se OK.
-async function requireOperator(req: Request): Promise<{ error: Response | null }> {
-  const authHeader = req.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
-  }
-  const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    global: { headers: { Authorization: authHeader } },
-  });
-  const { data: claimsData, error: claimsError } = await anonClient.auth.getClaims();
-  if (claimsError || !claimsData?.claims) {
-    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
-  }
-  const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role;
-  const level = ROLE_PRIORITY[role] ?? 0;
-  if (level < ROLE_PRIORITY.operator) {
-    return { error: new Response(JSON.stringify({ error: 'Forbidden: operator role required' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
-  }
-  return { error: null };
-}
 
 /**
  * Tabelas que existem no banco externo de produto (projeto doufsxqlfjyuvxuezpln)
@@ -93,7 +60,7 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const authCheck = await requireOperator(req);
+  const authCheck = await requireRole(req, ['admin', 'manager', 'operator']);
   if (authCheck.error) return authCheck.error;
 
   const externalUrl = Deno.env.get('EXTERNAL_SUPABASE_URL');
