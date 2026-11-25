@@ -113,9 +113,12 @@ serve(async (req) => {
           });
         }
 
+        // Somente as colunas que a UI consome. `select('*')` trazia
+        // `api_credentials` de `suppliers` -- usuario, senha e token da API do
+        // fornecedor -- para o navegador de qualquer operator.
         let query = externalClient
           .from(table)
-          .select('*', { count: 'exact' })
+          .select(listConfig.fields.join(', '), { count: 'exact' })
           .range(offset, offset + limit - 1)
           .order('id', { ascending: true });
 
@@ -148,15 +151,18 @@ serve(async (req) => {
           );
         }
 
-        if (!EXTERNAL_TABLES[table]) {
+        const getConfig = EXTERNAL_TABLES[table];
+        if (!getConfig) {
           return new Response(JSON.stringify({ data: null, unavailable: true }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           });
         }
 
+        // Mesma allowlist de colunas do `list`: credencial de fornecedor nao
+        // sai para o navegador.
         const { data, error } = await externalClient
           .from(table)
-          .select('*')
+          .select(getConfig.fields.join(', '))
           .eq('id', id)
           .single();
 
