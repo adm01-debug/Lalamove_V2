@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1a40403e0b` · branch `main` · 2026-11-25 22:08 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae612232f1` · branch `main` · 2026-11-25 23:54 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -220,8 +220,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `user_roles` | Authenticated users can update roles | UPDATE | authenticated | permissive | `true` |  |
 | `user_roles` | Service role full access user_roles | ALL | service_role | permissive | `true` | `true` |
 | `query_telemetry` | System can insert telemetry | INSERT | authenticated | permissive |  | `has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR public.can_run_db_diagnostics(auth.uid())` |
-| `audit_log` | audit_log_select | SELECT | public | permissive | `auth.uid() IS NOT NULL` |  |
-| `audit_log` | audit_log_insert | INSERT | public | permissive |  | `true` |
 | `lalamove_webhook_config` | Admins manage webhook config | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role)` | `public.has_role(auth.uid(), 'admin'::app_role)` |
 | `bitrix24_spa_sync` | Admin manager view spa sync | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role)` |  |
 | `job_queue` | Service role full access | ALL | service_role | permissive | `true` | `true` |
@@ -245,6 +243,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `messaging_usage` | service role escreve uso de mensageria | ALL | service_role | permissive | `true` | `true` |
 | `lalamove_uapi_snapshot` | equipe le snapshot uapi | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
 | `lalamove_uapi_snapshot` | service role escreve snapshot uapi | ALL | service_role | permissive | `true` | `true` |
+| `audit_log` | audit_log_insert | INSERT | authenticated | permissive |  | `user_id = auth.uid()` |
+| `audit_log` | audit_log_select | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role)` |  |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 

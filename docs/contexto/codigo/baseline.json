@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1a40403e0bac0d6de63da2eff40606c351687035",
+  "commit": "ae612232f1effc38e6381ecb6cb90b465e398aa6",
   "branch": "main",
-  "data_commit": "2026-11-25T19:02:04-03:00",
+  "data_commit": "2026-11-25T20:52:25-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "ae61223",
+    "data": "2026-11-25",
+    "assunto": "infra: hardening de banco - search_path, indices de FK, initplan de RLS, audit_log e PK de tracking_events (#392)"
+   },
    {
     "sha": "1a40403",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "9d7a8c0",
     "data": "2026-11-24",
     "assunto": "feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)"
-   },
-   {
-    "sha": "99d3b77",
-    "data": "2026-11-24",
-    "assunto": "feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)"
    }
   ],
-  "arquivos_mudados_7d": 530,
+  "arquivos_mudados_7d": 536,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1143,
+  "arquivos_total": 1149,
   "arquivos_codigo": 727,
   "linhas_codigo": 143544,
   "rotas": 57,
@@ -322,7 +322,7 @@
   "hooks": 102,
   "edge_functions": 28,
   "tabelas": 94,
-  "migrations": 207,
+  "migrations": 213,
   "cron_jobs": 24,
   "testes": 190,
   "workflows": 5,

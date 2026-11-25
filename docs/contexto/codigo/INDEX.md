@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1a40403e0bac0d6de63da2eff40606c351687035` (2026-11-25T19:02:04-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `ae612232f1effc38e6381ecb6cb90b465e398aa6` (2026-11-25T20:52:25-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (613), SQL (218), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
+- linguagens: TypeScript (613), SQL (224), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1143 |
+| arquivos_total | 1149 |
 | arquivos_codigo | 727 |
 | linhas_codigo | 143544 |
 | rotas | 57 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 102 |
 | edge_functions | 28 |
 | tabelas | 94 |
-| migrations | 207 |
+| migrations | 213 |
 | cron_jobs | 24 |
 | testes | 190 |
 | workflows | 5 |
@@ -293,8 +293,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10013 nós · 20781 arestas · 702 comunidades · grafo do commit `1a40403e`
-- comunidades maiores: cn (272), lucide-react (181), ref_node_fs (124), react (122), ref_https (114), AlertConfigCard.tsx (107), snapshot.py (106), @tanstack/react-query (95), App.tsx (89), send-notification/index.ts (83), 4. Componentes, hooks, libs e estado — **revisado** (82), dependencies (81)
+- 10041 nós · 20804 arestas · 717 comunidades · grafo do commit `ae612232`
+- comunidades maiores: cn (241), button.tsx (130), client.ts (122), badge.tsx (119), snapshot.py (104), ref_node_path (101), RateLimitDashboardPage.tsx (96), AppLayout (88), 4. Componentes, hooks, libs e estado — **revisado** (88), dependencies (81), react (77), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-25 `ae61223` infra: hardening de banco - search_path, indices de FK, initplan de RLS, audit_log e PK de tracking_events (#392)
 - 2026-11-25 `1a40403` fix: seed-fix-rls exige admin/manager e nao abre policies para anon (#393)
 - 2026-11-25 `70c35c5` feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)
 - 2026-11-25 `148b657` fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `63359d6` fix: external-companies usa o helper de auth compartilhado (#381)
 - 2026-11-25 `56e3472` fix: busca de endereco externa usa o schema real do banco de produtos (#380)
 - 2026-11-25 `29a49ed` fix: fecha leitura anonima das views de metrica (#379)
-- 2026-11-25 `1ded470` chore: least privilege nas funcoes internas de manutencao (#378)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

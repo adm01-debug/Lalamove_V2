@@ -6,10 +6,10 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 207,
+ "migrations": 213,
  "seeds": [],
  "avisos": [
-  "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
+  "19 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
  ],
  "extensoes": [
   "pg_cron",
@@ -198,6 +198,7 @@
   "notify_lalamove_quota_low",
   "notify_webhook_security_event",
   "pause_cron_job",
+  "pg_temp",
   "process_job_queue",
   "provision_tracking_partitions",
   "prune_tracking_events_partitions",
@@ -1858,13 +1859,13 @@
     {
      "nome": "audit_log_insert",
      "comando": "insert",
-     "para": "public",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
      "nome": "audit_log_select",
      "comando": "select",
-     "para": "public",
+     "para": "authenticated",
      "tipo": "permissive"
     }
    ],
@@ -4880,7 +4881,13 @@
    },
    "rls": true,
    "policies": [],
-   "indices": [],
+   "indices": [
+    {
+     "nome": "geo_budget_updated_by_idx",
+     "colunas": "updated_by",
+     "unico": false
+    }
+   ],
    "fks": [
     "updated_by->auth"
    ],
@@ -5071,7 +5078,13 @@
    },
    "rls": true,
    "policies": [],
-   "indices": [],
+   "indices": [
+    {
+     "nome": "geo_defaults_updated_by_idx",
+     "colunas": "updated_by",
+     "unico": false
+    }
+   ],
    "fks": [
     "updated_by->auth"
    ],
@@ -5222,7 +5235,13 @@
    },
    "rls": true,
    "policies": [],
-   "indices": [],
+   "indices": [
+    {
+     "nome": "geo_settings_updated_by_idx",
+     "colunas": "updated_by",
+     "unico": false
+    }
+   ],
    "fks": [
     "updated_by->auth"
    ],
@@ -7819,6 +7838,11 @@
    ],
    "indices": [
     {
+     "nome": "lalamove_webhook_config_registered_by_idx",
+     "colunas": "registered_by",
+     "unico": false
+    },
+    {
      "nome": "uq_webhook_config_active_env",
      "colunas": "environment",
      "unico": true
@@ -8301,6 +8325,11 @@
      "nome": "message_templates_event_idx",
      "colunas": "event, role, channel",
      "unico": false
+    },
+    {
+     "nome": "message_templates_updated_by_idx",
+     "colunas": "updated_by",
+     "unico": false
     }
    ],
    "fks": [
@@ -8430,7 +8459,13 @@
      "tipo": "permissive"
     }
    ],
-   "indices": [],
+   "indices": [
+    {
+     "nome": "messaging_settings_updated_by_idx",
+     "colunas": "updated_by",
+     "unico": false
+    }
+   ],
    "fks": [
     "updated_by->auth"
    ],
@@ -9129,6 +9164,11 @@
    ],
    "indices": [
     {
+     "nome": "notification_messages_alert_id_idx",
+     "colunas": "alert_id",
+     "unico": false
+    },
+    {
      "nome": "notification_messages_client_message_id_key",
      "colunas": "client_message_id",
      "unico": true
@@ -9136,6 +9176,11 @@
     {
      "nome": "notification_messages_driver_created_idx",
      "colunas": "driver_id, created_at DESC",
+     "unico": false
+    },
+    {
+     "nome": "notification_messages_fallback_of_idx",
+     "colunas": "fallback_of",
      "unico": false
     },
     {
@@ -9259,7 +9304,13 @@
      "tipo": "permissive"
     }
    ],
-   "indices": [],
+   "indices": [
+    {
+     "nome": "notification_optouts_created_by_idx",
+     "colunas": "created_by",
+     "unico": false
+    }
+   ],
    "fks": [
     "created_by->auth"
    ],
@@ -9373,6 +9424,11 @@
     {
      "nome": "notification_routes_event_idx",
      "colunas": "event",
+     "unico": false
+    },
+    {
+     "nome": "notification_routes_updated_by_idx",
+     "colunas": "updated_by",
      "unico": false
     }
    ],

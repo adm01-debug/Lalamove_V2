@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1a40403e0b` · branch `main` · 2026-11-25 22:08 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae612232f1` · branch `main` · 2026-11-25 23:54 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -21,7 +21,7 @@
 | `alert_dedup` | enabled | public: has_role(auth.uid(),'admin') OR has_role(auth.uid(),'manager') | — | — | — |
 | `alerts` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') |
 | `alerts_sent` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `audit_log` | enabled | public: auth.uid() IS NOT NULL | public: true | — | — |
+| `audit_log` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) | authenticated: user_id = auth.uid() | — | — |
 | `auth.users` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `auth_logs` | enabled | public: auth.uid() = user_id<br>public: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') OR  | — | — |
 | `bitrix24_activities` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
@@ -115,7 +115,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 133 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 136 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -250,6 +250,9 @@
 - `supabase/migrations/20261126130000_geo_jobs_freshness.sql`
 - `supabase/migrations/20261126140000_uapi_snapshot.sql`
 - `supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql`
+- `supabase/migrations/20261126190000_audit_log_policies_restritas.sql`
+- `supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql`
+- `supabase/migrations/20261126230000_revoke_authenticated_manutencao.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -411,7 +414,7 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated, anon | execute | `get_driver_stats_cached`, `get_delivery_metrics_cached`, `get_hourly_metrics_cached`, `get_top_drivers_by_metric`, `cache_status` |
 | grant | authenticated, anon | select | `mv_driver_stats`, `mv_delivery_metrics`, `mv_hourly_metrics` |
 | grant | authenticated, anon, service_role | select | `driver_stats_cache`, `delivery_metrics_cache`, `hourly_metrics_cache`, `cache_status` |
-| grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +5 |
+| grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +8 |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
 | grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants`, `cache_refresh_log`, `job_queue_processing_log` |
 | grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +44 |
@@ -430,9 +433,10 @@ Middleware matcher (Next.js): nenhum
 | revoke | anon, public | execute | `claim_alert_notification`, `get_pending_escalations`, `acknowledge_alert`, `claim_alert_notification` |
 | revoke | authenticated | all | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view` |
 | revoke | authenticated | execute | `rollup_contract_version_usage`, `clear_login_attempts`, `clear_login_attempts` |
+| revoke | authenticated | update, delete, truncate, references, trigger | `audit_log` |
 | revoke | authenticated, anon, public | execute | `claim_alert_notification`, `get_pending_escalations` |
 | revoke | public | all | `increment_contract_usage` |
-| revoke | public, anon | execute | `geo_budget_status` |
+| revoke | public, anon | execute | `geo_budget_status`, `is_phone_opted_out`, `messaging_month_cost_cents`, `refresh_cache_view` |
 | revoke | public, anon, authenticated | execute | `geo_audit_config`, `geo_evaluate_tracking`, `geo_usage_increment`, `process_job_queue`, `refresh_geo_jobs`, `cleanup_processing_logs`, `notification_messages_scrub_bodies`, `geo_budget_notify_if_needed`, `create_audit_log`, `cache_view_count`, `end_order_tracking`, `record_messaging_usage`, `trg_close_tracking_on_order_end` |
 
 ## Riscos de acesso detectados
