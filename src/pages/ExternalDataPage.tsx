@@ -28,6 +28,7 @@ import {
   Phone,
   Mail,
   Database,
+  Warehouse,
 } from 'lucide-react';
 import {
   useExternalList,
@@ -44,6 +45,7 @@ const TABLE_ICONS: Record<ExternalTable, React.ReactNode> = {
   suppliers: <ShoppingBag className="w-4 h-4" />,
   carriers: <Truck className="w-4 h-4" />,
   contacts: <Contact className="w-4 h-4" />,
+  supplier_branches: <Warehouse className="w-4 h-4" />,
 };
 
 const PAGE_SIZE = 25;
@@ -78,7 +80,7 @@ export default function ExternalDataPage() {
           Base de Dados CRM
         </h2>
         <p className="text-muted-foreground mt-1">
-          Consulte empresas, clientes, fornecedores, transportadoras e contatos
+          Consulte empresas, clientes, fornecedores, filiais, transportadoras e contatos
         </p>
       </div>
 
@@ -90,7 +92,7 @@ export default function ExternalDataPage() {
       )}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {(Object.keys(TABLE_LABELS) as ExternalTable[]).map((table) => (
           <Card
             key={table}

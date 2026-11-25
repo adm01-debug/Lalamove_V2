@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useMemo, useId } from 'react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigation, AlertTriangle, PencilLine } from 'lucide-react';
+import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Warehouse, Navigation, AlertTriangle, PencilLine } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
 import type { MapboxFeature } from '@/hooks/useMapbox';
@@ -41,6 +41,7 @@ const SOURCE_ICONS: Record<ExternalTable, React.ReactNode> = {
   suppliers: <ShoppingBag className="w-3 h-3" />,
   carriers: <Truck className="w-3 h-3" />,
   contacts: <Contact className="w-3 h-3" />,
+  supplier_branches: <Warehouse className="w-3 h-3" />,
 };
 
 const SOURCE_LABELS: Record<ExternalTable, string> = {
@@ -49,6 +50,7 @@ const SOURCE_LABELS: Record<ExternalTable, string> = {
   suppliers: 'Fornecedor',
   carriers: 'Transportadora',
   contacts: 'Contato',
+  supplier_branches: 'Filial',
 };
 
 /**

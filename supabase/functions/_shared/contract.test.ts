@@ -889,3 +889,27 @@ Deno.test("[lalamove-uapi] set-token exige access_token e refresh_token", () => 
   assert(!result.ok);
   if (!result.ok) assert(result.body.error.fields.some((f) => f.field === "refresh_token"));
 });
+
+// ── external-companies: filiais do fornecedor (pontos de coleta) ─────────────
+
+Deno.test("[external-companies] supplier_branches é uma tabela válida", () => {
+  for (
+    const payload of [
+      { action: "list", table: "supplier_branches" },
+      { action: "get", table: "supplier_branches", id: "e774f024-0000-4000-8000-000000000000" },
+      { action: "schema", table: "supplier_branches" },
+    ]
+  ) {
+    const result = validateContract(getSchema("external-companies", "v1"), payload, "v1");
+    assert(result.ok, `esperado ok=true para ${JSON.stringify(payload)}`);
+  }
+});
+
+Deno.test("[external-companies] tabela fora do contrato continua 422", () => {
+  const result = validateContract(
+    getSchema("external-companies", "v1"),
+    { action: "list", table: "fornecedores_x" },
+    "v1",
+  );
+  assert(!result.ok);
+});
