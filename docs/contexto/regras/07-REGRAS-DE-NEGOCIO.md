@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3ce0ba6eed` · branch `main` · 2026-11-25 10:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c1affe4f` · branch `main` · 2026-11-25 10:39 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -950,6 +950,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `supabase/functions/geo-gateway/providers/types.ts` |
 | CHANGE_DRIVER_REASONS | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', | `supabase/functions/lalamove-api/index.ts` |
 | GatewayTarget | unified \| uapi | `supabase/functions/lalamove-gateway/route.ts` |
+| SnapshotHealthReason | fresh \| stale \| empty | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
 | RecipientRole | pickup_contact \| delivery_contact \| internal | `supabase/functions/send-notification/recipients.ts` |
 | ErrorAction | fallback \| retry \| give_up \| alert | `supabase/functions/zapp-callback/payload.ts` |
 | CALLBACK_EVENTS | "message.status", "message.inbound", "message.outbound_manual", | `supabase/functions/zapp-callback/payload.ts` |
@@ -2085,7 +2086,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1557 testes em 137 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1563 testes em 138 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2195,6 +2196,7 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |
+| `supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts` | 6 | [watchdog] coleta recente mantém o painel servido e sem alerta · [watchdog] fronteira de 120 min ainda é considerada saudável · [watchdog] 121 min já alerta: é o que evita carteira congelada em silêncio · [watchdog] snapshot vazio alerta mesmo sem data … |
 | `supabase/functions/lalamove-token-refresh/uapi-direct.test.ts` | 6 | [uapi-direct] URL pede refresh_token com cara de portal · [uapi-direct] corpo leva token e refresh_token em args · [uapi-direct] ret=0 devolve o novo par · [uapi-direct] sem refresh_token novo, mantem o atual … |
 | `supabase/functions/send-notification/sms-dispatch.test.ts` | 6 | buildSmsBody junta titulo, mensagem e pedido sem partes vazias · sem provedor configurado devolve erro explicito e nao envia · dispatchSms repassa o texto montado e a referencia do pedido · dispatchSms propaga a falha do provedor com o texto que tentou … |
 | `src/components/auth/ProtectedRoute.test.tsx` | 5 | ProtectedRoute · não renderiza o filho enquanto o AAL está carregando (loadingAAL true) · renderiza o filho quando tudo carrega e não exige verificação MFA · redireciona para /mfa-verify quando requireMFA e needsMFAVerification … |
@@ -2562,6 +2564,7 @@ _nenhum item encontrado_
 | ── 5. Telemetria de rate limit (Etapa 14) ───────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | * Ação conhecida mas que não pode ser atendida sem o proxy externo. */ | `supabase/functions/lalamove-gateway/route.ts` |
 | Watchdog nao pode derrubar o worker de refresh. | `supabase/functions/lalamove-token-refresh/index.ts` |
+| * Regra do watchdog do snapshot UAPI, isolada do worker para poder ser testada | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
 | Anti-WAF headers required for UAPI | `supabase/functions/lalamove-uapi/index.ts` |
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |
 | HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |

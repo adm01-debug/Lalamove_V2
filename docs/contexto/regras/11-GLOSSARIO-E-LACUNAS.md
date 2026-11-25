@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3ce0ba6eed` · branch `main` · 2026-11-25 10:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c1affe4f` · branch `main` · 2026-11-25 10:39 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -199,6 +199,7 @@
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `CHANGE_DRIVER_REASONS` (TS) | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', |  | `supabase/functions/lalamove-api/index.ts` |
 | `GatewayTarget` (TS) | unified \| uapi |  | `supabase/functions/lalamove-gateway/route.ts` |
+| `SnapshotHealthReason` (TS) | fresh \| stale \| empty |  | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
 | `RecipientRole` (TS) | pickup_contact \| delivery_contact \| internal |  | `supabase/functions/send-notification/recipients.ts` |
 | `ErrorAction` (TS) | fallback \| retry \| give_up \| alert |  | `supabase/functions/zapp-callback/payload.ts` |
 | `CALLBACK_EVENTS` (TS) | "message.status", "message.inbound", "message.outbound_manual", |  | `supabase/functions/zapp-callback/payload.ts` |
@@ -230,7 +231,6 @@ _nenhum item encontrado_
 | status | valor `all` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useAdvancedReports.ts`<br>`compara:src/hooks/useMessaging.ts`<br>`compara:src/pages/AdvancedReportsPage.tsx`<br>`escreve:src/hooks/useAdvancedReports.ts` |
 | status | valor `fulfilled` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDashboardStats.ts` |
 | status | valor `number` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/lib/geo-gateway.ts` |
-| status | valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/CacheMonitoringPage.tsx` |
 | status | valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/IncidentsPage.tsx` |
 | status | valor `PROCESSING` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/JobQueuePage.tsx` |
 | status | valor `entregue` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/channels/sms.ts` |

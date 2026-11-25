@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3ce0ba6eedceb22df08e5f53c856bc6b7b3d3564",
+  "sha": "18c1affe4f15e9f4437ffd36eb1d40e0ffc67ef2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 10:21 UTC",
-  "files_total": 1128,
-  "code_files": 945,
-  "code_lines": 164714
+  "generated_at": "2026-11-25 10:39 UTC",
+  "files_total": 1130,
+  "code_files": 947,
+  "code_lines": 164799
  },
  "version": "1.3.2",
- "facts_hash": "6d8625ffd2261773",
+ "facts_hash": "ee3ce967d2ba4127",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 362,
+   ".ts": 364,
    ".tsx": 245,
    ".sql": 215,
    ".mjs": 110,
@@ -22925,8 +22925,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 122,
-   "lines": 29595,
+   "files": 124,
+   "lines": 29680,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -23016,9 +23016,9 @@
     "geocode-fallback.ts: GeocodeFallbackResult, GeocodeFallbackDeps, geocodeAddress, geocodeOrderFallback",
     "index.ts: CHANGE_DRIVER_REASONS",
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
+    "snapshot-watchdog.ts: SnapshotHealthReason, SnapshotHealth, evaluateSnapshotHealth",
     "uapi-direct.ts: UAPI_HEADERS, UapiRefreshRequest, buildUapiRefreshRequest, UapiRefreshResult, parseUapiRefreshResponse",
-    "normalize.ts: normalizeLalamoveV3Payload",
-    "security.ts: timingSafeEqual, validateHmacSignature, classifySignatureFailure, validateLalamoveV3Signature"
+    "normalize.ts: normalizeLalamoveV3Payload"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -26329,6 +26329,11 @@
     "values": "unified | uapi"
    },
    {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts",
+    "name": "SnapshotHealthReason",
+    "values": "fresh | stale | empty"
+   },
+   {
     "file": "supabase/functions/send-notification/recipients.ts",
     "name": "RecipientRole",
     "values": "pickup_contact | delivery_contact | internal"
@@ -29017,6 +29022,10 @@
    {
     "file": "supabase/functions/lalamove-token-refresh/index.ts",
     "text": "Watchdog nao pode derrubar o worker de refresh."
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts",
+    "text": "* Regra do watchdog do snapshot UAPI, isolada do worker para poder ser testada"
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
@@ -43763,6 +43772,30 @@
     "name": "target uapi também resolve as ações v3 (o front manda tudo como unified)"
    },
    {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    "name": "[watchdog] coleta recente mantém o painel servido e sem alerta"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    "name": "[watchdog] fronteira de 120 min ainda é considerada saudável"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    "name": "[watchdog] 121 min já alerta: é o que evita carteira congelada em silêncio"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    "name": "[watchdog] snapshot vazio alerta mesmo sem data"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    "name": "[watchdog] data inválida não gera idade negativa nem passa como fresco"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    "name": "[watchdog] coleta no futuro (relógio adiantado) não dispara alerta"
+   },
+   {
     "file": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
     "name": "[uapi-direct] URL pede refresh_token com cara de portal"
    },
@@ -55937,13 +55970,6 @@
     "msg": "valor `number` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/lib/geo-gateway.ts"
-    ]
-   },
-   {
-    "kind": "status",
-    "msg": "valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS",
-    "where": [
-     "compara:src/pages/CacheMonitoringPage.tsx"
     ]
    },
    {
@@ -77412,7 +77438,7 @@
   },
   "supabase/functions/lalamove-token-refresh/index.ts": {
    "path": "supabase/functions/lalamove-token-refresh/index.ts",
-   "lines": 385,
+   "lines": 384,
    "tables": [
     {
      "table": "alerts",
@@ -77516,6 +77542,47 @@
     "1"
    ],
    "uses_service_role": true
+  },
+  "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts": {
+   "path": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+   "lines": 53,
+   "is_test": true,
+   "errors": [
+    "${msg} — esperado ${JSON.stringify(expected)}, veio ${JSON.stringify(actual)}"
+   ],
+   "params": [
+    {
+     "name": "STALE",
+     "value": "120"
+    }
+   ],
+   "tests": [
+    "[watchdog] coleta recente mantém o painel servido e sem alerta",
+    "[watchdog] fronteira de 120 min ainda é considerada saudável",
+    "[watchdog] 121 min já alerta: é o que evita carteira congelada em silêncio",
+    "[watchdog] snapshot vazio alerta mesmo sem data",
+    "[watchdog] data inválida não gera idade negativa nem passa como fresco",
+    "[watchdog] coleta no futuro (relógio adiantado) não dispara alerta"
+   ]
+  },
+  "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts": {
+   "path": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts",
+   "lines": 33,
+   "exports": [
+    "type SnapshotHealthReason",
+    "interface SnapshotHealth",
+    "function evaluateSnapshotHealth"
+   ],
+   "enums": [
+    {
+     "name": "SnapshotHealthReason",
+     "values": "fresh | stale | empty"
+    }
+   ],
+   "rule_comments": [
+    "* Regra do watchdog do snapshot UAPI, isolada do worker para poder ser testada"
+   ],
+   "doc": "Regra do watchdog do snapshot UAPI, isolada do worker para poder ser testada sem banco. O snapshot só serve o painel enquanto está fresco: a edge `lalamove-uapi` responde do snapshot e para de responder quando `expires_at` vence. Medir a idade da última coleta é o que transforma \"coletor morreu\" em …"
   },
   "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts": {
    "path": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
@@ -80216,10 +80283,21 @@
   }
  },
  "git": {
-  "sha": "3ce0ba6eedceb22df08e5f53c856bc6b7b3d3564",
+  "sha": "18c1affe4f15e9f4437ffd36eb1d40e0ffc67ef2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "18c1aff",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)",
+    "files": [
+     "supabase/functions/lalamove-token-refresh/index.ts",
+     "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+     "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts"
+    ]
+   },
    {
     "sha": "3ce0ba6",
     "date": "2026-11-25",
@@ -80567,17 +80645,6 @@
      "supabase/functions/zapp-callback/ledger.test.ts",
      "supabase/functions/zapp-callback/ledger.ts"
     ]
-   },
-   {
-    "sha": "5ae5aff",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "feat: aviso de chegada na coleta ao motorista (M4) (#345)",
-    "files": [
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "supabase/functions/job-worker/index.ts",
-     "supabase/functions/job-worker/notification-bridge.test.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80586,16 +80653,16 @@
     6
    ],
    [
+    "supabase/functions/lalamove-token-refresh/index.ts",
+    5
+   ],
+   [
     "supabase/functions/check-driver-alerts/index.ts",
     5
    ],
    [
-    "supabase/functions/lalamove-token-refresh/index.ts",
-    4
-   ],
-   [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    4
+    3
    ],
    [
     "src/hooks/useSLAMetrics.ts",
@@ -80618,10 +80685,6 @@
     2
    ],
    [
-    "supabase/functions/job-worker/index.ts",
-    2
-   ],
-   [
     "src/pages/NotificationHistoryPage.tsx",
     2
    ],
@@ -80636,6 +80699,14 @@
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
     2
+   ],
+   [
+    "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts",
+    1
    ],
    [
     "supabase/migrations/20241231000001_entity_versions.sql",
@@ -80655,10 +80726,6 @@
    ],
    [
     "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261121190000_validate_service_type_constraint.sql",
     1
    ]
   ]

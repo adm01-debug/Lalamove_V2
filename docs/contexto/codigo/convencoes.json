@@ -22,7 +22,7 @@
   ],
   "testes": [
    "co-localizado (__tests__) (61)",
-   "supabase/functions/<edge> (48)",
+   "supabase/functions/<edge> (49)",
    "guards em scripts/ (47)"
   ],
   "edge_functions": "supabase/functions",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)",
    "fix: renovacao do token UAPI pelo coletor via refresh_token (#374)",
    "feat: alerta quando o snapshot da UAPI para de atualizar (#373)",
    "chore: reconcilia versoes de migration aplicadas direto no banco (#372)",
-   "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)",
-   "fix: coleta agendada nao falha quando o perfil esta em uso (#370)"
+   "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
