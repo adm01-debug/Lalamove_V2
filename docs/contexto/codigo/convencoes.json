@@ -6,7 +6,7 @@
    "src/pages (55)"
   ],
   "componentes": [
-   "src/components (131)",
+   "src/components (132)",
    "src/pages (88)",
    "src/hooks (3)"
   ],
@@ -16,7 +16,7 @@
    "scripts/ai-context (1)"
   ],
   "servicos_logica": [
-   "src/lib (30)",
+   "src/lib (31)",
    "src/utils (6)",
    "src/integrations (4)"
   ],
@@ -54,7 +54,7 @@
  },
  "barrels_index": 4,
  "extensao_componentes": [
-  ".tsx (223)"
+  ".tsx (224)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)",
    "fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)",
    "fix: renovacao do token UAPI pelo coletor via refresh_token (#374)",
    "feat: alerta quando o snapshot da UAPI para de atualizar (#373)",
-   "chore: reconcilia versoes de migration aplicadas direto no banco (#372)",
-   "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)"
+   "chore: reconcilia versoes de migration aplicadas direto no banco (#372)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

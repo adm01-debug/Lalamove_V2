@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c1affe4f` · branch `main` · 2026-11-25 10:39 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6736c92120` · branch `main` · 2026-11-25 11:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -155,6 +155,7 @@
 | `OrderErrorField` (TS) | senderPhone \| recipientPhone \| schedule \| address |  | `src/lib/orderErrors.ts` |
 | `AppRole` (TS) | admin \| manager \| operator \| viewer |  | `src/lib/roles.ts` |
 | `StatusLevel` (TS) | operational \| attention \| critical \| info |  | `src/lib/statusPalette.ts` |
+| `SnapshotTone` (TS) | live \| fresh \| stale |  | `src/lib/uapiSnapshot.ts` |
 | `DriverStatus` (TS) | ACTIVE = 'ACTIVE', INACTIVE = 'INACTIVE', SUSPENDED = 'SUSPENDED', BANNED = 'BANNED', // Compatibilidade com sistema atual APPROVED = 'APPROVED', PENDING_APPROVAL = 'PENDING_APPROVAL', BLOCKED = 'BLOCKED', WHITELIST = 'WHITELIST', BLACKLIST = 'BLACKLIST' |  | `src/types/driver.ts` |
 | `RiskLevel` (TS) | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' |  | `src/types/driver.ts` |
 | `DeliveryOutcome` (TS) | SUCCESS = 'SUCCESS', FAILED = 'FAILED', DAMAGED = 'DAMAGED', STOLEN = 'STOLEN', LATE = 'LATE', WRONG_ADDRESS = 'WRONG_ADDRESS', CUSTOMER_UNAVAILABLE = 'CUSTOMER_UNAVAILABLE' |  | `src/types/driver.ts` |

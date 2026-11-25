@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 223,
+ "total": 224,
  "orfaos": 5,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -623,7 +623,7 @@
     "UapiCouponsPanel"
    ],
    "export_default": null,
-   "linhas": 105,
+   "linhas": 107,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useExchangeCoupon",
@@ -640,7 +640,7 @@
     "UapiFleetPanel"
    ],
    "export_default": null,
-   "linhas": 130,
+   "linhas": 139,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useFleetMutation",
@@ -658,7 +658,7 @@
     "UapiOrderHistoryPanel"
    ],
    "export_default": null,
-   "linhas": 128,
+   "linhas": 131,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useDownloadReceipt",
@@ -684,12 +684,26 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/lalamove/UapiSnapshotBadge.tsx",
+   "exports": [
+    "UapiSnapshotBadge"
+   ],
+   "export_default": null,
+   "linhas": 44,
+   "dominio": "components/lalamove",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 4,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/lalamove/UapiStatementPanel.tsx",
    "exports": [
     "UapiStatementPanel"
    ],
    "export_default": null,
-   "linhas": 149,
+   "linhas": 151,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useUapiWalletStatement"

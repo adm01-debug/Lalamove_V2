@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "18c1affe4f15e9f4437ffd36eb1d40e0ffc67ef2",
+  "sha": "6736c92120c64cbc305e2681469287d0d60cb9da",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 10:39 UTC",
-  "files_total": 1130,
-  "code_files": 947,
-  "code_lines": 164799
+  "generated_at": "2026-11-25 11:30 UTC",
+  "files_total": 1133,
+  "code_files": 950,
+  "code_lines": 165045
  },
  "version": "1.3.2",
- "facts_hash": "ee3ce967d2ba4127",
+ "facts_hash": "34530e6f1cfb8e5a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,8 +187,8 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 364,
-   ".tsx": 245,
+   ".ts": 366,
+   ".tsx": 246,
    ".sql": 215,
    ".mjs": 110,
    ".py": 8,
@@ -18370,7 +18370,7 @@
      "lalamove-uapi"
     ],
     "rpc_transitive": [],
-    "deps_count": 23
+    "deps_count": 25
    },
    {
     "path": "",
@@ -20526,7 +20526,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 167,
+  "components_count": 168,
   "hooks": [
    {
     "name": "useOrders",
@@ -22101,8 +22101,8 @@
   },
   {
    "module": "src/components",
-   "files": 166,
-   "lines": 29865,
+   "files": 167,
+   "lines": 29925,
    "tables": [
     "active_tracking",
     "lalamove_orders",
@@ -22240,6 +22240,7 @@
     "src/components/lalamove/UapiFleetPanel.tsx",
     "src/components/lalamove/UapiOrderHistoryPanel.tsx",
     "src/components/lalamove/UapiSessionRequired.tsx",
+    "src/components/lalamove/UapiSnapshotBadge.tsx",
     "src/components/lalamove/UapiStatementPanel.tsx",
     "src/components/lalamove/__tests__/UapiSessionRequired.test.tsx",
     "src/components/layout/AppLayout.tsx",
@@ -22273,14 +22274,13 @@
     "src/components/map/hooks/useMapAlerts.ts",
     "src/components/map/hooks/useMapMarkers.ts",
     "src/components/map/hooks/useMapboxToken.ts",
-    "src/components/map/hooks/useTrackingData.ts",
-    "src/components/map/hooks/useTrackingTrails.ts"
+    "src/components/map/hooks/useTrackingData.ts"
    ]
   },
   {
    "module": "src/hooks",
    "files": 115,
-   "lines": 19876,
+   "lines": 19930,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22539,8 +22539,8 @@
   },
   {
    "module": "src/lib",
-   "files": 51,
-   "lines": 4381,
+   "files": 53,
+   "lines": 4513,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -22570,6 +22570,7 @@
     "uapi-proxy.ts: UAPIResponse, UAPIUserData, ProxySession, uapi",
     "uapiErrors.ts: UapiErrorInfo, UAPI_ERROR_MAP, resolveUapiError, isUapiAuthFailure, UAPI_SESSION_MISSING_MESSAGE, UAPI_SESSION_MISSING_HINT",
     "uapiFormat.ts: formatFen, formatUapiTime",
+    "uapiSnapshot.ts: SnapshotTone, UapiSnapshotInfo, SnapshotDescription, SNAPSHOT_STALE_MINUTES, describeSnapshotAge",
     "uapiStatement.ts: AccountingRow, toIsoDate, fenToDecimal, toAccountingRows, summarizeAccountingRows",
     "user-display.ts: getDisplayName, getDisplayInitials",
     "utils.ts: cn"
@@ -22631,6 +22632,8 @@
     "src/lib/uapi-proxy.ts",
     "src/lib/uapiErrors.ts",
     "src/lib/uapiFormat.ts",
+    "src/lib/uapiSnapshot.test.ts",
+    "src/lib/uapiSnapshot.ts",
     "src/lib/uapiStatement.ts",
     "src/lib/user-display.ts",
     "src/lib/utils.test.ts",
@@ -26107,6 +26110,11 @@
     "file": "src/lib/statusPalette.ts",
     "name": "StatusLevel",
     "values": "operational | attention | critical | info"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.ts",
+    "name": "SnapshotTone",
+    "values": "live | fresh | stale"
    },
    {
     "file": "src/types/driver.ts",
@@ -32505,6 +32513,11 @@
     "file": "src/lib/uapiErrors.ts",
     "name": "UAPI_SESSION_MISSING_MESSAGE",
     "value": "'Sessão UAPI não configurada.'"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.ts",
+    "name": "SNAPSHOT_STALE_MINUTES",
+    "value": "60"
    },
    {
     "file": "src/pages/ExternalDataPage.tsx",
@@ -40810,6 +40823,42 @@
    {
     "file": "src/lib/phone.test.ts",
     "name": "mascara %s -> %s"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "describeSnapshotAge"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "marca leitura direta como ao vivo"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "mostra a idade da coleta em minutos"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "usa singular na primeira unidade"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "colapsa idades abaixo de um minuto"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "escala para horas e dias"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "trata 60 min como velho e 59 min como fresco"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "avisa quando a coleta veio sem horário"
+   },
+   {
+    "file": "src/lib/uapiSnapshot.test.ts",
+    "name": "não quebra com horário inválido nem com relógio adiantado"
    },
    {
     "file": "src/lib/utils.test.ts",
@@ -62119,7 +62168,7 @@
   },
   "src/components/lalamove/UapiCouponsPanel.tsx": {
    "path": "src/components/lalamove/UapiCouponsPanel.tsx",
-   "lines": 105,
+   "lines": 107,
    "exports": [
     "function UapiCouponsPanel"
    ],
@@ -62130,14 +62179,14 @@
   },
   "src/components/lalamove/UapiFleetPanel.tsx": {
    "path": "src/components/lalamove/UapiFleetPanel.tsx",
-   "lines": 130,
+   "lines": 139,
    "exports": [
     "function UapiFleetPanel"
    ]
   },
   "src/components/lalamove/UapiOrderHistoryPanel.tsx": {
    "path": "src/components/lalamove/UapiOrderHistoryPanel.tsx",
-   "lines": 128,
+   "lines": 131,
    "exports": [
     "function UapiOrderHistoryPanel"
    ]
@@ -62149,9 +62198,16 @@
     "function UapiSessionRequired"
    ]
   },
+  "src/components/lalamove/UapiSnapshotBadge.tsx": {
+   "path": "src/components/lalamove/UapiSnapshotBadge.tsx",
+   "lines": 44,
+   "exports": [
+    "function UapiSnapshotBadge"
+   ]
+  },
   "src/components/lalamove/UapiStatementPanel.tsx": {
    "path": "src/components/lalamove/UapiStatementPanel.tsx",
-   "lines": 149,
+   "lines": 151,
    "exports": [
     "function UapiStatementPanel"
    ]
@@ -67182,13 +67238,16 @@
   },
   "src/hooks/useLalamoveUapi.ts": {
    "path": "src/hooks/useLalamoveUapi.ts",
-   "lines": 297,
+   "lines": 351,
    "exports": [
     "interface UapiEnvelope",
+    "interface UapiFreshness",
+    "interface UapiList",
     "class UapiError",
     "interface UapiOrderSummary",
     "function useUapiOrderHistory",
     "function flattenOrderPages",
+    "function lastPageFreshness",
     "interface UapiWalletTransaction",
     "function useUapiWalletStatement",
     "function useDownloadReceipt",
@@ -70641,6 +70700,46 @@
     "function formatUapiTime"
    ],
    "doc": "Formatadores compartilhados dos payloads UAPI (valores em `fen` = centavos)."
+  },
+  "src/lib/uapiSnapshot.test.ts": {
+   "path": "src/lib/uapiSnapshot.test.ts",
+   "lines": 56,
+   "is_test": true,
+   "tests": [
+    "describeSnapshotAge",
+    "marca leitura direta como ao vivo",
+    "mostra a idade da coleta em minutos",
+    "usa singular na primeira unidade",
+    "colapsa idades abaixo de um minuto",
+    "escala para horas e dias",
+    "trata 60 min como velho e 59 min como fresco",
+    "avisa quando a coleta veio sem horário",
+    "não quebra com horário inválido nem com relógio adiantado"
+   ]
+  },
+  "src/lib/uapiSnapshot.ts": {
+   "path": "src/lib/uapiSnapshot.ts",
+   "lines": 76,
+   "exports": [
+    "type SnapshotTone",
+    "interface UapiSnapshotInfo",
+    "interface SnapshotDescription",
+    "const SNAPSHOT_STALE_MINUTES",
+    "function describeSnapshotAge"
+   ],
+   "enums": [
+    {
+     "name": "SnapshotTone",
+     "values": "live | fresh | stale"
+    }
+   ],
+   "params": [
+    {
+     "name": "SNAPSHOT_STALE_MINUTES",
+     "value": "60"
+    }
+   ],
+   "doc": "Idade da cópia coletada pelo robô (snapshot da UAPI). O gateway assinado da Lalamove recusa leitura direta feita fora do navegador (`ret 10010`), então o painel é servido pela última coleta do robô (a cada 30 min, validade de 6h no banco). Sem indicador, o operador não distingue um saldo de 30 s de …"
   },
   "src/lib/uapiStatement.ts": {
    "path": "src/lib/uapiStatement.ts",
@@ -80283,10 +80382,26 @@
   }
  },
  "git": {
-  "sha": "18c1affe4f15e9f4437ffd36eb1d40e0ffc67ef2",
+  "sha": "6736c92120c64cbc305e2681469287d0d60cb9da",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "6736c92",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)",
+    "files": [
+     "src/components/lalamove/UapiCouponsPanel.tsx",
+     "src/components/lalamove/UapiFleetPanel.tsx",
+     "src/components/lalamove/UapiOrderHistoryPanel.tsx",
+     "src/components/lalamove/UapiSnapshotBadge.tsx",
+     "src/components/lalamove/UapiStatementPanel.tsx",
+     "src/hooks/useLalamoveUapi.ts",
+     "src/lib/uapiSnapshot.test.ts",
+     "src/lib/uapiSnapshot.ts"
+    ]
+   },
    {
     "sha": "18c1aff",
     "date": "2026-11-25",
@@ -80628,23 +80743,6 @@
      "supabase/functions/_shared/messaging/notify-driver.test.ts",
      "supabase/functions/_shared/messaging/notify-driver.ts"
     ]
-   },
-   {
-    "sha": "3f160c3",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)",
-    "files": [
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "supabase/functions/_shared/messaging/inbound-actions.ts",
-     "supabase/functions/_shared/messaging/inbound-event.test.ts",
-     "supabase/functions/_shared/messaging/inbound-event.ts",
-     "supabase/functions/zapp-callback/inbound-exec.test.ts",
-     "supabase/functions/zapp-callback/inbound-exec.ts",
-     "supabase/functions/zapp-callback/index.ts",
-     "supabase/functions/zapp-callback/ledger.test.ts",
-     "supabase/functions/zapp-callback/ledger.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80661,8 +80759,24 @@
     5
    ],
    [
-    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    3
+    "src/components/lalamove/UapiCouponsPanel.tsx",
+    2
+   ],
+   [
+    "src/components/lalamove/UapiFleetPanel.tsx",
+    2
+   ],
+   [
+    "src/components/lalamove/UapiOrderHistoryPanel.tsx",
+    2
+   ],
+   [
+    "src/components/lalamove/UapiStatementPanel.tsx",
+    2
+   ],
+   [
+    "src/hooks/useLalamoveUapi.ts",
+    2
    ],
    [
     "src/hooks/useSLAMetrics.ts",
@@ -80693,6 +80807,10 @@
     2
    ],
    [
+    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    2
+   ],
+   [
     "supabase/functions/_shared/messaging/auto-notices.test.ts",
     2
    ],
@@ -80701,31 +80819,11 @@
     2
    ],
    [
-    "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
+    "src/components/lalamove/UapiSnapshotBadge.tsx",
     1
    ],
    [
-    "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20241231000001_entity_versions.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260712195203_stub_aplicado_diretamente_no_banco.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260723174708_stub_aplicado_diretamente_no_banco_2.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260821130000_baseline_migracao_lovable_iecgydon.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
+    "src/lib/uapiSnapshot.test.ts",
     1
    ]
   ]

@@ -1,11 +1,11 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 46,
+ "total": 47,
  "por_camada": {
   "i18n": 1,
   "integrations": 4,
-  "lib": 30,
+  "lib": 31,
   "services": 1,
   "types": 4,
   "utils": 6
@@ -912,6 +912,33 @@
    "orfao": false
   },
   {
+   "arquivo": "src/lib/uapiSnapshot.ts",
+   "camada": "lib",
+   "exports": [
+    "SNAPSHOT_STALE_MINUTES",
+    "SnapshotDescription",
+    "SnapshotTone",
+    "UapiSnapshotInfo",
+    "describeSnapshotAge"
+   ],
+   "export_default": null,
+   "linhas": 76,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/lalamove"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/lib/uapiStatement.ts",
    "camada": "lib",
    "exports": [
@@ -984,7 +1011,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 117,
+   "usado_por": 118,
    "usado_por_modulos": [
     "components",
     "components/admin",
@@ -994,6 +1021,7 @@
     "components/dashboard",
     "components/drivers",
     "components/health",
+    "components/lalamove",
     "components/layout",
     "components/notifications",
     "components/orders",

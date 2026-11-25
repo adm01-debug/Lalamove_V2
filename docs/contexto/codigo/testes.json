@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 188,
+ "total": 189,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 47,
   "guard (node --test)": 34,
-  "unit (vitest)": 89
+  "unit (vitest)": 90
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 15
+   "arquivos": 16
   },
   {
    "padrao": "e2e/",
@@ -1165,6 +1165,15 @@
    "casos": 7
   },
   {
+   "arquivo": "src/lib/uapiSnapshot.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 56,
+   "testa": [
+    "src/lib/uapiSnapshot.ts"
+   ],
+   "casos": 8
+  },
+  {
    "arquivo": "src/lib/utils.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 77,
@@ -1837,6 +1846,7 @@
   "src/lib/roles.ts": 1,
   "src/lib/statusPalette.ts": 1,
   "src/lib/uapiErrors.ts": 3,
+  "src/lib/uapiSnapshot.ts": 1,
   "src/lib/uapiStatement.ts": 1,
   "src/lib/utils.ts": 1,
   "src/pages/AdminTelemetriaPage.tsx": 1,

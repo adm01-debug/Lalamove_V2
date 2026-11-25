@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c1affe4f` · branch `main` · 2026-11-25 10:39 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6736c92120` · branch `main` · 2026-11-25 11:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -906,6 +906,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | OrderErrorField | senderPhone \| recipientPhone \| schedule \| address | `src/lib/orderErrors.ts` |
 | AppRole | admin \| manager \| operator \| viewer | `src/lib/roles.ts` |
 | StatusLevel | operational \| attention \| critical \| info | `src/lib/statusPalette.ts` |
+| SnapshotTone | live \| fresh \| stale | `src/lib/uapiSnapshot.ts` |
 | DriverStatus | ACTIVE = 'ACTIVE', INACTIVE = 'INACTIVE', SUSPENDED = 'SUSPENDED', BANNED = 'BANNED', // Compatibilidade com sistema atual APPROVED = 'APPROVED', PENDING_APPROVAL = 'PENDING_APPROVAL', BLOCKED = 'BLOCKED', WHITELIST = 'WHITELIST', BLACKLIST = 'BLACKLIST' | `src/types/driver.ts` |
 | RiskLevel | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' | `src/types/driver.ts` |
 | DeliveryOutcome | SUCCESS = 'SUCCESS', FAILED = 'FAILED', DAMAGED = 'DAMAGED', STOLEN = 'STOLEN', LATE = 'LATE', WRONG_ADDRESS = 'WRONG_ADDRESS', CUSTOMER_UNAVAILABLE = 'CUSTOMER_UNAVAILABLE' | `src/types/driver.ts` |
@@ -1505,6 +1506,7 @@ _nenhum item encontrado_
 | `RETRY_FLAG` | `'lazy-retry-flag'` | `src/lib/lazyWithRetry.ts` |
 | `BITRIX24_CONNECTED` | `"bitrix24_connected"` | `src/lib/postMessage.ts` |
 | `UAPI_SESSION_MISSING_MESSAGE` | `'Sessão UAPI não configurada.'` | `src/lib/uapiErrors.ts` |
+| `SNAPSHOT_STALE_MINUTES` | `60` | `src/lib/uapiSnapshot.ts` |
 | `PAGE_SIZE` | `25` | `src/pages/ExternalDataPage.tsx` |
 | `OPTIMIZATION_THRESHOLD_PCT` | `5` | `src/pages/map-tools/OptimizationTab.tsx` |
 | `DEDUP_WINDOW_MS` | `30` | `src/services/errorMonitoring.ts` |
@@ -2086,7 +2088,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1563 testes em 138 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1572 testes em 139 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2164,6 +2166,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useRecentOrders.test.ts` | 9 | useRecentOrders · deve buscar e mapear pedidos corretamente · deve calcular paginação corretamente · deve lidar com driver null … |
 | `src/hooks/__tests__/useWebhookEvents.test.ts` | 9 | useWebhookEvents · deve buscar eventos sem filtros · deve retornar lista vazia · deve propagar erro … |
 | `src/lib/orderErrors.test.ts` | 9 | parseOrderError · identifica telefone do remetente (guard server) · identifica telefone do destinatário e captura o índice · mapeia INVALID_PHONE_NUMBER da API Lalamove … |
+| `src/lib/uapiSnapshot.test.ts` | 9 | describeSnapshotAge · marca leitura direta como ao vivo · mostra a idade da coleta em minutos · usa singular na primeira unidade … |
 | `src/lib/__tests__/lalamoveContract.test.ts` | 9 | contrato Lalamove — fixtures reais · parseia a resposta de cotação preservando o TTL de 5 minutos · trata driverId vazio na criação como  · normaliza o status do webhook para o enum canônico … |
 | `supabase/functions/_shared/template.test.ts` | 9 | renderTemplate: substitui as variaveis do template PT-BR de coleta · renderTemplate: placeholder sem valor e preservado, nunca vira undefined · renderTemplate: null e string vazia tambem preservam o placeholder · renderTemplate: aceita espacos dentro das chaves … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |

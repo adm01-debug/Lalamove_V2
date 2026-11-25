@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 542,
- "arestas": 1815,
+ "nos": 544,
+ "arestas": 1821,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -10,7 +10,7 @@
   },
   {
    "arquivo": "src/lib/utils.ts",
-   "importado_por": 118
+   "importado_por": 119
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
