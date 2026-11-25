@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "870d6e6018fc59f279fc4e1f8bfa2086e43493bb",
+  "sha": "c1a0a10b679ebdfa0690e02af3b385524261a615",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 14:06 UTC",
+  "generated_at": "2026-11-25 15:09 UTC",
   "files_total": 1136,
   "code_files": 953,
-  "code_lines": 165216
+  "code_lines": 165291
  },
  "version": "1.3.2",
- "facts_hash": "bdc919ecbc03c5bc",
+ "facts_hash": "9499b2cad10d4021",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -23117,7 +23117,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29693,
+   "lines": 29768,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -32725,6 +32725,11 @@
     "file": "supabase/functions/check-external-api/index.ts",
     "name": "HEALTH_ADDRESS",
     "value": "'Avenida Paulista 1578, São Paulo'"
+   },
+   {
+    "file": "supabase/functions/external-companies/index.ts",
+    "name": "SEARCH_SCAN_LIMIT",
+    "value": "500"
    },
    {
     "file": "supabase/functions/geo-admin/rotation.ts",
@@ -76043,7 +76048,7 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 341,
+   "lines": 416,
    "tables": [
     {
      "table": "suppliers",
@@ -76055,6 +76060,14 @@
     },
     {
      "table": "suppliers",
+     "op": "select"
+    },
+    {
+     "table": "suppliers",
+     "op": "select"
+    },
+    {
+     "table": "supplier_branches",
      "op": "select"
     }
    ],
@@ -76068,6 +76081,12 @@
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
     "EXTERNAL_SUPABASE_URL"
+   ],
+   "params": [
+    {
+     "name": "SEARCH_SCAN_LIMIT",
+     "value": "500"
+    }
    ],
    "rule_comments": [
     "apenas em `suppliers` (sede) e `supplier_branches` (filial/CD)."
@@ -80618,10 +80637,19 @@
   }
  },
  "git": {
-  "sha": "870d6e6018fc59f279fc4e1f8bfa2086e43493bb",
+  "sha": "c1a0a10b679ebdfa0690e02af3b385524261a615",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c1a0a10",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: busca de endereco acha sem acento e com termos fora de ordem (#383)",
+    "files": [
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
    {
     "sha": "870d6e6",
     "date": "2026-11-25",
@@ -80956,19 +80984,6 @@
      "src/pages/AlertsPage.tsx",
      "src/types/index.ts"
     ]
-   },
-   {
-    "sha": "65473ca",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)",
-    "files": [
-     "docs/agentes/mensageria.md",
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "supabase/functions/_shared/messaging/auto-notices.test.ts",
-     "supabase/functions/_shared/messaging/auto-notices.ts",
-     "supabase/functions/check-driver-alerts/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80982,11 +80997,7 @@
    ],
    [
     "supabase/functions/external-companies/index.ts",
-    3
-   ],
-   [
-    "supabase/functions/check-driver-alerts/index.ts",
-    3
+    4
    ],
    [
     "src/components/lalamove/UapiCouponsPanel.tsx",
@@ -81018,6 +81029,10 @@
    ],
    [
     "src/pages/error-state.test.tsx",
+    2
+   ],
+   [
+    "supabase/functions/check-driver-alerts/index.ts",
     2
    ],
    [

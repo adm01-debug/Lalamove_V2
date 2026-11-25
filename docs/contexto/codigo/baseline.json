@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "870d6e6018fc59f279fc4e1f8bfa2086e43493bb",
+  "commit": "c1a0a10b679ebdfa0690e02af3b385524261a615",
   "branch": "main",
-  "data_commit": "2026-11-25T11:05:56-03:00",
+  "data_commit": "2026-11-25T12:08:49-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c1a0a10",
+    "data": "2026-11-25",
+    "assunto": "fix: busca de endereco acha sem acento e com termos fora de ordem (#383)"
+   },
    {
     "sha": "870d6e6",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "524a6f4",
     "data": "2026-11-24",
     "assunto": "fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)"
-   },
-   {
-    "sha": "d4f8bc7",
-    "data": "2026-11-24",
-    "assunto": "fix: rota/ETA so recalcula com posicao viva do motorista (#357)"
    }
   ],
   "arquivos_mudados_7d": 529,
@@ -203,11 +203,11 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 32
+    "mudancas": 30
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 30
+    "mudancas": 28
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -215,15 +215,27 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 16
+   },
+   {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 15
+   },
+   {
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "mudancas": 15
+   },
+   {
+    "arquivo": "src/App.tsx",
+    "mudancas": 14
    },
    {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
@@ -234,11 +246,11 @@
     "mudancas": 14
    },
    {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 14
    },
    {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 14
    },
    {
@@ -250,23 +262,15 @@
     "mudancas": 13
    },
    {
-    "arquivo": "src/App.tsx",
-    "mudancas": 13
-   },
-   {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 13
    },
    {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 13
-   },
-   {
     "arquivo": "supabase/config.toml",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
     "mudancas": 12
    },
    {
@@ -278,11 +282,11 @@
     "mudancas": 11
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "arquivo": "supabase/functions/external-companies/index.ts",
     "mudancas": 11
    },
    {
-    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
+    "arquivo": "supabase/functions/geo-gateway/index.ts",
     "mudancas": 11
    },
    {
@@ -290,18 +294,14 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/layout/MobileSidebar.tsx",
-    "mudancas": 9
-   },
-   {
     "arquivo": "src/components/layout/sidebar-config.ts",
-    "mudancas": 9
+    "mudancas": 10
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 282
+    "commits": 283
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1142,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143178,
+  "linhas_codigo": 143253,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29693
+   "linhas": 29768
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -686,7 +686,7 @@
   }
  ],
  "qualidade": {
-  "any": 144,
+  "any": 146,
   "console_log": 427,
   "ts_ignore": 0,
   "eslint_disable": 1,

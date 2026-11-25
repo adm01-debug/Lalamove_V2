@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `870d6e6018` · branch `main` · 2026-11-25 14:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c1a0a10b67` · branch `main` · 2026-11-25 15:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1528,6 +1528,7 @@ _nenhum item encontrado_
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_POD_DEADLINE_MINUTES` | `30` | `supabase/functions/check-driver-alerts/index.ts` |
 | `HEALTH_ADDRESS` | `'Avenida Paulista 1578, São Paulo'` | `supabase/functions/check-external-api/index.ts` |
+| `SEARCH_SCAN_LIMIT` | `500` | `supabase/functions/external-companies/index.ts` |
 | `REVOKE_AFTER_MS` | `10` | `supabase/functions/geo-admin/rotation.ts` |
 | `ERROR_RATE_THRESHOLD` | `0.05` | `supabase/functions/geo-gateway/error-monitor.ts` |
 | `ERROR_RATE_MIN_SAMPLES` | `20` | `supabase/functions/geo-gateway/error-monitor.ts` |
