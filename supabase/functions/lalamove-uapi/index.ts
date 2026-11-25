@@ -136,6 +136,17 @@ async function getActiveToken(supabase: any): Promise<{
   }
 
   // Token is 20-24h old, try refresh
+  // Sem refresh_token nao ha renovacao possivel: tentar a cada requisicao so
+  // soma latencia e enche o log de erro. Nesse cenario quem mantem o token vivo
+  // e o coletor do navegador (login manual), que grava o par novo.
+  if (!s.refresh_token) {
+    return {
+      accessToken: s.access_token,
+      refreshToken: '',
+      userFid: s.user_fid || '',
+      wasRefreshed: false,
+    };
+  }
   logger.log('Token needs refresh, attempting refresh_token...');
   const refreshResult = await refreshUapiToken(s.access_token, s.refresh_token);
   
