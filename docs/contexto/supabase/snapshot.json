@@ -23588,12 +23588,6 @@
           "table": "cache_refresh_log"
         },
         {
-          "grantee": "anon",
-          "privileges": "SELECT",
-          "schema": "public",
-          "table": "cache_status"
-        },
-        {
           "grantee": "authenticated",
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
@@ -31461,6 +31455,12 @@
         "statements": 21,
         "statements_sha": "16b9a8045b07df85",
         "version": "20261126150000"
+      },
+      {
+        "name": "revoke_anon_metric_views",
+        "statements": 5,
+        "statements_sha": "051e9ac295e0b358",
+        "version": "20261126160000"
       }
     ],
     "policies": [

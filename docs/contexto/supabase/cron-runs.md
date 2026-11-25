@@ -74,9 +74,9 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 12:20:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 12:15:00 | succeeded | 0.04 | 1 row |
-| 2026-11-25 12:10:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 13:15:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 13:10:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 13:05:00 | succeeded | 0.02 | 1 row |
 
 
 ## 19 · lalamove_uapi_token_refresh_hourly
@@ -92,36 +92,36 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 12:21:00 | succeeded | 0.03 | 1 row |
-| 2026-11-25 12:20:00 | succeeded | 0.03 | 1 row |
-| 2026-11-25 12:19:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 13:16:00 | succeeded | 0.05 | 1 row |
+| 2026-11-25 13:15:00 | succeeded | 0.03 | 1 row |
+| 2026-11-25 13:14:00 | succeeded | 0.02 | 1 row |
 
 
 ## 25 · geo-jobs-refresh
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 12:21:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 12:16:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 12:11:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 13:16:00 | succeeded | 0.04 | 1 row |
+| 2026-11-25 13:11:00 | succeeded | 0.05 | 1 row |
+| 2026-11-25 13:06:00 | succeeded | 0.01 | 1 row |
 
 
 ## 26 · refresh-cache-views
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-25 13:03:00 | succeeded | 0.20 | 3 rows |
 | 2026-11-25 12:03:00 | succeeded | 0.22 | 3 rows |
 | 2026-11-25 11:03:00 | succeeded | 0.23 | 3 rows |
-| 2026-11-25 10:03:00 | succeeded | 0.22 | 3 rows |
 
 
 ## 29 · check-driver-alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 12:20:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 12:18:00 | succeeded | 0.01 | 1 row |
-| 2026-11-25 12:16:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 13:16:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 13:14:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 13:12:00 | succeeded | 0.03 | 1 row |
 
 
 ## 30 · notification_messages_scrub_bodies
