@@ -21,6 +21,9 @@ export interface ExternalRecord {
   phone?: string;
   email?: string;
   type?: string;
+  /** Nome do fornecedor dono da filial (só em `supplier_branches`). */
+  supplier_name?: string | null;
+  is_active?: boolean | null;
   [key: string]: unknown;
 }
 
@@ -100,7 +103,7 @@ export function useExternalStats() {
         body: { action: 'stats' },
       });
       if (error) await edgeThrow(error);
-      return data as { counts: Record<string, number> };
+      return data as { counts: Record<string, number>; unavailable?: ExternalTable[] };
     },
     staleTime: 5 * 60_000,
     enabled: isBitrixConfigured(),

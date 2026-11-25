@@ -66,6 +66,13 @@ export default function ExternalDataPage() {
 
   const totalPages = listData?.count ? Math.ceil(listData.count / PAGE_SIZE) : 0;
 
+  // Tabela do contrato que não existe no banco de produto some da tela: aba
+  // vazia para sempre só faz o operador pensar que a base está quebrada.
+  const unavailableTables = (stats?.unavailable ?? []) as ExternalTable[];
+  const visibleTables = (Object.keys(TABLE_LABELS) as ExternalTable[]).filter(
+    (table) => !unavailableTables.includes(table),
+  );
+
   const handleTableChange = (table: string) => {
     setActiveTable(table as ExternalTable);
     setPage(1);
@@ -80,7 +87,7 @@ export default function ExternalDataPage() {
           Base de Dados CRM
         </h2>
         <p className="text-muted-foreground mt-1">
-          Consulte empresas, clientes, fornecedores, filiais, transportadoras e contatos
+          Consulte fornecedores, filiais e os demais cadastros do CRM
         </p>
       </div>
 
@@ -93,7 +100,7 @@ export default function ExternalDataPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {(Object.keys(TABLE_LABELS) as ExternalTable[]).map((table) => (
+        {visibleTables.map((table) => (
           <Card
             key={table}
             className={`cursor-pointer transition-all hover:border-primary/50 ${
@@ -168,6 +175,7 @@ export default function ExternalDataPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Nome</TableHead>
+                      {activeTable === 'supplier_branches' && <TableHead>Fornecedor</TableHead>}
                       <TableHead>Endereço</TableHead>
                       <TableHead>Cidade/UF</TableHead>
                       <TableHead>Telefone</TableHead>
@@ -177,9 +185,21 @@ export default function ExternalDataPage() {
                   <TableBody>
                     {listData.data.map((record: ExternalRecord) => (
                       <TableRow key={record.id}>
-                        <TableCell className="font-medium max-w-[200px] truncate">
-                          {record.name || '—'}
+                        <TableCell className="font-medium max-w-[200px]">
+                          <span className="flex items-center gap-2">
+                            <span className="truncate">{record.name || '—'}</span>
+                            {record.is_active === false && (
+                              <Badge variant="secondary" className="shrink-0">
+                                Inativa
+                              </Badge>
+                            )}
+                          </span>
                         </TableCell>
+                        {activeTable === 'supplier_branches' && (
+                          <TableCell className="max-w-[180px] truncate text-muted-foreground">
+                            {record.supplier_name || '—'}
+                          </TableCell>
+                        )}
                         <TableCell className="max-w-[250px] truncate text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <MapPin className="w-3 h-3 flex-shrink-0" />
