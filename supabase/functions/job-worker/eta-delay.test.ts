@@ -246,3 +246,83 @@ Deno.test("etapa 49: ETA na janela de aproximacao usa transito", () => {
 Deno.test("etapa 49: sem ETA conhecido a primeira medicao sai sem transito", () => {
   assertEquals(wantsTraffic(null), false);
 });
+
+Deno.test("ETA_DELAY: limiar vem da linha do canal whatsapp, nao do default de 15 min", async () => {
+  // A configuracao de LATE_DELIVERY existe so no canal `whatsapp`
+  // (20261122130100_geo_foundation.sql), com min_interval_seconds=300. O worker
+  // filtrava por `channel=email`: sem linha, caia nos 900s de default. Cenario
+  // com atraso de 8 min -> com 5 min dispara, com 15 min nao.
+  const rpcCalls: Array<Record<string, unknown>> = [];
+  const client = {
+    from(table: string) {
+      if (table === "lalamove_orders") {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () => Promise.resolve({ data: { scheduled_at: isoIn(40), status: "ON_GOING" }, error: null }),
+            }),
+          }),
+        };
+      }
+      if (table === "alert_configurations") {
+        return {
+          select: () => ({
+            eq: (_coluna: string, _valor: string) => ({
+              eq: (_coluna2: string, canal: string) => ({
+                maybeSingle: () =>
+                  Promise.resolve({
+                    data: canal === "whatsapp" ? { min_interval_seconds: 300, is_enabled: true } : null,
+                    error: null,
+                  }),
+              }),
+            }),
+          }),
+        };
+      }
+      throw new Error(`tabela inesperada: ${table}`);
+    },
+    rpc(nome: string, params: Record<string, unknown>) {
+      assertEquals(nome, "geo_emit_event");
+      rpcCalls.push(params);
+      return Promise.resolve({ data: "uuid-evento", error: null });
+    },
+  };
+  const emitted = await maybeEmitEtaDelay(client, { ...baseArgs, etaMinutes: 48 });
+  assertEquals(emitted, true);
+  assertEquals(rpcCalls.length, 1);
+});
+
+Deno.test("ETA_DELAY: limiar do canal whatsapp respeita o desligamento pela UI", async () => {
+  const rpcCalls: Array<Record<string, unknown>> = [];
+  const client = {
+    from(table: string) {
+      if (table === "lalamove_orders") {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () => Promise.resolve({ data: { scheduled_at: isoIn(-120), status: "ON_GOING" }, error: null }),
+            }),
+          }),
+        };
+      }
+      if (table === "alert_configurations") {
+        return {
+          select: () => ({
+            eq: () => ({
+              eq: () => ({
+                maybeSingle: () => Promise.resolve({ data: { min_interval_seconds: 300, is_enabled: false }, error: null }),
+              }),
+            }),
+          }),
+        };
+      }
+      throw new Error(`tabela inesperada: ${table}`);
+    },
+    rpc(nome: string, params: Record<string, unknown>) {
+      rpcCalls.push(params);
+      return Promise.resolve({ data: "uuid-evento", error: null });
+    },
+  };
+  assertEquals(await maybeEmitEtaDelay(client, baseArgs), false);
+  assertEquals(rpcCalls.length, 0);
+});

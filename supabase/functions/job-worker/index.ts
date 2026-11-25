@@ -778,11 +778,14 @@ export async function maybeEmitEtaDelay(
 
   // Janela de tolerancia: `LATE_DELIVERY` das alert_configurations; sem linha,
   // cai no padrao do plano (15 min) para nao ficar sem alerta por falta de seed.
+  // A linha de LATE_DELIVERY vive no canal `whatsapp` (geo_foundation): filtrada
+  // por `email` devolvia null, ignorava o limiar configurado e nunca respeitava o
+  // desligamento feito pela UI.
   const { data: cfg } = await supabase
     .from('alert_configurations')
     .select('min_interval_seconds, is_enabled')
     .eq('alert_type', 'LATE_DELIVERY')
-    .eq('channel', 'email')
+    .eq('channel', 'whatsapp')
     .maybeSingle();
   if (cfg && cfg.is_enabled === false) return false;
   const thresholdMin = Math.max(1, Math.round(Number(cfg?.min_interval_seconds ?? 900) / 60));
