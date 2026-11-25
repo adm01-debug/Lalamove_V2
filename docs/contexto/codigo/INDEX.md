@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `0bd75b9b3f1d9472f3db769679a254a62adf3c9a` (2026-11-25T15:06:17-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `148b65702f92462ebd9a47933a2df747e31e3feb` (2026-11-25T15:43:28-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1143 |
 | arquivos_codigo | 727 |
-| linhas_codigo | 143379 |
+| linhas_codigo | 143462 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -293,26 +293,26 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10010 nós · 20778 arestas · 705 comunidades · grafo do commit `0bd75b9b`
-- comunidades maiores: cn (262), client.ts (157), badge.tsx (127), lucide-react (121), ref_https (120), 4. Componentes, hooks, libs e estado — **revisado** (113), RateLimitDashboardPage.tsx (106), App.tsx (91), react (89), ref_node_path (85), dependencies (81), job-worker/index.ts (80)
+- 10012 nós · 20780 arestas · 716 comunidades · grafo do commit `148b6570`
+- comunidades maiores: cn (188), App.tsx (177), button.tsx (163), react (128), 4. Componentes, hooks, libs e estado — **revisado** (108), ref_node_path (107), snapshot.py (106), ref_https (99), AppLayout (97), DashboardRedesigned.tsx (88), client.ts (84), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (40)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- package.json (19)
-- .github/workflows/ci.yml (18)
-- package-lock.json (17)
+- package.json (18)
+- .github/workflows/ci.yml (17)
+- package-lock.json (16)
 - supabase/functions/job-worker/index.ts (15)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
-- supabase/functions/_shared/schemas.ts (13)
-- supabase/functions/send-notification/index.ts (13)
-- supabase/functions/check-driver-alerts/index.ts (12)
+- supabase/functions/_shared/schemas.ts (12)
+- supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
-- src/App.tsx (11)
-- src/components/orders/AddressAutocomplete.tsx (11)
-- src/components/orders/NewOrderDialog.tsx (11)
+- supabase/functions/check-driver-alerts/index.ts (11)
+- supabase/functions/geo-gateway/index.ts (11)
+- docs/pendencias/_ordem.md (10)
+- src/App.tsx (10)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-25 `148b657` fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)
 - 2026-11-25 `0bd75b9` fix: religa alertas que nasceram desligados e morriam em silencio (#387)
 - 2026-11-25 `962d1b5` fix: limita "hoje" do dashboard ao fuso de São Paulo (#388)
 - 2026-11-25 `3d6697c` feat: painel lista as filiais dos fornecedores (#386)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `1ded470` chore: least privilege nas funcoes internas de manutencao (#378)
 - 2026-11-25 `6736c92` feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)
 - 2026-11-25 `18c1aff` fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)
-- 2026-11-25 `3ce0ba6` fix: renovacao do token UAPI pelo coletor via refresh_token (#374)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

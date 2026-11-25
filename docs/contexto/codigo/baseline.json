@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "0bd75b9b3f1d9472f3db769679a254a62adf3c9a",
+  "commit": "148b65702f92462ebd9a47933a2df747e31e3feb",
   "branch": "main",
-  "data_commit": "2026-11-25T15:06:17-03:00",
+  "data_commit": "2026-11-25T15:43:28-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "148b657",
+    "data": "2026-11-25",
+    "assunto": "fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)"
+   },
    {
     "sha": "0bd75b9",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "4bbb1fc",
     "data": "2026-11-24",
     "assunto": "fix: falha de dados mostra erro e retry em 6 páginas (#365)"
-   },
-   {
-    "sha": "569b237",
-    "data": "2026-11-24",
-    "assunto": "fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)"
    }
   ],
   "arquivos_mudados_7d": 530,
@@ -160,12 +160,12 @@
     "mudancas": 26
    },
    {
-    "pasta": "supabase/functions/lalamove-api",
+    "pasta": "supabase/functions/job-worker",
     "mudancas": 23
    },
    {
-    "pasta": "supabase/functions/job-worker",
-    "mudancas": 21
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 23
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -207,15 +207,15 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 19
-   },
-   {
-    "arquivo": ".github/workflows/ci.yml",
     "mudancas": 18
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": ".github/workflows/ci.yml",
     "mudancas": 17
+   },
+   {
+    "arquivo": "package-lock.json",
+    "mudancas": 16
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
@@ -231,14 +231,10 @@
    },
    {
     "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 13
+    "mudancas": 12
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 12
    },
    {
@@ -246,19 +242,7 @@
     "mudancas": 11
    },
    {
-    "arquivo": "src/App.tsx",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 11
    },
    {
@@ -266,42 +250,58 @@
     "mudancas": 11
    },
    {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 11
-   },
-   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
+    "arquivo": "src/App.tsx",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 10
+   },
+   {
     "arquivo": "supabase/config.toml",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/functions/external-companies/index.ts",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
     "mudancas": 9
    },
    {
-    "arquivo": "src/components/map/LiveMap.tsx",
+    "arquivo": "supabase/functions/external-companies/index.ts",
+    "mudancas": 9
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 8
    },
    {
-    "arquivo": "supabase/functions/_shared/contract.test.ts",
+    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
     "mudancas": 8
+   },
+   {
+    "arquivo": "scripts/uapi-collector/collect.mjs",
+    "mudancas": 7
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 289
+    "commits": 290
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1143,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143379,
+  "linhas_codigo": 143462,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29814
+   "linhas": 29897
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -594,7 +594,7 @@
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 1362
+   "linhas": 1365
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",

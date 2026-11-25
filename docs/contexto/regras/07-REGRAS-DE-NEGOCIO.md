@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0bd75b9b3f` · branch `main` · 2026-11-25 18:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `148b65702f` · branch `main` · 2026-11-25 18:43 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2089,7 +2089,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1579 testes em 140 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1581 testes em 140 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2108,13 +2108,13 @@ _nenhum item encontrado_
 | `src/hooks/useGeoSearch.test.tsx` | 20 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/utils/__tests__/timeUtils.test.ts` | 20 | getElapsedTime · deve calcular segundos corretamente · deve calcular minutos corretamente · deve calcular horas corretamente … |
 | `supabase/functions/_shared/messaging/dispatch.test.ts` | 20 | etapa 145: modo sombra decide o canal e nao envia nada · etapa 88: a rota do banco define a ordem (cancelamento sai por SMS) · etapa 88: whatsapp desligado no kill switch sobra o SMS · etapa 79: numero sem whatsapp nao insiste no whatsapp … |
+| `supabase/functions/job-worker/eta-delay.test.ts` | 20 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
 | `src/components/map/__tests__/googleLayers.test.ts` | 19 | toGooglePath (etapa 77) · converte expected_route em path do Google · devolve path vazio para rota ausente ou corrompida (nunca Polyline quebrada) · buildTrailPath (etapa 77) … |
 | `supabase/functions/_shared/messaging/auto-notices.test.ts` | 19 | M6: pedido de 2 paradas nao gera aviso de proxima parada · M6: multi-parada com parada em aberto gera aviso · M6: multi-parada sem parada em aberto nao gera aviso · M11: avisa uma vez o pedido agendado dentro de 30 min … |
 | `supabase/functions/_shared/messaging/router.test.ts` | 19 | etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms · etapa 88: evento ou papel sem rota nao envia nada · etapa 88: rota desabilitada devolve lista vazia (desligado e desligado) · etapa 88: resolveChannels nao devolve a referencia interna do catalogo … |
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
 | `src/lib/__tests__/lalamoveCanonical.test.ts` | 18 | lalamoveCatalog · cobre os 14 serviceTypes oficiais · valida type guards · respeita disponibilidade por cidade … |
-| `supabase/functions/job-worker/eta-delay.test.ts` | 18 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
 | `supabase/functions/zapp-callback/payload.test.ts` | 18 | unwrapPayload desembrulha data e aceita raiz plana · message.status valido vira escrita de status · message.status com status desconhecido e ignorado sem perder id · status em maiuscula e normalizado … |
 | `supabase/functions/_shared/phone.test.ts` | 17 | normaliza celular com máscara · normaliza celular já com DDI · normaliza celular cru e remove zero de discagem · normaliza telefone fixo de 10 dígitos … |
 | `scripts/db-audit/register-migration.test.mjs` | 16 | splitStatements respects dollar-quoted function bodies (does not split on internal semicolons) · splitStatements strips line comments but preserves them inside dollar-quoted bodies · buildInsertSql picks a dollar-quote tag that does not collide with the statement body · parseMigrationFile rejects a filename that does not match the version_name.sql convention … |

@@ -565,7 +565,7 @@
    "servico": "Fila de jobs",
    "entrada": "supabase/functions/job-worker/index.ts",
    "arquivos": 1,
-   "linhas": 1362,
+   "linhas": 1365,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

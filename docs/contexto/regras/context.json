@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "0bd75b9b3f1d9472f3db769679a254a62adf3c9a",
+  "sha": "148b65702f92462ebd9a47933a2df747e31e3feb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 18:06 UTC",
+  "generated_at": "2026-11-25 18:43 UTC",
   "files_total": 1137,
   "code_files": 954,
-  "code_lines": 165462
+  "code_lines": 165545
  },
  "version": "1.3.2",
- "facts_hash": "8f71544825ad75b2",
+ "facts_hash": "4cac6458dd64d33c",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -23118,7 +23118,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29814,
+   "lines": 29897,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -43711,6 +43711,14 @@
    {
     "file": "supabase/functions/job-worker/eta-delay.test.ts",
     "name": "etapa 49: sem ETA conhecido a primeira medicao sai sem transito"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-delay.test.ts",
+    "name": "ETA_DELAY: limiar vem da linha do canal whatsapp, nao do default de 15 min"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-delay.test.ts",
+    "name": "ETA_DELAY: limiar do canal whatsapp respeita o desligamento pela UI"
    },
    {
     "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
@@ -76951,7 +76959,7 @@
   },
   "supabase/functions/job-worker/eta-delay.test.ts": {
    "path": "supabase/functions/job-worker/eta-delay.test.ts",
-   "lines": 249,
+   "lines": 329,
    "is_test": true,
    "errors": [
     "tabela inesperada: ${table}"
@@ -76983,7 +76991,9 @@
     "M10: falha no aviso nao derruba o refresh do ETA",
     "etapa 49: ETA longo nao paga a SKU com transito",
     "etapa 49: ETA na janela de aproximacao usa transito",
-    "etapa 49: sem ETA conhecido a primeira medicao sai sem transito"
+    "etapa 49: sem ETA conhecido a primeira medicao sai sem transito",
+    "ETA_DELAY: limiar vem da linha do canal whatsapp, nao do default de 15 min",
+    "ETA_DELAY: limiar do canal whatsapp respeita o desligamento pela UI"
    ],
    "side_effects": [
     "notifyDriver"
@@ -77024,7 +77034,7 @@
   },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 1362,
+   "lines": 1365,
    "exports": [
     "function geoAlertDriverEvent",
     "function processGeoBackfillOrders",
@@ -80675,10 +80685,20 @@
   }
  },
  "git": {
-  "sha": "0bd75b9b3f1d9472f3db769679a254a62adf3c9a",
+  "sha": "148b65702f92462ebd9a47933a2df747e31e3feb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "148b657",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)",
+    "files": [
+     "supabase/functions/job-worker/eta-delay.test.ts",
+     "supabase/functions/job-worker/index.ts"
+    ]
+   },
    {
     "sha": "0bd75b9",
     "date": "2026-11-25",
@@ -80998,18 +81018,6 @@
     "files": [
      "supabase/functions/check-driver-alerts/index.ts"
     ]
-   },
-   {
-    "sha": "aacd178",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)",
-    "files": [
-     "supabase/functions/lalamove-token-refresh/index.ts",
-     "supabase/functions/lalamove-webhook/index.ts",
-     "supabase/functions/lalamove-webhook/security.test.ts",
-     "supabase/functions/lalamove-webhook/security.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -81023,7 +81031,7 @@
    ],
    [
     "supabase/functions/lalamove-token-refresh/index.ts",
-    5
+    4
    ],
    [
     "supabase/functions/lalamove-uapi/index.ts",
@@ -81052,6 +81060,14 @@
    [
     "src/hooks/useSLAMetrics.ts",
     2
+   ],
+   [
+    "supabase/functions/job-worker/eta-delay.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/job-worker/index.ts",
+    1
    ],
    [
     "supabase/migrations/20261126170000_enable_delivery_alert_notifications.sql",
@@ -81083,14 +81099,6 @@
    ],
    [
     "supabase/functions/_shared/schemas.ts",
-    1
-   ],
-   [
-    ".github/workflows/ci.yml",
-    1
-   ],
-   [
-    "src/lib/bitrix-config.test.ts",
     1
    ]
   ]
