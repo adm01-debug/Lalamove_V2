@@ -237,6 +237,53 @@ serve(async (req) => {
           });
         }
 
+        // O filtro acima exige o termo inteiro e com acento ("rua sao tome" nao
+        // acha "Rua São Tomé"). Quem digita no painel raramente acentua, entao
+        // quando nada casou varre as duas tabelas comparando sem acento e por
+        // termos separados. A varredura tambem completa o mapa de donos das
+        // filiais, que aqui vem inteiro.
+        if (results.length === 0) {
+          const terms = tokenizeSearch(search);
+
+          const { data: allSuppliers } = (await externalClient
+            .from('suppliers')
+            .select(supplierConfig.fields.join(', '))
+            .limit(SEARCH_SCAN_LIMIT)) as { data: any[] | null };
+
+          for (const supplier of allSuppliers ?? []) {
+            supplierNames.set(supplier.id, supplier.name);
+            const fullAddress = formatAddress(supplier, supplierConfig.addressFields);
+            if (!fullAddress) continue;
+            if (!matchesAllTerms(supplier, supplierConfig.searchFields, terms)) continue;
+            results.push({
+              ...normalizeRow(supplier),
+              source_table: 'suppliers',
+              display_name: supplier.name,
+              full_address: fullAddress,
+            });
+          }
+
+          const { data: allBranches } = (await externalClient
+            .from('supplier_branches')
+            .select([...branchConfig.fields, 'supplier_id'].join(', '))
+            .limit(SEARCH_SCAN_LIMIT)) as { data: any[] | null };
+
+          for (const branch of allBranches ?? []) {
+            const fullAddress = formatAddress(branch, branchConfig.addressFields);
+            if (!fullAddress) continue;
+            if (!matchesAllTerms(branch, branchConfig.searchFields, terms)) continue;
+            const owner = branch.supplier_id ? supplierNames.get(branch.supplier_id) : undefined;
+            results.push({
+              ...normalizeRow(branch),
+              source_table: 'suppliers',
+              display_name: owner ? `${owner} — ${branch.branch_name}` : branch.branch_name,
+              full_address: fullAddress,
+            });
+          }
+
+          if (results.length > limit) results.length = limit;
+        }
+
         return new Response(JSON.stringify({ results }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
@@ -323,6 +370,34 @@ function escapeIlike(value: string): string {
 function buildSearchFilter(config: ExternalTableConfig, search: string): string {
   const term = `%${escapeIlike(search)}%`;
   return config.searchFields.map((field) => `${field}.ilike.${term}`).join(',');
+}
+
+// Teto da varredura tolerante a acento (ver search_address). As duas tabelas
+// com endereco somam poucas dezenas de linhas; o teto so evita surpresa se o
+// cadastro crescer muito.
+const SEARCH_SCAN_LIMIT = 500;
+
+// `ilike` do Postgres compara bytes, entao "SÃO TOMÉ" nao casa com "sao tome".
+// normalizeText derruba acento e caixa para a comparacao em memoria.
+function normalizeText(value: unknown): string {
+  return typeof value === 'string'
+    ? value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    : '';
+}
+
+function tokenizeSearch(search: string): string[] {
+  return normalizeText(search).split(/\s+/).filter((term) => term.length > 0);
+}
+
+// Todos os termos precisam aparecer, em qualquer campo e em qualquer ordem:
+// "sao tome" acha "Rua Sao Tome, 119 - Vila Olimpia, Sao Paulo/SP".
+function matchesAllTerms(
+  record: Record<string, unknown>,
+  fields: string[],
+  terms: string[],
+): boolean {
+  const haystack = normalizeText(fields.map((field) => record[field]).join(' '));
+  return terms.every((term) => haystack.includes(term));
 }
 
 // A UI do painel consome `state` (ExternalRecord); o banco de produto chama a
