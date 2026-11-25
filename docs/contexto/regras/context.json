@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c1a0a10b679ebdfa0690e02af3b385524261a615",
+  "sha": "a3a43e6ba3d6b7fc8aef162647d8deba3544f1d5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 15:09 UTC",
+  "generated_at": "2026-11-25 15:17 UTC",
   "files_total": 1136,
   "code_files": 953,
-  "code_lines": 165291
+  "code_lines": 165297
  },
  "version": "1.3.2",
- "facts_hash": "9499b2cad10d4021",
+ "facts_hash": "005fe3c1a1abfe67",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -23117,7 +23117,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29768,
+   "lines": 29774,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -28892,6 +28892,10 @@
    {
     "file": "supabase/functions/external-companies/index.ts",
     "text": "apenas em `suppliers` (sede) e `supplier_branches` (filial/CD)."
+   },
+   {
+    "file": "supabase/functions/external-companies/index.ts",
+    "text": "Somente as colunas que a UI consome. `select('*')` trazia"
    },
    {
     "file": "supabase/functions/external-db-bridge/index.ts",
@@ -76048,7 +76052,7 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 416,
+   "lines": 422,
    "tables": [
     {
      "table": "suppliers",
@@ -76089,7 +76093,8 @@
     }
    ],
    "rule_comments": [
-    "apenas em `suppliers` (sede) e `supplier_branches` (filial/CD)."
+    "apenas em `suppliers` (sede) e `supplier_branches` (filial/CD).",
+    "Somente as colunas que a UI consome. `select('*')` trazia"
    ],
    "pagination": [
     "3"
@@ -80637,10 +80642,19 @@
   }
  },
  "git": {
-  "sha": "c1a0a10b679ebdfa0690e02af3b385524261a615",
+  "sha": "a3a43e6ba3d6b7fc8aef162647d8deba3544f1d5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a3a43e6",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: painel deixa de receber a credencial da API do fornecedor (#384)",
+    "files": [
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
    {
     "sha": "c1a0a10",
     "date": "2026-11-25",
@@ -80971,19 +80985,6 @@
      "src/pages/NotificationHistoryPage.tsx",
      "src/pages/alert-configurations/AlertConfigCard.tsx"
     ]
-   },
-   {
-    "sha": "71cf6b0",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)",
-    "files": [
-     "src/components/alerts/AlertsAdvanced.tsx",
-     "src/hooks/__tests__/useAlertGrouping.test.ts",
-     "src/hooks/useAlertGrouping.ts",
-     "src/pages/AlertsPage.tsx",
-     "src/types/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80992,12 +80993,12 @@
     6
    ],
    [
-    "supabase/functions/lalamove-token-refresh/index.ts",
+    "supabase/functions/external-companies/index.ts",
     5
    ],
    [
-    "supabase/functions/external-companies/index.ts",
-    4
+    "supabase/functions/lalamove-token-refresh/index.ts",
+    5
    ],
    [
     "src/components/lalamove/UapiCouponsPanel.tsx",

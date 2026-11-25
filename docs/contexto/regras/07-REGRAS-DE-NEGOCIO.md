@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c1a0a10b67` · branch `main` · 2026-11-25 15:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a3a43e6ba3` · branch `main` · 2026-11-25 15:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2510,6 +2510,7 @@ _nenhum item encontrado_
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
 | apenas em `suppliers` (sede) e `supplier_branches` (filial/CD). | `supabase/functions/external-companies/index.ts` |
+| Somente as colunas que a UI consome. `select('*')` trazia | `supabase/functions/external-companies/index.ts` |
 | Apenas administradores podem acessar o banco externo. | `supabase/functions/external-db-bridge/index.ts` |
 | Qual id o passo 3 do runbook deve revogar. `pickTokenToRevoke` devolve null | `supabase/functions/geo-admin/index.ts` |
 | apenas quando ele está presente. | `supabase/functions/geo-admin/rotation.ts` |

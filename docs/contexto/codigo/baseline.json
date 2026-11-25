@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c1a0a10b679ebdfa0690e02af3b385524261a615",
+  "commit": "a3a43e6ba3d6b7fc8aef162647d8deba3544f1d5",
   "branch": "main",
-  "data_commit": "2026-11-25T12:08:49-03:00",
+  "data_commit": "2026-11-25T12:16:43-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a3a43e6",
+    "data": "2026-11-25",
+    "assunto": "fix: painel deixa de receber a credencial da API do fornecedor (#384)"
+   },
    {
     "sha": "c1a0a10",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "aacd178",
     "data": "2026-11-24",
     "assunto": "fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)"
-   },
-   {
-    "sha": "524a6f4",
-    "data": "2026-11-24",
-    "assunto": "fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)"
    }
   ],
   "arquivos_mudados_7d": 529,
@@ -203,10 +203,6 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 30
-   },
-   {
-    "arquivo": "package-lock.json",
     "mudancas": 28
    },
    {
@@ -214,43 +210,27 @@
     "mudancas": 26
    },
    {
+    "arquivo": "package-lock.json",
+    "mudancas": 26
+   },
+   {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 20
+    "mudancas": 19
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 18
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
-    "mudancas": 16
+    "mudancas": 15
    },
    {
     "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 15
+    "mudancas": 14
    },
    {
     "arquivo": "supabase/functions/check-driver-alerts/index.ts",
-    "mudancas": 15
-   },
-   {
-    "arquivo": "src/App.tsx",
-    "mudancas": 14
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 14
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 14
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 14
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 14
    },
    {
@@ -262,23 +242,35 @@
     "mudancas": 13
    },
    {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "arquivo": "src/App.tsx",
     "mudancas": 13
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 12
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
     "mudancas": 12
    },
    {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 11
    },
    {
@@ -290,18 +282,26 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/layout/sidebar-config.ts",
+    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 10
+   },
+   {
+    "arquivo": "src/components/layout/sidebar-config.ts",
+    "mudancas": 9
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 283
+    "commits": 284
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1142,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143253,
+  "linhas_codigo": 143259,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29768
+   "linhas": 29774
   },
   "tailwind.config.ts": {
    "arquivos": 1,
