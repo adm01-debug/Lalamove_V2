@@ -150,6 +150,21 @@ async function saveSessionToken(session, token, refreshToken) {
   });
 }
 
+/**
+ * Coleta bem-sucedida = o token foi aceito pela UAPI. Sem refresh_token gravado
+ * nao existe renovacao automatica, entao `last_refreshed_at` passa a registrar a
+ * ultima verificacao real da sessao (e o watchdog mede a janela de 24 h a partir
+ * dela). Com refresh_token, a coluna segue reservada ao refresh de token.
+ */
+async function touchSession(session) {
+  if (!session?.id) return;
+  await sbFetch(`/rest/v1/lalamove_uapi_sessions?id=eq.${session.id}`, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ last_refreshed_at: new Date().toISOString() }),
+  });
+}
+
 function buildUrl(method, args, { token, deviceId, su }) {
   const params = new URLSearchParams({
     _m: method,
@@ -525,6 +540,14 @@ async function main() {
     }
   } finally {
     await context.close().catch(() => {});
+  }
+
+  // Sessao sem refresh_token so pode ser mantida pelo login manual: a cada
+  // coleta confirmada, registra que o token continua vivo.
+  if (collected.length && !(session.refresh_token ?? '').trim()) {
+    await touchSession(session).catch((err) => {
+      console.error(`aviso: heartbeat da sessao nao gravado (${String(err).slice(0, 120)})`);
+    });
   }
 
   console.log(`gravados (${collected.length}): ${collected.join(', ') || '-'}`);
