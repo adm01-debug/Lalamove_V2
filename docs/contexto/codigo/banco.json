@@ -12047,6 +12047,7 @@
    "usada_em_edges": [
     "_shared",
     "geo-admin",
+    "seed-fix-rls",
     "simulate-driver-movement"
    ],
    "triggers": [

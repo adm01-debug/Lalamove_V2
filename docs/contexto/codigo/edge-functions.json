@@ -1057,14 +1057,16 @@
    "servico": "Manutenção/DDL",
    "entrada": "supabase/functions/seed-fix-rls/index.ts",
    "arquivos": 1,
-   "linhas": 153,
+   "linhas": 189,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
    ],
    "assina_hmac": false,
    "usa_service_role": true,
-   "tabelas": [],
+   "tabelas": [
+    "user_roles"
+   ],
    "rpcs": [
     "exec"
    ],

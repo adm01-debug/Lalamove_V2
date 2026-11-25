@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: seed-fix-rls exige admin/manager e nao abre policies para anon (#393)",
    "feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)",
    "fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)",
    "fix: religa alertas que nasceram desligados e morriam em silencio (#387)",
-   "fix: limita \"hoje\" do dashboard ao fuso de São Paulo (#388)",
-   "feat: painel lista as filiais dos fornecedores (#386)"
+   "fix: limita \"hoje\" do dashboard ao fuso de São Paulo (#388)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

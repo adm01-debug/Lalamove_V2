@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `70c35c5866` · branch `main` · 2026-11-25 21:34 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1a40403e0b` · branch `main` · 2026-11-25 22:08 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -817,7 +817,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `updated` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `valid` | compara | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts` |
-| `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/geo-admin/index.ts`<br>`supabase/functions/lalamove-uapi/index.ts`<br>… +1 |
+| `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/geo-admin/index.ts`<br>`supabase/functions/lalamove-uapi/index.ts`<br>… +2 |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
 | `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/dispatch.ts`<br>`supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
@@ -825,7 +825,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `operator` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
 | `role` | `pickup_contact` | escreve | `supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/job-worker/index.ts` |
-| `role` | `service_role` | compara | `supabase/functions/geo-admin/index.ts`<br>`supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
+| `role` | `service_role` | compara | `supabase/functions/geo-admin/index.ts`<br>`supabase/functions/seed-fix-rls/index.ts`<br>`supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
 | `role` | `string` | compara | `supabase/functions/send-notification/recipients.ts` |
 | `role` | `supplier` | escreve | `supabase/functions/check-driver-alerts/index.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `role` | `system` | escreve | `supabase/functions/route-analyzer/index.ts` |
@@ -2045,7 +2045,7 @@ _nenhum item encontrado_
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Escolha ao menos um canal para a rota | `src/pages/MessagingSettingsPage.tsx` |
 | Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
-| … +125 linhas — lista completa em `context.json` | |
+| … +127 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2082,6 +2082,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/geo-admin/index.ts` |
 | `admin` | `supabase/functions/lalamove-uapi/index.ts` |
 | `true` | `supabase/functions/mcp-query/index.ts` |
+| `service_role` | `supabase/functions/seed-fix-rls/index.ts` |
 | `delivery_contact` | `supabase/functions/send-notification/index.ts` |
 | `service_role` | `supabase/functions/send-notification/index.ts` |
 | `role` | `supabase/functions/send-notification/recipients.ts` |

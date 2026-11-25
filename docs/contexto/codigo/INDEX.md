@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `70c35c58663f727c69d8cfb407edfc28f12127b2` (2026-11-25T18:33:47-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1a40403e0bac0d6de63da2eff40606c351687035` (2026-11-25T19:02:04-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1143 |
 | arquivos_codigo | 727 |
-| linhas_codigo | 143508 |
+| linhas_codigo | 143544 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -224,7 +224,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `new-device-alert` [Notificações/Alertas] — tabelas: auth_logs, new_device_alerts, user_devices; chamada por 1 arquivo(s) do front
 - `rotate-tokens` [Segredos/token] — tabelas: alerts, bitrix24_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `route-analyzer` [Lovable AI (custo por token)] — tabelas: alerts, drivers, lalamove_orders; chamada por 1 arquivo(s) do front
-- `seed-fix-rls` [Manutenção/DDL] — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `seed-fix-rls` [Manutenção/DDL] — tabelas: user_roles; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `send-notification` [Notificações/Alertas] — tabelas: active_tracking, alert_configurations, alerts, alerts_sent, bitrix24_tokens, drivers, geo_defaults, job_queue, lalamove_orders, order_geo_events; chamada por 1 arquivo(s) do front
 - `simulate-driver-movement` [Motoristas] — tabelas: active_tracking, tracking_events, user_roles; chamada por 1 arquivo(s) do front
 - `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 2 arquivo(s) do front
@@ -293,16 +293,16 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10012 nós · 20780 arestas · 716 comunidades · grafo do commit `70c35c58`
-- comunidades maiores: cn (188), App.tsx (177), button.tsx (163), react (128), 4. Componentes, hooks, libs e estado — **revisado** (108), ref_node_path (107), snapshot.py (106), ref_https (99), AppLayout (97), DashboardRedesigned.tsx (88), client.ts (84), dependencies (81)
+- 10013 nós · 20781 arestas · 702 comunidades · grafo do commit `1a40403e`
+- comunidades maiores: cn (272), lucide-react (181), ref_node_fs (124), react (122), ref_https (114), AlertConfigCard.tsx (107), snapshot.py (106), @tanstack/react-query (95), App.tsx (89), send-notification/index.ts (83), 4. Componentes, hooks, libs e estado — **revisado** (82), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (40)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
 - .github/workflows/ci.yml (17)
-- package.json (17)
-- package-lock.json (16)
+- package.json (16)
+- package-lock.json (15)
 - supabase/functions/job-worker/index.ts (15)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-25 `1a40403` fix: seed-fix-rls exige admin/manager e nao abre policies para anon (#393)
 - 2026-11-25 `70c35c5` feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)
 - 2026-11-25 `148b657` fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)
 - 2026-11-25 `0bd75b9` fix: religa alertas que nasceram desligados e morriam em silencio (#387)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `56e3472` fix: busca de endereco externa usa o schema real do banco de produtos (#380)
 - 2026-11-25 `29a49ed` fix: fecha leitura anonima das views de metrica (#379)
 - 2026-11-25 `1ded470` chore: least privilege nas funcoes internas de manutencao (#378)
-- 2026-11-25 `6736c92` feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "70c35c58663f727c69d8cfb407edfc28f12127b2",
+  "commit": "1a40403e0bac0d6de63da2eff40606c351687035",
   "branch": "main",
-  "data_commit": "2026-11-25T18:33:47-03:00",
+  "data_commit": "2026-11-25T19:02:04-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1a40403",
+    "data": "2026-11-25",
+    "assunto": "fix: seed-fix-rls exige admin/manager e nao abre policies para anon (#393)"
+   },
    {
     "sha": "70c35c5",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "99d3b77",
     "data": "2026-11-24",
     "assunto": "feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)"
-   },
-   {
-    "sha": "c804662",
-    "data": "2026-11-24",
-    "assunto": "chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)"
    }
   ],
   "arquivos_mudados_7d": 530,
@@ -211,11 +211,11 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 17
+    "mudancas": 16
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 16
+    "mudancas": 15
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1143,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143508,
+  "linhas_codigo": 143544,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29920
+   "linhas": 29956
   },
   "tailwind.config.ts": {
    "arquivos": 1,
