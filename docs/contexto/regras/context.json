@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "56e3472897dc8c4032265788f42e869a6dd1129f",
+  "sha": "63359d69e0a940d1da4529e473b2fc95852c8ca6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 13:48 UTC",
+  "generated_at": "2026-11-25 13:56 UTC",
   "files_total": 1136,
   "code_files": 953,
-  "code_lines": 165235
+  "code_lines": 165202
  },
  "version": "1.3.2",
- "facts_hash": "2245e3c9ee971837",
+ "facts_hash": "15230d4d8bc44b60",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -19272,24 +19272,20 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
     "tables": [
      "supplier_branches",
-     "suppliers"
+     "suppliers",
+     "user_roles"
     ],
     "env": [
      "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
-     "EXTERNAL_SUPABASE_URL",
-     "SUPABASE_ANON_KEY",
-     "SUPABASE_URL"
+     "EXTERNAL_SUPABASE_URL"
     ],
     "external": [],
     "invokes": [],
     "doc": "",
-    "errors": [
-     "Forbidden: operator role required",
-     "Unauthorized"
-    ],
+    "errors": [],
     "side_effects": [],
     "webhook_events": [],
     "idempotency": false
@@ -23121,7 +23117,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29712,
+   "lines": 29679,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -25115,7 +25111,6 @@
    ],
    "SUPABASE_ANON_KEY": [
     "supabase/functions/_shared/auth.ts",
-    "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.ts",
     "supabase/functions/lalamove-gateway/index.ts",
     "supabase/functions/lalamove-uapi/index.ts",
@@ -25193,7 +25188,6 @@
     "supabase/functions/check-driver-alerts/index.ts",
     "supabase/functions/escalate-alerts/index.ts",
     "supabase/functions/evaluate-driver/index.ts",
-    "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.ts",
     "supabase/functions/geo-admin/index.ts",
     "supabase/functions/geo-gateway/index.ts",
@@ -27828,14 +27822,6 @@
     "msg": "Unknown service: ${service}"
    },
    {
-    "file": "supabase/functions/external-companies/index.ts",
-    "msg": "Forbidden: operator role required"
-   },
-   {
-    "file": "supabase/functions/external-companies/index.ts",
-    "msg": "Unauthorized"
-   },
-   {
     "file": "supabase/functions/geo-admin/index.ts",
     "msg": "Tokens API list ${res.status}: ${(await res.text()).slice(0, 200)}"
    },
@@ -28898,10 +28884,6 @@
    {
     "file": "supabase/functions/evaluate-driver/index.ts",
     "text": "Add rule factors to reasons"
-   },
-   {
-    "file": "supabase/functions/external-companies/index.ts",
-    "text": "significa que admin, manager e operator passam; apenas viewer é negado."
    },
    {
     "file": "supabase/functions/external-companies/index.ts",
@@ -76057,7 +76039,7 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 360,
+   "lines": 327,
    "tables": [
     {
      "table": "suppliers",
@@ -76071,16 +76053,9 @@
    "dyn_from": 4,
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
-    "EXTERNAL_SUPABASE_URL",
-    "SUPABASE_ANON_KEY",
-    "SUPABASE_URL"
-   ],
-   "errors": [
-    "Forbidden: operator role required",
-    "Unauthorized"
+    "EXTERNAL_SUPABASE_URL"
    ],
    "rule_comments": [
-    "significa que admin, manager e operator passam; apenas viewer é negado.",
     "apenas em `suppliers` (sede) e `supplier_branches` (filial/CD)."
    ],
    "pagination": [
@@ -80629,10 +80604,19 @@
   }
  },
  "git": {
-  "sha": "56e3472897dc8c4032265788f42e869a6dd1129f",
+  "sha": "63359d69e0a940d1da4529e473b2fc95852c8ca6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "63359d6",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: external-companies usa o helper de auth compartilhado (#381)",
+    "files": [
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
    {
     "sha": "56e3472",
     "date": "2026-11-25",
@@ -80971,18 +80955,6 @@
     "files": [
      "supabase/functions/check-driver-alerts/index.ts"
     ]
-   },
-   {
-    "sha": "a741f0d",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)",
-    "files": [
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "supabase/functions/_shared/messaging/auto-notices.test.ts",
-     "supabase/functions/_shared/messaging/auto-notices.ts",
-     "supabase/functions/check-driver-alerts/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80996,7 +80968,11 @@
    ],
    [
     "supabase/functions/check-driver-alerts/index.ts",
-    5
+    4
+   ],
+   [
+    "supabase/functions/external-companies/index.ts",
+    2
    ],
    [
     "src/components/lalamove/UapiCouponsPanel.tsx",
@@ -81035,18 +81011,6 @@
     2
    ],
    [
-    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/auto-notices.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/auto-notices.ts",
-    2
-   ],
-   [
     "src/lib/bitrix-config.test.ts",
     1
    ],
@@ -81055,15 +81019,23 @@
     1
    ],
    [
-    "supabase/functions/external-companies/index.ts",
-    1
-   ],
-   [
     "supabase/migrations/20261126160000_revoke_anon_metric_views.sql",
     1
    ],
    [
     "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
+    1
+   ],
+   [
+    "src/components/lalamove/UapiSnapshotBadge.tsx",
+    1
+   ],
+   [
+    "src/lib/uapiSnapshot.test.ts",
+    1
+   ],
+   [
+    "src/lib/uapiSnapshot.ts",
     1
    ]
   ]

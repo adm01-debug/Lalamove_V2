@@ -2420,6 +2420,7 @@
    "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/external-companies/index.ts": [
+   "supabase/functions/_shared/auth.ts",
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "56e3472897dc8c4032265788f42e869a6dd1129f",
+  "commit": "63359d69e0a940d1da4529e473b2fc95852c8ca6",
   "branch": "main",
-  "data_commit": "2026-11-25T10:47:02-03:00",
+  "data_commit": "2026-11-25T10:56:03-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "63359d6",
+    "data": "2026-11-25",
+    "assunto": "fix: external-companies usa o helper de auth compartilhado (#381)"
+   },
    {
     "sha": "56e3472",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "1e34334",
     "data": "2026-11-24",
     "assunto": "fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)"
-   },
-   {
-    "sha": "49c9a83",
-    "data": "2026-11-24",
-    "assunto": "fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)"
    }
   ],
   "arquivos_mudados_7d": 529,
@@ -203,11 +203,11 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 34
+    "mudancas": 33
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 32
+    "mudancas": 31
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -219,10 +219,26 @@
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 15
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 14
    },
    {
@@ -234,35 +250,23 @@
     "mudancas": 13
    },
    {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
-    "mudancas": 13
-   },
-   {
     "arquivo": "src/App.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/config.toml",
     "mudancas": 12
    },
    {
@@ -270,7 +274,7 @@
     "mudancas": 11
    },
    {
-    "arquivo": "supabase/config.toml",
+    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 11
    },
    {
@@ -278,30 +282,26 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
-    "mudancas": 10
-   },
-   {
     "arquivo": "src/components/layout/MobileSidebar.tsx",
-    "mudancas": 8
+    "mudancas": 9
    },
    {
     "arquivo": "src/components/layout/sidebar-config.ts",
-    "mudancas": 8
+    "mudancas": 9
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 280
+    "commits": 281
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1142,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143197,
+  "linhas_codigo": 143164,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29712
+   "linhas": 29679
   },
   "tailwind.config.ts": {
    "arquivos": 1,

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `56e3472897` · branch `main` · 2026-11-25 13:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `63359d69e0` · branch `main` · 2026-11-25 13:56 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2044,7 +2044,7 @@ _nenhum item encontrado_
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Escolha ao menos um canal para a rota | `src/pages/MessagingSettingsPage.tsx` |
 | Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
-| … +127 linhas — lista completa em `context.json` | |
+| … +125 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2508,7 +2508,6 @@ _nenhum item encontrado_
 | ============= RULE EVALUATOR ============= | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
-| significa que admin, manager e operator passam; apenas viewer é negado. | `supabase/functions/external-companies/index.ts` |
 | apenas em `suppliers` (sede) e `supplier_branches` (filial/CD). | `supabase/functions/external-companies/index.ts` |
 | Apenas administradores podem acessar o banco externo. | `supabase/functions/external-db-bridge/index.ts` |
 | Qual id o passo 3 do runbook deve revogar. `pickTokenToRevoke` devolve null | `supabase/functions/geo-admin/index.ts` |

@@ -353,7 +353,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/external-companies/index.ts",
    "arquivos": 1,
-   "linhas": 360,
+   "linhas": 327,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -367,14 +367,13 @@
    "rpcs": [],
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
-    "EXTERNAL_SUPABASE_URL",
-    "SUPABASE_ANON_KEY",
-    "SUPABASE_URL"
+    "EXTERNAL_SUPABASE_URL"
    ],
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
    "usa_shared": [
+    "auth.ts",
     "contract.ts",
     "schemas.ts",
     "telemetry.ts"
