@@ -145,12 +145,17 @@ jobs:
       # job-worker, send-notification e lalamove-api tinham testes no repo que
       # nenhum workflow executava: ETA, cadencia, replay de trajeto, opt-out e
       # fallback de geocode podiam quebrar sem o CI ficar vermelho.
+      # lalamove-token-refresh entrou na lista: a regra que decide se carteira/
+      # extrato/cupons/frota continuam servidos (watchdog do snapshot) e o
+      # formato do refresh direto da UAPI tinham testes que nenhum workflow
+      # executava — regressao aqui congela o painel sem ninguem ser avisado.
       - name: Run job-worker, send-notification and lalamove-api tests
         run: |
           deno test --allow-net --allow-env --allow-read \
             supabase/functions/job-worker/ \
             supabase/functions/send-notification/ \
-            supabase/functions/lalamove-api/
+            supabase/functions/lalamove-api/ \
+            supabase/functions/lalamove-token-refresh/
       # Etapa 53 do plano Mapbox: replay deterministico do trajeto.
       - name: Run driver movement replay tests
         run: deno test --allow-net --allow-env --allow-read supabase/functions/simulate-driver-movement/
