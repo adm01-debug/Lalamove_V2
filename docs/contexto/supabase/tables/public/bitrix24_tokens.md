@@ -50,7 +50,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | WITH CHECK |  |
 
 ### `Admins can insert tokens`
@@ -61,7 +61,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 
 ### `Admins can update tokens`
 
@@ -70,7 +70,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | WITH CHECK |  |
 
 ### `Only admins can view tokens`
@@ -80,7 +80,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | WITH CHECK |  |
 
 

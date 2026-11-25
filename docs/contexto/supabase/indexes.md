@@ -114,11 +114,14 @@ Uso e tamanho em `stats.md`.
 | public.geo_blocks | idx_geo_blocks_active | btree | is_blocked | não | sim | `(is_blocked = true)` |
 | public.geo_blocks | idx_geo_blocks_blocked_by | btree | blocked_by | não | sim |  |
 | public.geo_budget | geo_budget_pkey | btree | provider | sim | sim |  |
+| public.geo_budget | geo_budget_updated_by_idx | btree | updated_by | não | sim |  |
 | public.geo_cache | geo_cache_pkey | btree | key | sim | sim |  |
 | public.geo_cache | idx_geo_cache_expires | btree | expires_at | não | sim |  |
 | public.geo_defaults | geo_defaults_pkey | btree | id | sim | sim |  |
+| public.geo_defaults | geo_defaults_updated_by_idx | btree | updated_by | não | sim |  |
 | public.geo_price_list | geo_price_list_pkey | btree | provider, sku | sim | sim |  |
 | public.geo_settings | geo_settings_pkey | btree | function | sim | sim |  |
+| public.geo_settings | geo_settings_updated_by_idx | btree | updated_by | não | sim |  |
 | public.geo_usage | geo_usage_pkey | btree | day, provider, function, sku | sim | sim |  |
 | public.geo_usage | idx_geo_usage_month | btree | provider, day | não | sim |  |
 | public.hourly_metrics_cache | idx_hourly_metrics_cache_hour | btree | hour | sim | sim |  |
@@ -181,6 +184,7 @@ Uso e tamanho em `stats.md`.
 | public.lalamove_uapi_snapshot | lalamove_uapi_snapshot_expires_at_idx | btree | expires_at | não | sim |  |
 | public.lalamove_uapi_snapshot | lalamove_uapi_snapshot_pkey | btree | resource | sim | sim |  |
 | public.lalamove_webhook_config | lalamove_webhook_config_pkey | btree | id | sim | sim |  |
+| public.lalamove_webhook_config | lalamove_webhook_config_registered_by_idx | btree | registered_by | não | sim |  |
 | public.lalamove_webhook_config | uq_webhook_config_active_env | btree | environment | sim | sim | `is_active` |
 | public.login_attempts | idx_login_attempts_email | btree | email | não | sim |  |
 | public.login_attempts | idx_login_attempts_ip_last_attempt | btree | ip_address, last_attempt_at | não | sim |  |
@@ -195,7 +199,9 @@ Uso e tamanho em `stats.md`.
 | public.message_templates | message_templates_event_idx | btree | event, role, channel | não | sim | `is_active` |
 | public.message_templates | message_templates_key_channel_version_key | btree | key, channel, version | sim | sim |  |
 | public.message_templates | message_templates_pkey | btree | id | sim | sim |  |
+| public.message_templates | message_templates_updated_by_idx | btree | updated_by | não | sim |  |
 | public.messaging_settings | messaging_settings_pkey | btree | id | sim | sim |  |
+| public.messaging_settings | messaging_settings_updated_by_idx | btree | updated_by | não | sim |  |
 | public.messaging_usage | messaging_usage_day_idx | btree | day | não | sim |  |
 | public.messaging_usage | messaging_usage_pkey | btree | day, channel, provider | sim | sim |  |
 | public.mfa_sessions | idx_mfa_sessions_user | btree | user_id | não | sim |  |
@@ -203,16 +209,20 @@ Uso e tamanho em `stats.md`.
 | public.new_device_alerts | idx_new_device_alerts_device_id | btree | device_id | não | sim |  |
 | public.new_device_alerts | idx_new_device_alerts_user | btree | user_id, created_at | não | sim |  |
 | public.new_device_alerts | new_device_alerts_pkey | btree | id | sim | sim |  |
+| public.notification_messages | notification_messages_alert_id_idx | btree | alert_id | não | sim |  |
 | public.notification_messages | notification_messages_client_message_id_key | btree | client_message_id | sim | sim | `(client_message_id IS NOT NULL)` |
 | public.notification_messages | notification_messages_driver_created_idx | btree | driver_id, created_at | não | sim |  |
+| public.notification_messages | notification_messages_fallback_of_idx | btree | fallback_of | não | sim |  |
 | public.notification_messages | notification_messages_order_created_idx | btree | order_id, created_at | não | sim |  |
 | public.notification_messages | notification_messages_pending_idx | btree | status | não | sim | `(status = ANY (ARRAY['queued'::text, 'sent'::text]))` |
 | public.notification_messages | notification_messages_pkey | btree | id | sim | sim |  |
 | public.notification_messages | notification_messages_provider_message_id_key | btree | provider, provider_message_id | sim | sim | `(provider_message_id IS NOT NULL)` |
 | public.notification_messages | notification_messages_recipient_created_idx | btree | recipient_phone, created_at | não | sim |  |
+| public.notification_optouts | notification_optouts_created_by_idx | btree | created_by | não | sim |  |
 | public.notification_optouts | notification_optouts_pkey | btree | phone | sim | sim |  |
 | public.notification_routes | notification_routes_event_idx | btree | event | não | sim | `is_enabled` |
 | public.notification_routes | notification_routes_pkey | btree | event, role | sim | sim |  |
+| public.notification_routes | notification_routes_updated_by_idx | btree | updated_by | não | sim |  |
 | public.order_geo_events | idx_order_geo_events_alert_id | btree | alert_id | não | sim |  |
 | public.order_geo_events | idx_order_geo_events_order | btree | order_id, triggered_at | não | sim |  |
 | public.order_geo_events | order_geo_events_order_id_event_type_stop_index_key | btree | order_id, event_type, stop_index | sim | sim |  |
@@ -256,39 +266,47 @@ Uso e tamanho em `stats.md`.
 | public.tracking_events | idx_tracking_driver_created | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events | idx_tracking_events_created_brin | brin | created_at | não | sim |  |
 | public.tracking_events | idx_tracking_order_created | btree | order_id, created_at | não | sim |  |
+| public.tracking_events | tracking_events_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_default | tracking_events_default_created_at_idx | brin | created_at | não | sim |  |
 | public.tracking_events_default | tracking_events_default_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_default | tracking_events_default_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_default | tracking_events_default_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m05 | tracking_events_y2026m05_created_at_idx | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m05 | tracking_events_y2026m05_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m05 | tracking_events_y2026m05_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m05 | tracking_events_y2026m05_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m06 | tracking_events_y2026m06_created_at_idx | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m06 | tracking_events_y2026m06_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m06 | tracking_events_y2026m06_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m06 | tracking_events_y2026m06_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m07 | tracking_events_y2026m07_created_at_idx | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m07 | tracking_events_y2026m07_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m07 | tracking_events_y2026m07_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m07 | tracking_events_y2026m07_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m08 | tracking_events_y2026m08_created_at_idx | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m08 | tracking_events_y2026m08_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m08 | tracking_events_y2026m08_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m08 | tracking_events_y2026m08_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m09 | tracking_events_y2026m09_created_at_idx | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m09 | tracking_events_y2026m09_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m09 | tracking_events_y2026m09_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m09 | tracking_events_y2026m09_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m10 | tracking_events_y2026m10_created_at_idx | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m10 | tracking_events_y2026m10_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m10 | tracking_events_y2026m10_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m10 | tracking_events_y2026m10_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m11 | tracking_events_y2026m11_created_at_idx | brin | created_at | não | sim |  |
-| public.tracking_events_y2026m11 | tracking_events_y2026m11_created_brin | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m11 | tracking_events_y2026m11_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m11 | tracking_events_y2026m11_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m11 | tracking_events_y2026m11_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2026m12 | tracking_events_y2026m12_created_at_idx | brin | created_at | não | sim |  |
-| public.tracking_events_y2026m12 | tracking_events_y2026m12_created_brin | brin | created_at | não | sim |  |
 | public.tracking_events_y2026m12 | tracking_events_y2026m12_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2026m12 | tracking_events_y2026m12_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2026m12 | tracking_events_y2026m12_pkey | btree | id, created_at | sim | sim |  |
 | public.tracking_events_y2027m01 | tracking_events_y2027m01_created_at_idx | brin | created_at | não | sim |  |
-| public.tracking_events_y2027m01 | tracking_events_y2027m01_created_brin | brin | created_at | não | sim |  |
 | public.tracking_events_y2027m01 | tracking_events_y2027m01_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  |
 | public.tracking_events_y2027m01 | tracking_events_y2027m01_order_id_created_at_idx | btree | order_id, created_at | não | sim |  |
+| public.tracking_events_y2027m01 | tracking_events_y2027m01_pkey | btree | id, created_at | sim | sim |  |
 | public.user_devices | idx_user_devices_last_seen | btree | last_seen_at | não | sim |  |
 | public.user_devices | user_devices_pkey | btree | id | sim | sim |  |
 | public.user_devices | user_devices_user_id_device_fingerprint_key | btree | user_id, device_fingerprint | sim | sim |  |

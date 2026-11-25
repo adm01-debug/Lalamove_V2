@@ -60,7 +60,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))` |
 | WITH CHECK |  |
 
 ### `Managers can delete driver locations`
@@ -70,7 +70,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))` |
 | WITH CHECK |  |
 
 ### `Operators can insert driver locations`
@@ -81,7 +81,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))` |
+| WITH CHECK | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))` |
 
 ### `Operators can update driver locations`
 
@@ -90,7 +90,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))` |
 | WITH CHECK |  |
 
 ### `Operators can view active delivery locations only`
@@ -100,7 +100,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'operator'::app_role) AND (EXISTS ( SELECT 1    FROM active_tracking at   WHERE ((at.id = driver_locations.tracking_id) AND (at.tracking_status = 'ACTIVE'::text)))))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) AND (EXISTS ( SELECT 1    FROM active_tracking at   WHERE ((at.id = driver_locations.tracking_id) AND (at.tracking_status = 'ACTIVE'::text)))))` |
 | WITH CHECK |  |
 
 

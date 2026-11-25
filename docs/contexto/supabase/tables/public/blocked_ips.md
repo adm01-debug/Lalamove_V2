@@ -57,7 +57,7 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | WITH CHECK |  |
 
 ### `Managers can view blocked IPs`
@@ -67,7 +67,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `has_role(auth.uid(), 'manager'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'manager'::app_role)` |
 | WITH CHECK |  |
 
 

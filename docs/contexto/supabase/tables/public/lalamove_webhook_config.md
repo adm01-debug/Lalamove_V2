@@ -43,6 +43,7 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | lalamove_webhook_config_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX lalamove_webhook_config_pkey ON public.lalamove_webhook_config USING btree (id)` |
+| lalamove_webhook_config_registered_by_idx | btree | registered_by | não | sim |  | `CREATE INDEX lalamove_webhook_config_registered_by_idx ON public.lalamove_webhook_config USING btree (registered_by)` |
 | uq_webhook_config_active_env | btree | environment | sim | sim | `is_active` | `CREATE UNIQUE INDEX uq_webhook_config_active_env ON public.lalamove_webhook_config USING btree (environment) WHERE is_active` |
 
 
@@ -55,8 +56,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
-| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
+| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 
 
 ## Triggers

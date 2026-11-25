@@ -211,3 +211,9 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261126150000 | [least_privilege_funcoes_manutencao](migrations/20261126150000_least_privilege_funcoes_manutencao.sql) | 21 |
 | 20261126160000 | [revoke_anon_metric_views](migrations/20261126160000_revoke_anon_metric_views.sql) | 5 |
 | 20261126170000 | [enable_delivery_alert_notifications](migrations/20261126170000_enable_delivery_alert_notifications.sql) | 1 |
+| 20261126180000 | [hardening_searchpath_indices_fk](migrations/20261126180000_hardening_searchpath_indices_fk.sql) | 1 |
+| 20261126190000 | [audit_log_policies_restritas](migrations/20261126190000_audit_log_policies_restritas.sql) | 1 |
+| 20261126200000 | [rls_auth_initplan](migrations/20261126200000_rls_auth_initplan.sql) | 1 |
+| 20261126210000 | [tracking_events_pk](migrations/20261126210000_tracking_events_pk.sql) | 1 |
+| 20261126220000 | [revoke_anon_funcoes_definer](migrations/20261126220000_revoke_anon_funcoes_definer.sql) | 0 |
+| 20261126230000 | [revoke_authenticated_manutencao](migrations/20261126230000_revoke_authenticated_manutencao.sql) | 0 |

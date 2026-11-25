@@ -48,6 +48,7 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | messaging_settings_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX messaging_settings_pkey ON public.messaging_settings USING btree (id)` |
+| messaging_settings_updated_by_idx | btree | updated_by | não | sim |  | `CREATE INDEX messaging_settings_updated_by_idx ON public.messaging_settings USING btree (updated_by)` |
 
 
 ## Policies (RLS)
@@ -59,8 +60,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
-| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
+| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 
 ### `equipe le configuracao de mensageria`
 
@@ -69,7 +70,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 ### `service role gerencia configuracao de mensageria`

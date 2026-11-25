@@ -2,6 +2,7 @@ CREATE OR REPLACE FUNCTION public.normalize_br_phone(p_phone text)
  RETURNS text
  LANGUAGE plpgsql
  IMMUTABLE PARALLEL SAFE
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE
   d text := regexp_replace(COALESCE(p_phone, ''), '\D', '', 'g');

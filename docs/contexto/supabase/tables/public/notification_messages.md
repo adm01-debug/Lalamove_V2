@@ -76,8 +76,10 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
+| notification_messages_alert_id_idx | btree | alert_id | não | sim |  | `CREATE INDEX notification_messages_alert_id_idx ON public.notification_messages USING btree (alert_id)` |
 | notification_messages_client_message_id_key | btree | client_message_id | sim | sim | `(client_message_id IS NOT NULL)` | `CREATE UNIQUE INDEX notification_messages_client_message_id_key ON public.notification_messages USING btree (client_message_id) WHERE (client_message_id IS NOT NULL)` |
 | notification_messages_driver_created_idx | btree | driver_id, created_at | não | sim |  | `CREATE INDEX notification_messages_driver_created_idx ON public.notification_messages USING btree (driver_id, created_at DESC)` |
+| notification_messages_fallback_of_idx | btree | fallback_of | não | sim |  | `CREATE INDEX notification_messages_fallback_of_idx ON public.notification_messages USING btree (fallback_of)` |
 | notification_messages_order_created_idx | btree | order_id, created_at | não | sim |  | `CREATE INDEX notification_messages_order_created_idx ON public.notification_messages USING btree (order_id, created_at DESC)` |
 | notification_messages_pending_idx | btree | status | não | sim | `(status = ANY (ARRAY['queued'::text, 'sent'::text]))` | `CREATE INDEX notification_messages_pending_idx ON public.notification_messages USING btree (status) WHERE (status = ANY (ARRAY['queued'::text, 'sent'::text]))` |
 | notification_messages_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX notification_messages_pkey ON public.notification_messages USING btree (id)` |
@@ -94,7 +96,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 ### `service role escreve ledger de mensagens`

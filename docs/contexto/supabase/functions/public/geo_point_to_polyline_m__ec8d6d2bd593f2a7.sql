@@ -2,6 +2,7 @@ CREATE OR REPLACE FUNCTION public.geo_point_to_polyline_m(plat double precision,
  RETURNS double precision
  LANGUAGE plpgsql
  IMMUTABLE PARALLEL SAFE
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE
   n     integer;

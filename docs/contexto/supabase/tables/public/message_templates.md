@@ -55,6 +55,7 @@
 | message_templates_event_idx | btree | event, role, channel | não | sim | `is_active` | `CREATE INDEX message_templates_event_idx ON public.message_templates USING btree (event, role, channel) WHERE is_active` |
 | message_templates_key_channel_version_key | btree | key, channel, version | sim | sim |  | `CREATE UNIQUE INDEX message_templates_key_channel_version_key ON public.message_templates USING btree (key, channel, version)` |
 | message_templates_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX message_templates_pkey ON public.message_templates USING btree (id)` |
+| message_templates_updated_by_idx | btree | updated_by | não | sim |  | `CREATE INDEX message_templates_updated_by_idx ON public.message_templates USING btree (updated_by)` |
 
 
 ## Policies (RLS)
@@ -66,8 +67,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
-| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
+| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 
 ### `equipe le templates`
 
@@ -76,7 +77,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 ### `service role gerencia templates`

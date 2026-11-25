@@ -53,7 +53,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 ### `Users can insert their MFA sessions`
@@ -64,7 +64,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(auth.uid() = user_id)` |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
 ### `Users can manage own MFA sessions`
 
@@ -73,8 +73,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(auth.uid() = user_id)` |
-| WITH CHECK | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
 ### `Users can update their MFA sessions`
 
@@ -83,7 +83,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
 ### `Usuários podem ver suas próprias sessões MFA`
@@ -93,7 +93,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
 

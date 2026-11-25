@@ -57,7 +57,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())` |
 | WITH CHECK |  |
 
 ### `MFA admins can insert roles`
@@ -68,7 +68,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())` |
+| WITH CHECK | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())` |
 
 ### `MFA admins can update roles`
 
@@ -77,8 +77,8 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())` |
-| WITH CHECK | `(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())` |
+| WITH CHECK | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())` |
 
 ### `Users can view own roles`
 
@@ -87,7 +87,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 

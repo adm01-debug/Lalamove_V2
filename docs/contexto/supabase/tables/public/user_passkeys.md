@@ -58,7 +58,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 ### `Users can insert own passkeys`
@@ -69,7 +69,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(auth.uid() = user_id)` |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
 ### `Users can update own passkeys`
 
@@ -78,8 +78,8 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(auth.uid() = user_id)` |
-| WITH CHECK | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
 ### `Users can view own passkeys`
 
@@ -88,7 +88,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
 

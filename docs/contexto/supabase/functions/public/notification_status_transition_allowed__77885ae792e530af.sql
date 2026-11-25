@@ -2,6 +2,7 @@ CREATE OR REPLACE FUNCTION public.notification_status_transition_allowed(p_from 
  RETURNS boolean
  LANGUAGE sql
  IMMUTABLE PARALLEL SAFE
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT p_from = p_to OR CASE p_from
     WHEN 'queued'    THEN p_to IN ('sent','failed','uncertain','expired','suppressed')

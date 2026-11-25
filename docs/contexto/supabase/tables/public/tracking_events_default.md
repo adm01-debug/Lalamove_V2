@@ -36,6 +36,7 @@
 
 | nome | tipo | definição | on delete | on update | validada |
 |---|---|---|---|---|---|
+| tracking_events_default_pkey | PRIMARY KEY | `PRIMARY KEY (id, created_at)` |  |  | sim |
 | tracking_events_heading_check | CHECK | `CHECK (heading IS NULL OR heading >= 0::numeric AND heading <= 360::numeric)` |  |  | sim |
 | tracking_events_latitude_check | CHECK | `CHECK (latitude >= '-90'::integer::numeric AND latitude <= 90::numeric)` |  |  | sim |
 | tracking_events_longitude_check | CHECK | `CHECK (longitude >= '-180'::integer::numeric AND longitude <= 180::numeric)` |  |  | sim |
@@ -49,6 +50,7 @@
 | tracking_events_default_created_at_idx | brin | created_at | não | sim |  | `CREATE INDEX tracking_events_default_created_at_idx ON public.tracking_events_default USING brin (created_at) WITH (pages_per_range='32')` |
 | tracking_events_default_driver_id_created_at_idx | btree | driver_id, created_at | não | sim |  | `CREATE INDEX tracking_events_default_driver_id_created_at_idx ON public.tracking_events_default USING btree (driver_id, created_at)` |
 | tracking_events_default_order_id_created_at_idx | btree | order_id, created_at | não | sim |  | `CREATE INDEX tracking_events_default_order_id_created_at_idx ON public.tracking_events_default USING btree (order_id, created_at)` |
+| tracking_events_default_pkey | btree | id, created_at | sim | sim |  | `CREATE UNIQUE INDEX tracking_events_default_pkey ON public.tracking_events_default USING btree (id, created_at)` |
 
 
 ## Policies (RLS)
@@ -60,7 +62,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))` |
 | WITH CHECK |  |
 
 

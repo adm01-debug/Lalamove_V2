@@ -25,17 +25,17 @@ Gerado automaticamente a cada 10 min pelo workflow `contexto` (job `banco`). **N
 | functions | 81 |
 | triggers | 44 |
 | policies (RLS) | 232 |
-| índices | 304 |
+| índices | 322 |
 | tipos/enums | 11 |
 | extensões | 8 |
 | cron jobs | 17 |
 | filas pgmq | 0 |
-| migrations | 207 |
+| migrations | 213 |
 | buckets | 0 |
 | edge functions | n/d |
 | webhooks | 0 |
 | lints ALTA | 1 |
-| lints total | 238 |
+| lints total | 4 |
 
 ## Estado das fontes do mapa de referências
 

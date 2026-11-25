@@ -922,7 +922,7 @@ erDiagram
         timestamp_with_time_zone created_at
     }
     public_tracking_events {
-        uuid id
+        uuid id PK
         uuid order_id
         uuid driver_id
         numeric latitude
@@ -931,7 +931,7 @@ erDiagram
         numeric speed
         text event_type
         jsonb metadata
-        timestamp_with_time_zone created_at
+        timestamp_with_time_zone created_at PK
     }
     public_user_devices {
         uuid id PK

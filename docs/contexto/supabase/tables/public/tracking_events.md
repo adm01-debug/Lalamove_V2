@@ -38,6 +38,7 @@
 | tracking_events_heading_check | CHECK | `CHECK (heading IS NULL OR heading >= 0::numeric AND heading <= 360::numeric)` |  |  | sim |
 | tracking_events_latitude_check | CHECK | `CHECK (latitude >= '-90'::integer::numeric AND latitude <= 90::numeric)` |  |  | sim |
 | tracking_events_longitude_check | CHECK | `CHECK (longitude >= '-180'::integer::numeric AND longitude <= 180::numeric)` |  |  | sim |
+| tracking_events_pkey | PRIMARY KEY | `PRIMARY KEY (id, created_at)` |  |  | sim |
 | tracking_events_speed_check | CHECK | `CHECK (speed IS NULL OR speed >= 0::numeric)` |  |  | sim |
 
 
@@ -48,6 +49,7 @@
 | idx_tracking_driver_created | btree | driver_id, created_at | não | sim |  | `CREATE INDEX idx_tracking_driver_created ON ONLY public.tracking_events USING btree (driver_id, created_at)` |
 | idx_tracking_events_created_brin | brin | created_at | não | sim |  | `CREATE INDEX idx_tracking_events_created_brin ON ONLY public.tracking_events USING brin (created_at) WITH (pages_per_range='32')` |
 | idx_tracking_order_created | btree | order_id, created_at | não | sim |  | `CREATE INDEX idx_tracking_order_created ON ONLY public.tracking_events USING btree (order_id, created_at)` |
+| tracking_events_pkey | btree | id, created_at | sim | sim |  | `CREATE UNIQUE INDEX tracking_events_pkey ON ONLY public.tracking_events USING btree (id, created_at)` |
 
 
 ## Policies (RLS)
@@ -59,7 +61,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))` |
 | WITH CHECK |  |
 
 

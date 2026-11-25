@@ -43,6 +43,7 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | geo_budget_pkey | btree | provider | sim | sim |  | `CREATE UNIQUE INDEX geo_budget_pkey ON public.geo_budget USING btree (provider)` |
+| geo_budget_updated_by_idx | btree | updated_by | não | sim |  | `CREATE INDEX geo_budget_updated_by_idx ON public.geo_budget USING btree (updated_by)` |
 
 
 ## Policies (RLS)
@@ -54,8 +55,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
-| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
+| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 
 ### `geo_budget_read_authenticated`
 
@@ -64,7 +65,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(auth.role() = 'authenticated'::text)` |
+| USING | `(( SELECT auth.role() AS role) = 'authenticated'::text)` |
 | WITH CHECK |  |
 
 

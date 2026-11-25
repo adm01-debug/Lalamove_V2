@@ -46,6 +46,7 @@
 |---|---|---|---|---|---|---|
 | notification_routes_event_idx | btree | event | não | sim | `is_enabled` | `CREATE INDEX notification_routes_event_idx ON public.notification_routes USING btree (event) WHERE is_enabled` |
 | notification_routes_pkey | btree | event, role | sim | sim |  | `CREATE UNIQUE INDEX notification_routes_pkey ON public.notification_routes USING btree (event, role)` |
+| notification_routes_updated_by_idx | btree | updated_by | não | sim |  | `CREATE INDEX notification_routes_updated_by_idx ON public.notification_routes USING btree (updated_by)` |
 
 
 ## Policies (RLS)
@@ -57,8 +58,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
-| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
+| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 
 ### `equipe le rotas de notificacao`
 
@@ -67,7 +68,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 ### `service role gerencia rotas de notificacao`

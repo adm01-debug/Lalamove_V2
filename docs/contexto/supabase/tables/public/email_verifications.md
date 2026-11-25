@@ -52,7 +52,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | WITH CHECK |  |
 
 ### `Users can insert own verifications`
@@ -63,7 +63,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(auth.uid() = user_id)` |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
 ### `Users can update their verifications`
 
@@ -72,7 +72,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |
+| USING | `((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | WITH CHECK |  |
 
 ### `Users can view own verifications`
@@ -82,7 +82,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
 

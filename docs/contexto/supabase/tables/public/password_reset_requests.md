@@ -57,7 +57,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))` |
 | WITH CHECK |  |
 
 ### `Admins can update reset requests`
@@ -67,8 +67,8 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
-| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
+| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 
 ### `Users can request own password reset`
 
@@ -78,7 +78,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(user_email = (( SELECT users.email    FROM auth.users   WHERE (users.id = auth.uid())))::text)` |
+| WITH CHECK | `(user_email = (( SELECT users.email    FROM auth.users   WHERE (users.id = ( SELECT auth.uid() AS uid))))::text)` |
 
 
 ## Triggers

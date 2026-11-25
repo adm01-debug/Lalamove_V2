@@ -18626,6 +18626,24 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "speed"
         ],
         "deferrable": false,
@@ -18643,6 +18661,24 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_default_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_default",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "heading"
         ],
         "deferrable": false,
@@ -18779,6 +18815,24 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m05_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m05",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "heading"
         ],
         "deferrable": false,
@@ -18843,6 +18897,24 @@
         "schema": "public",
         "table": "tracking_events_y2026m06",
         "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m06_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m06",
+        "type": "PRIMARY KEY",
         "validated": true
       },
       {
@@ -18915,6 +18987,24 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m07_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m07",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "heading"
         ],
         "deferrable": false,
@@ -18979,6 +19069,24 @@
         "schema": "public",
         "table": "tracking_events_y2026m08",
         "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m08_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m08",
+        "type": "PRIMARY KEY",
         "validated": true
       },
       {
@@ -19051,6 +19159,24 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m09_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m09",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "heading"
         ],
         "deferrable": false,
@@ -19115,6 +19241,24 @@
         "schema": "public",
         "table": "tracking_events_y2026m10",
         "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m10_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m10",
+        "type": "PRIMARY KEY",
         "validated": true
       },
       {
@@ -19187,6 +19331,24 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m11_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m11",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "heading"
         ],
         "deferrable": false,
@@ -19255,6 +19417,24 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2026m12_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m12",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "heading"
         ],
         "deferrable": false,
@@ -19319,6 +19499,24 @@
         "schema": "public",
         "table": "tracking_events_y2027m01",
         "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id, created_at)",
+        "name": "tracking_events_y2027m01_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "tracking_events_y2027m01",
+        "type": "PRIMARY KEY",
         "validated": true
       },
       {
@@ -20066,7 +20264,7 @@
         ],
         "definition": null,
         "definition_sha": "736bd82afeddfca5",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20103,7 +20301,7 @@
         ],
         "definition": null,
         "definition_sha": "b7ec2fba95ceebf1",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20152,7 +20350,7 @@
         ],
         "definition": null,
         "definition_sha": "bed92713891844c8",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20236,7 +20434,7 @@
         ],
         "definition": null,
         "definition_sha": "1a50e4ce1fb0b9d0",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20268,7 +20466,7 @@
         ],
         "definition": null,
         "definition_sha": "7273e59f4cabe906",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20305,7 +20503,7 @@
         ],
         "definition": null,
         "definition_sha": "86e050ce52d898b6",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20504,7 +20702,7 @@
         ],
         "definition": null,
         "definition_sha": "b6f085299f6313a0",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20765,9 +20963,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "61bb0155ab6d9445",
+        "definition_sha": "ad3834a9701eda81",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -20804,9 +21004,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "d4028dd0c414e3ce",
+        "definition_sha": "0a2c59a839405ff2",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -20839,9 +21041,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "2faa25e5f12302f0",
+        "definition_sha": "cf67a6f266a4c164",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -21446,7 +21650,7 @@
         ],
         "definition": null,
         "definition_sha": "733e0e6183e51779",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
@@ -21645,7 +21849,7 @@
         ],
         "definition": null,
         "definition_sha": "ffd2fcbf43d6c46a",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -21993,7 +22197,7 @@
         ],
         "definition": null,
         "definition_sha": "2752fd20fe7a7679",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22025,9 +22229,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "017508c01fd86e61",
+        "definition_sha": "99d8ba2242d0053b",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -22097,9 +22303,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "d47d6d25799058c5",
+        "definition_sha": "cb15411f6438adc3",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": true,
@@ -22130,9 +22338,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "bdb4223b8bca3e94",
+        "definition_sha": "7c6595ec417008b5",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -22301,7 +22511,7 @@
         ],
         "definition": null,
         "definition_sha": "0e71ab2d54858443",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22346,7 +22556,7 @@
         ],
         "definition": null,
         "definition_sha": "900e880af930555a",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22503,7 +22713,7 @@
         ],
         "definition": null,
         "definition_sha": "8beae288b316685f",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22585,7 +22795,7 @@
         ],
         "definition": null,
         "definition_sha": "b60f4e69e4c605d4",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22630,7 +22840,7 @@
         ],
         "definition": null,
         "definition_sha": "91b34a46ae08a5e9",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22679,7 +22889,7 @@
         ],
         "definition": null,
         "definition_sha": "e757a0be941d77e2",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22718,7 +22928,7 @@
         ],
         "definition": null,
         "definition_sha": "5326215182e864a4",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22763,7 +22973,7 @@
         ],
         "definition": null,
         "definition_sha": "a77ae1b78e6b4950",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
@@ -22808,7 +23018,7 @@
         ],
         "definition": null,
         "definition_sha": "4a8e0e93253d4b39",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
@@ -23481,7 +23691,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "privileges": "INSERT, SELECT",
           "schema": "public",
           "table": "audit_log"
         },
@@ -26203,6 +26413,20 @@
       },
       {
         "columns": [
+          "updated_by"
+        ],
+        "definition": "CREATE INDEX geo_budget_updated_by_idx ON public.geo_budget USING btree (updated_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "geo_budget_updated_by_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "geo_budget"
+      },
+      {
+        "columns": [
           "key"
         ],
         "definition": "CREATE UNIQUE INDEX geo_cache_pkey ON public.geo_cache USING btree (key)",
@@ -26245,6 +26469,20 @@
       },
       {
         "columns": [
+          "updated_by"
+        ],
+        "definition": "CREATE INDEX geo_defaults_updated_by_idx ON public.geo_defaults USING btree (updated_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "geo_defaults_updated_by_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "geo_defaults"
+      },
+      {
+        "columns": [
           "provider",
           "sku"
         ],
@@ -26268,6 +26506,20 @@
         "is_valid": true,
         "method": "btree",
         "name": "geo_settings_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "geo_settings"
+      },
+      {
+        "columns": [
+          "updated_by"
+        ],
+        "definition": "CREATE INDEX geo_settings_updated_by_idx ON public.geo_settings USING btree (updated_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "geo_settings_updated_by_idx",
         "predicate": null,
         "schema": "public",
         "table": "geo_settings"
@@ -27157,6 +27409,20 @@
       },
       {
         "columns": [
+          "registered_by"
+        ],
+        "definition": "CREATE INDEX lalamove_webhook_config_registered_by_idx ON public.lalamove_webhook_config USING btree (registered_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "lalamove_webhook_config_registered_by_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_webhook_config"
+      },
+      {
+        "columns": [
           "environment"
         ],
         "definition": "CREATE UNIQUE INDEX uq_webhook_config_active_env ON public.lalamove_webhook_config USING btree (environment) WHERE is_active",
@@ -27360,6 +27626,20 @@
       },
       {
         "columns": [
+          "updated_by"
+        ],
+        "definition": "CREATE INDEX message_templates_updated_by_idx ON public.message_templates USING btree (updated_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "message_templates_updated_by_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "message_templates"
+      },
+      {
+        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX messaging_settings_pkey ON public.messaging_settings USING btree (id)",
@@ -27368,6 +27648,20 @@
         "is_valid": true,
         "method": "btree",
         "name": "messaging_settings_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "messaging_settings"
+      },
+      {
+        "columns": [
+          "updated_by"
+        ],
+        "definition": "CREATE INDEX messaging_settings_updated_by_idx ON public.messaging_settings USING btree (updated_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "messaging_settings_updated_by_idx",
         "predicate": null,
         "schema": "public",
         "table": "messaging_settings"
@@ -27475,6 +27769,20 @@
       },
       {
         "columns": [
+          "alert_id"
+        ],
+        "definition": "CREATE INDEX notification_messages_alert_id_idx ON public.notification_messages USING btree (alert_id)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_alert_id_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
           "client_message_id"
         ],
         "definition": "CREATE UNIQUE INDEX notification_messages_client_message_id_key ON public.notification_messages USING btree (client_message_id) WHERE (client_message_id IS NOT NULL)",
@@ -27498,6 +27806,20 @@
         "is_valid": true,
         "method": "btree",
         "name": "notification_messages_driver_created_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
+          "fallback_of"
+        ],
+        "definition": "CREATE INDEX notification_messages_fallback_of_idx ON public.notification_messages USING btree (fallback_of)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_fallback_of_idx",
         "predicate": null,
         "schema": "public",
         "table": "notification_messages"
@@ -27577,6 +27899,20 @@
       },
       {
         "columns": [
+          "created_by"
+        ],
+        "definition": "CREATE INDEX notification_optouts_created_by_idx ON public.notification_optouts USING btree (created_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_optouts_created_by_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_optouts"
+      },
+      {
+        "columns": [
           "phone"
         ],
         "definition": "CREATE UNIQUE INDEX notification_optouts_pkey ON public.notification_optouts USING btree (phone)",
@@ -27614,6 +27950,20 @@
         "is_valid": true,
         "method": "btree",
         "name": "notification_routes_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_routes"
+      },
+      {
+        "columns": [
+          "updated_by"
+        ],
+        "definition": "CREATE INDEX notification_routes_updated_by_idx ON public.notification_routes USING btree (updated_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_routes_updated_by_idx",
         "predicate": null,
         "schema": "public",
         "table": "notification_routes"
@@ -28237,6 +28587,21 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_pkey ON ONLY public.tracking_events USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events"
+      },
+      {
+        "columns": [
           "created_at"
         ],
         "definition": "CREATE INDEX tracking_events_default_created_at_idx ON public.tracking_events_default USING brin (created_at) WITH (pages_per_range='32')",
@@ -28275,6 +28640,21 @@
         "is_valid": true,
         "method": "btree",
         "name": "tracking_events_default_order_id_created_at_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_default"
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_default_pkey ON public.tracking_events_default USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_default_pkey",
         "predicate": null,
         "schema": "public",
         "table": "tracking_events_default"
@@ -28325,6 +28705,21 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m05_pkey ON public.tracking_events_y2026m05 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m05_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m05"
+      },
+      {
+        "columns": [
           "created_at"
         ],
         "definition": "CREATE INDEX tracking_events_y2026m06_created_at_idx ON public.tracking_events_y2026m06 USING brin (created_at) WITH (pages_per_range='32')",
@@ -28363,6 +28758,21 @@
         "is_valid": true,
         "method": "btree",
         "name": "tracking_events_y2026m06_order_id_created_at_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m06"
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m06_pkey ON public.tracking_events_y2026m06 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m06_pkey",
         "predicate": null,
         "schema": "public",
         "table": "tracking_events_y2026m06"
@@ -28413,6 +28823,21 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m07_pkey ON public.tracking_events_y2026m07 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m07_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m07"
+      },
+      {
+        "columns": [
           "created_at"
         ],
         "definition": "CREATE INDEX tracking_events_y2026m08_created_at_idx ON public.tracking_events_y2026m08 USING brin (created_at) WITH (pages_per_range='32')",
@@ -28451,6 +28876,21 @@
         "is_valid": true,
         "method": "btree",
         "name": "tracking_events_y2026m08_order_id_created_at_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m08"
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m08_pkey ON public.tracking_events_y2026m08 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m08_pkey",
         "predicate": null,
         "schema": "public",
         "table": "tracking_events_y2026m08"
@@ -28501,6 +28941,21 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m09_pkey ON public.tracking_events_y2026m09 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m09_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m09"
+      },
+      {
+        "columns": [
           "created_at"
         ],
         "definition": "CREATE INDEX tracking_events_y2026m10_created_at_idx ON public.tracking_events_y2026m10 USING brin (created_at) WITH (pages_per_range='32')",
@@ -28545,6 +29000,21 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m10_pkey ON public.tracking_events_y2026m10 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m10_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m10"
+      },
+      {
+        "columns": [
           "created_at"
         ],
         "definition": "CREATE INDEX tracking_events_y2026m11_created_at_idx ON public.tracking_events_y2026m11 USING brin (created_at) WITH (pages_per_range='32')",
@@ -28553,20 +29023,6 @@
         "is_valid": true,
         "method": "brin",
         "name": "tracking_events_y2026m11_created_at_idx",
-        "predicate": null,
-        "schema": "public",
-        "table": "tracking_events_y2026m11"
-      },
-      {
-        "columns": [
-          "created_at"
-        ],
-        "definition": "CREATE INDEX tracking_events_y2026m11_created_brin ON public.tracking_events_y2026m11 USING brin (created_at) WITH (pages_per_range='32')",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "brin",
-        "name": "tracking_events_y2026m11_created_brin",
         "predicate": null,
         "schema": "public",
         "table": "tracking_events_y2026m11"
@@ -28603,6 +29059,21 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m11_pkey ON public.tracking_events_y2026m11 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m11_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m11"
+      },
+      {
+        "columns": [
           "created_at"
         ],
         "definition": "CREATE INDEX tracking_events_y2026m12_created_at_idx ON public.tracking_events_y2026m12 USING brin (created_at) WITH (pages_per_range='32')",
@@ -28611,20 +29082,6 @@
         "is_valid": true,
         "method": "brin",
         "name": "tracking_events_y2026m12_created_at_idx",
-        "predicate": null,
-        "schema": "public",
-        "table": "tracking_events_y2026m12"
-      },
-      {
-        "columns": [
-          "created_at"
-        ],
-        "definition": "CREATE INDEX tracking_events_y2026m12_created_brin ON public.tracking_events_y2026m12 USING brin (created_at) WITH (pages_per_range='32')",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "brin",
-        "name": "tracking_events_y2026m12_created_brin",
         "predicate": null,
         "schema": "public",
         "table": "tracking_events_y2026m12"
@@ -28661,6 +29118,21 @@
       },
       {
         "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2026m12_pkey ON public.tracking_events_y2026m12 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2026m12_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2026m12"
+      },
+      {
+        "columns": [
           "created_at"
         ],
         "definition": "CREATE INDEX tracking_events_y2027m01_created_at_idx ON public.tracking_events_y2027m01 USING brin (created_at) WITH (pages_per_range='32')",
@@ -28669,20 +29141,6 @@
         "is_valid": true,
         "method": "brin",
         "name": "tracking_events_y2027m01_created_at_idx",
-        "predicate": null,
-        "schema": "public",
-        "table": "tracking_events_y2027m01"
-      },
-      {
-        "columns": [
-          "created_at"
-        ],
-        "definition": "CREATE INDEX tracking_events_y2027m01_created_brin ON public.tracking_events_y2027m01 USING brin (created_at) WITH (pages_per_range='32')",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "brin",
-        "name": "tracking_events_y2027m01_created_brin",
         "predicate": null,
         "schema": "public",
         "table": "tracking_events_y2027m01"
@@ -28713,6 +29171,21 @@
         "is_valid": true,
         "method": "btree",
         "name": "tracking_events_y2027m01_order_id_created_at_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "tracking_events_y2027m01"
+      },
+      {
+        "columns": [
+          "id",
+          "created_at"
+        ],
+        "definition": "CREATE UNIQUE INDEX tracking_events_y2027m01_pkey ON public.tracking_events_y2027m01 USING btree (id, created_at)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "tracking_events_y2027m01_pkey",
         "predicate": null,
         "schema": "public",
         "table": "tracking_events_y2027m01"
@@ -28995,1396 +29468,10 @@
         "severity": "ALTA"
       },
       {
-        "code": "no_primary_key",
-        "detail": "Sem chave primária: Realtime/replicação e updates por linha ficam frágeis.",
-        "object": "public.tracking_events",
-        "severity": "MÉDIA"
-      },
-      {
         "code": "rls_no_policies",
         "detail": "RLS ligado sem policies: inacessível via API (só service_role).",
         "object": "public.geo_cache",
         "severity": "MÉDIA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.geo_budget.geo_budget_updated_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.geo_defaults.geo_defaults_updated_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.geo_settings.geo_settings_updated_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['registered_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.lalamove_webhook_config.lalamove_webhook_config_registered_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.message_templates.message_templates_updated_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.messaging_settings.messaging_settings_updated_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['alert_id']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.notification_messages.notification_messages_alert_id_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['fallback_of']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.notification_messages.notification_messages_fallback_of_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['created_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.notification_optouts.notification_optouts_created_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.notification_routes.notification_routes_updated_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.active_tracking.Admins can delete tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.active_tracking.Authorized roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.active_tracking.Managers can insert tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.active_tracking.Managers can update tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.active_tracking.Viewers can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alert_configurations.Admins can delete alert configs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alert_configurations.Admins managers can view alert configs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alert_configurations.Managers can insert alert configs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alert_configurations.Managers can update alert configs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alert_configurations.Viewers can view alert configs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alert_dedup.Authorized roles can view alert dedup",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts.Authorized roles can view alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts.Managers can delete alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts.Operators can insert alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts.Operators can update alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts.Viewers can view alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts_sent.Admins can delete alerts sent",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts_sent.Authorized roles can view alerts sent",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts_sent.Managers can update alerts sent",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.alerts_sent.System can insert alerts sent",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.audit_log.audit_log_select",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.auth_logs.Admins can view all auth logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.auth_logs.Authenticated can insert auth logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.auth_logs.Users can view own auth logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_activities.Admins can delete activities",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_activities.Authorized roles can view activities",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_activities.Managers can insert activities",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_activities.Managers can update activities",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_spa_sync.Admin manager view spa sync",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_stage_mappings.Admins can delete stage mappings",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_stage_mappings.Authorized roles can view stage mappings",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_stage_mappings.Managers can insert stage mappings",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_stage_mappings.Managers can update stage mappings",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_sync.Authorized roles can view sync data",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_sync.Managers can delete sync data",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_sync.Operators can insert sync data",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_sync.Operators can update sync data",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_tokens.Admins can delete tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_tokens.Admins can insert tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_tokens.Admins can update tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.bitrix24_tokens.Only admins can view tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.blocked_ips.Admins can manage blocked IPs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.blocked_ips.Managers can view blocked IPs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.cache_refresh_log.Admins read cache refresh log",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.contacts.Users manage their own contacts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.contract_version_usage.admins read contract usage",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.contract_version_usage_monthly.Admins can view monthly contract usage",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.cron_job_logs.Admins can view cron logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_approval_queue.Admins can delete approvals",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_approval_queue.Authorized roles can view approvals",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_approval_queue.Managers can insert approvals",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_approval_queue.Managers can update approvals",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_approval_queue.Viewers can view approval queue",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_evaluations.Admins can delete evaluations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_evaluations.Authorized roles can view evaluations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_evaluations.Managers can update evaluations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_evaluations.Operators can insert evaluations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_evaluations.Viewers can view driver evaluations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_incidents.Admins can delete incidents",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_incidents.Authorized roles can view incidents",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_incidents.Managers can update incidents",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_incidents.Operators can insert incidents",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_incidents.Viewers can view incidents",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_locations.Admins managers can view all locations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_locations.Managers can delete driver locations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_locations.Operators can insert driver locations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_locations.Operators can update driver locations",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.driver_locations.Operators can view active delivery locations only",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.drivers.Admins can delete drivers",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.drivers.Admins managers can view all drivers",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.drivers.Managers can insert drivers",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.drivers.Managers can update drivers",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.drivers.Operators can view drivers limited",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.drivers.Viewers can view drivers",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.email_verifications.Admins can delete verifications",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.email_verifications.Users can insert own verifications",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.email_verifications.Users can update their verifications",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.email_verifications.Users can view own verifications",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.feature_flags.Feature flags can only be managed by admins",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_blocks.Admins can delete geo blocks",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_blocks.Admins can insert geo blocks",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_blocks.Admins can manage geo blocks",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_blocks.Admins can update geo blocks",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_blocks.Managers can view geo blocks",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_budget.geo_budget_admin_all",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_budget.geo_budget_read_authenticated",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_defaults.geo_defaults_admin_all",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_defaults.geo_defaults_read_authenticated",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_price_list.geo_price_list_admin_all",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_price_list.geo_price_list_read_authenticated",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_settings.geo_settings_admin_all",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_settings.geo_settings_read_authenticated",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.geo_usage.geo_usage_read_manager",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.ip_whitelist.Admins can delete whitelist",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.ip_whitelist.Admins can insert whitelist",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.ip_whitelist.Admins can manage IP whitelist",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.ip_whitelist.Admins can update whitelist",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.ip_whitelist.Managers can view IP whitelist",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.job_queue.Admins view jobs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.job_queue_processing_log.Admins read job queue processing log",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_order_replacements.Admins can delete order_replacements",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_order_replacements.Admins managers can view order_replacements",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_orders.Admins managers can view all orders",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_orders.Managers can delete orders",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_orders.Operators can insert orders",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_orders.Operators can update orders",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_orders.Operators can view orders",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_orders.Viewers can view orders",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_priority_fee_history.Admin/manager insert priority fee history",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_priority_fee_history.Operational roles view priority fee history",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_rate_limits.Admins and managers can view rate limits",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_rate_limits.System roles can insert rate limits",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_status_history.Admins can delete status history",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_status_history.Authorized roles can view status history",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_status_history.Managers can update status history",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_status_history.Operators can insert status history",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_status_history.Viewers can view status history",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stop_proofs.Admins can delete stop_proofs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stop_proofs.Admins managers can view stop_proofs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stop_proofs.Managers can update stop_proofs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stop_proofs.Operators can insert stop_proofs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stop_proofs.Operators can view stop_proofs limited",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stops.Admins can delete stops",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stops.Admins managers can view all stops",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stops.Managers can update stops",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stops.Operators can insert stops",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_stops.Operators can view stops limited",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_uapi_sessions.Admins can manage UAPI sessions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_uapi_snapshot.equipe le snapshot uapi",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.lalamove_webhook_config.Admins manage webhook config",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.login_attempts.Admins can delete login attempts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.login_attempts.Admins can insert login attempts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.login_attempts.Admins can update login attempts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.login_attempts.Admins can view login attempts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.map_settings_overrides.Users can manage their own settings overrides",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.mcp_diagnostics_grants.Admins manage diagnostics grants",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.message_templates.admin edita templates",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.message_templates.equipe le templates",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.messaging_settings.admin edita configuracao de mensageria",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.messaging_settings.equipe le configuracao de mensageria",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.messaging_usage.equipe le uso de mensageria",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.mfa_sessions.Users can delete their MFA sessions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.mfa_sessions.Users can insert their MFA sessions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.mfa_sessions.Users can manage own MFA sessions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.mfa_sessions.Users can update their MFA sessions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.mfa_sessions.Usuários podem ver suas próprias sessões MFA",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.new_device_alerts.Users can delete their device alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.new_device_alerts.Users can insert their device alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.new_device_alerts.Users can update their device alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.new_device_alerts.Users can view own device alerts",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.notification_messages.operator le ledger de mensagens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.notification_optouts.admin gerencia opt-outs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.notification_routes.admin edita rotas de notificacao",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.notification_routes.equipe le rotas de notificacao",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.order_geo_events.order_geo_events_read",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.password_reset_requests.Admins and managers can view reset requests",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.password_reset_requests.Admins can update reset requests",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.password_reset_requests.Users can request own password reset",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.password_reset_tokens.Admins can delete reset tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.password_reset_tokens.Authenticated can insert own reset tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.password_reset_tokens.Users can select own reset tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.password_reset_tokens.Users can view own reset tokens",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.permissions.Admins can delete permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.permissions.Admins can insert permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.permissions.Admins can update permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.permissions.Authorized roles can view permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.query_telemetry.Admins can manage telemetry",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.query_telemetry.Managers can view telemetry",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.query_telemetry.System can insert telemetry",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.rate_limit_logs.Admins can view rate limit logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.rate_limit_logs.Authenticated can insert rate limit logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.report_presets.Users can manage their own report presets",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.risk_rules.Admins can delete risk rules",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.risk_rules.Authorized roles can view risk rules",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.risk_rules.Managers can insert risk rules",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.risk_rules.Managers can update risk rules",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.risk_rules.Viewers can view risk rules",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.role_permissions.Admins can delete role permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.role_permissions.Admins can insert role permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.role_permissions.Admins can manage role_permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.role_permissions.Admins can update role permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.role_permissions.Authorized roles can view role_permissions",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.runtime_error_logs.Admins can delete error logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.runtime_error_logs.Admins can update error logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.runtime_error_logs.Admins managers can view error logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.runtime_error_logs.Authenticated can insert error logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.security_test_logs.Admins can view security test logs",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_default.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m05.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m06.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m07.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m08.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m09.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m10.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m11.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2026m12.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.tracking_events_y2027m01.Operational roles can view tracking",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_devices.Users can delete their devices",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_devices.Users can insert their devices",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_devices.Users can manage own devices",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_devices.Users can update their devices",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_devices.Users can view own devices",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_passkeys.Users can delete own passkeys",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_passkeys.Users can insert own passkeys",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_passkeys.Users can update own passkeys",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_passkeys.Users can view own passkeys",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_roles.MFA admins can delete roles",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_roles.MFA admins can insert roles",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_roles.MFA admins can update roles",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.user_roles.Users can view own roles",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webauthn_challenges.Authenticated can create challenges",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webauthn_challenges.Authenticated can read own challenges",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webauthn_challenges.Users can delete their challenges",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webauthn_challenges.Users can insert their challenges",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webauthn_challenges.Users can update their challenges",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webhook_events.Admins can delete events",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webhook_events.Authorized roles can view webhook events",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webhook_events.Managers can update events",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "policy_auth_fn_not_wrapped",
-        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
-        "object": "public.webhook_events.Operators can insert events",
-        "severity": "BAIXA"
       },
       {
         "code": "rpc_anon_executable",
@@ -30395,25 +29482,7 @@
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.is_phone_opted_out(p_phone text)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.messaging_month_cost_cents(p_month date)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.record_failed_login_v2(p_email text, p_ip_address inet, p_user_agent text)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.refresh_cache_view(p_view_name text, p_triggered_by text)",
         "severity": "INFO"
       }
     ],
@@ -31467,6 +30536,40 @@
         "statements": 1,
         "statements_sha": "527eaeef085901ac",
         "version": "20261126170000"
+      },
+      {
+        "name": "hardening_searchpath_indices_fk",
+        "statements": 1,
+        "statements_sha": "79f409ff50899cff",
+        "version": "20261126180000"
+      },
+      {
+        "name": "audit_log_policies_restritas",
+        "statements": 1,
+        "statements_sha": "4c669fec90586c30",
+        "version": "20261126190000"
+      },
+      {
+        "name": "rls_auth_initplan",
+        "statements": 1,
+        "statements_sha": "5258fe596bc6f257",
+        "version": "20261126200000"
+      },
+      {
+        "name": "tracking_events_pk",
+        "statements": 1,
+        "statements_sha": "a3390024ef44659c",
+        "version": "20261126210000"
+      },
+      {
+        "name": "revoke_anon_funcoes_definer",
+        "statements": null,
+        "version": "20261126220000"
+      },
+      {
+        "name": "revoke_authenticated_manutencao",
+        "statements": null,
+        "version": "20261126230000"
       }
     ],
     "policies": [
@@ -31479,7 +30582,7 @@
         ],
         "schema": "public",
         "table": "active_tracking",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31491,7 +30594,7 @@
         ],
         "schema": "public",
         "table": "active_tracking",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -31504,7 +30607,7 @@
         "schema": "public",
         "table": "active_tracking",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -31515,7 +30618,7 @@
         ],
         "schema": "public",
         "table": "active_tracking",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -31527,7 +30630,7 @@
         ],
         "schema": "public",
         "table": "active_tracking",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -31539,7 +30642,7 @@
         ],
         "schema": "public",
         "table": "alert_configurations",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31551,7 +30654,7 @@
         ],
         "schema": "public",
         "table": "alert_configurations",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31564,7 +30667,7 @@
         "schema": "public",
         "table": "alert_configurations",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -31575,7 +30678,7 @@
         ],
         "schema": "public",
         "table": "alert_configurations",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31587,7 +30690,7 @@
         ],
         "schema": "public",
         "table": "alert_configurations",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -31599,7 +30702,7 @@
         ],
         "schema": "public",
         "table": "alert_dedup",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31611,7 +30714,7 @@
         ],
         "schema": "public",
         "table": "alerts",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -31623,7 +30726,7 @@
         ],
         "schema": "public",
         "table": "alerts",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31636,7 +30739,7 @@
         "schema": "public",
         "table": "alerts",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -31647,7 +30750,7 @@
         ],
         "schema": "public",
         "table": "alerts",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -31659,7 +30762,7 @@
         ],
         "schema": "public",
         "table": "alerts",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -31671,7 +30774,7 @@
         ],
         "schema": "public",
         "table": "alerts_sent",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31683,7 +30786,7 @@
         ],
         "schema": "public",
         "table": "alerts_sent",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -31695,7 +30798,7 @@
         ],
         "schema": "public",
         "table": "alerts_sent",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31708,30 +30811,30 @@
         "schema": "public",
         "table": "alerts_sent",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "INSERT",
         "name": "audit_log_insert",
         "permissive": "PERMISSIVE",
         "roles": [
-          "public"
+          "authenticated"
         ],
         "schema": "public",
         "table": "audit_log",
         "using": null,
-        "with_check": "true"
+        "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
       },
       {
         "cmd": "SELECT",
         "name": "audit_log_select",
         "permissive": "PERMISSIVE",
         "roles": [
-          "public"
+          "authenticated"
         ],
         "schema": "public",
         "table": "audit_log",
-        "using": "(auth.uid() IS NOT NULL)",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31743,7 +30846,7 @@
         ],
         "schema": "public",
         "table": "auth_logs",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31756,7 +30859,7 @@
         "schema": "public",
         "table": "auth_logs",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))"
       },
       {
         "cmd": "SELECT",
@@ -31767,7 +30870,7 @@
         ],
         "schema": "public",
         "table": "auth_logs",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -31779,7 +30882,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_activities",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31791,7 +30894,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_activities",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31804,7 +30907,7 @@
         "schema": "public",
         "table": "bitrix24_activities",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -31815,7 +30918,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_activities",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31827,7 +30930,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_spa_sync",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31839,7 +30942,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_stage_mappings",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31851,7 +30954,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_stage_mappings",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -31864,7 +30967,7 @@
         "schema": "public",
         "table": "bitrix24_stage_mappings",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -31875,7 +30978,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_stage_mappings",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31887,7 +30990,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_sync",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31899,7 +31002,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_sync",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -31912,7 +31015,7 @@
         "schema": "public",
         "table": "bitrix24_sync",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -31923,7 +31026,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_sync",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -31935,7 +31038,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_tokens",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31948,7 +31051,7 @@
         "schema": "public",
         "table": "bitrix24_tokens",
         "using": null,
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "UPDATE",
@@ -31959,7 +31062,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_tokens",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31971,7 +31074,7 @@
         ],
         "schema": "public",
         "table": "bitrix24_tokens",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31983,7 +31086,7 @@
         ],
         "schema": "public",
         "table": "blocked_ips",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -31995,7 +31098,7 @@
         ],
         "schema": "public",
         "table": "blocked_ips",
-        "using": "has_role(auth.uid(), 'manager'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'manager'::app_role)",
         "with_check": null
       },
       {
@@ -32007,7 +31110,7 @@
         ],
         "schema": "public",
         "table": "cache_refresh_log",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32019,8 +31122,8 @@
         ],
         "schema": "public",
         "table": "contacts",
-        "using": "(auth.uid() = owner_id)",
-        "with_check": "(auth.uid() = owner_id)"
+        "using": "(( SELECT auth.uid() AS uid) = owner_id)",
+        "with_check": "(( SELECT auth.uid() AS uid) = owner_id)"
       },
       {
         "cmd": "SELECT",
@@ -32031,7 +31134,7 @@
         ],
         "schema": "public",
         "table": "contract_version_usage",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32043,7 +31146,7 @@
         ],
         "schema": "public",
         "table": "contract_version_usage_monthly",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32055,7 +31158,7 @@
         ],
         "schema": "public",
         "table": "cron_job_logs",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32067,7 +31170,7 @@
         ],
         "schema": "public",
         "table": "driver_approval_queue",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32079,7 +31182,7 @@
         ],
         "schema": "public",
         "table": "driver_approval_queue",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32092,7 +31195,7 @@
         "schema": "public",
         "table": "driver_approval_queue",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -32103,7 +31206,7 @@
         ],
         "schema": "public",
         "table": "driver_approval_queue",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32115,7 +31218,7 @@
         ],
         "schema": "public",
         "table": "driver_approval_queue",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -32127,7 +31230,7 @@
         ],
         "schema": "public",
         "table": "driver_evaluations",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32139,7 +31242,7 @@
         ],
         "schema": "public",
         "table": "driver_evaluations",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32151,7 +31254,7 @@
         ],
         "schema": "public",
         "table": "driver_evaluations",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32164,7 +31267,7 @@
         "schema": "public",
         "table": "driver_evaluations",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "SELECT",
@@ -32175,7 +31278,7 @@
         ],
         "schema": "public",
         "table": "driver_evaluations",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -32187,7 +31290,7 @@
         ],
         "schema": "public",
         "table": "driver_incidents",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32199,7 +31302,7 @@
         ],
         "schema": "public",
         "table": "driver_incidents",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32211,7 +31314,7 @@
         ],
         "schema": "public",
         "table": "driver_incidents",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32224,7 +31327,7 @@
         "schema": "public",
         "table": "driver_incidents",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "SELECT",
@@ -32235,7 +31338,7 @@
         ],
         "schema": "public",
         "table": "driver_incidents",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -32247,7 +31350,7 @@
         ],
         "schema": "public",
         "table": "driver_locations",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32259,7 +31362,7 @@
         ],
         "schema": "public",
         "table": "driver_locations",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32272,7 +31375,7 @@
         "schema": "public",
         "table": "driver_locations",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -32283,7 +31386,7 @@
         ],
         "schema": "public",
         "table": "driver_locations",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32295,7 +31398,7 @@
         ],
         "schema": "public",
         "table": "driver_locations",
-        "using": "(has_role(auth.uid(), 'operator'::app_role) AND (EXISTS ( SELECT 1\n   FROM active_tracking at\n  WHERE ((at.id = driver_locations.tracking_id) AND (at.tracking_status = 'ACTIVE'::text)))))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) AND (EXISTS ( SELECT 1\n   FROM active_tracking at\n  WHERE ((at.id = driver_locations.tracking_id) AND (at.tracking_status = 'ACTIVE'::text)))))",
         "with_check": null
       },
       {
@@ -32307,7 +31410,7 @@
         ],
         "schema": "public",
         "table": "drivers",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32319,7 +31422,7 @@
         ],
         "schema": "public",
         "table": "drivers",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32332,7 +31435,7 @@
         "schema": "public",
         "table": "drivers",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -32343,7 +31446,7 @@
         ],
         "schema": "public",
         "table": "drivers",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32355,7 +31458,7 @@
         ],
         "schema": "public",
         "table": "drivers",
-        "using": "has_role(auth.uid(), 'operator'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'operator'::app_role)",
         "with_check": null
       },
       {
@@ -32367,7 +31470,7 @@
         ],
         "schema": "public",
         "table": "drivers",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -32379,7 +31482,7 @@
         ],
         "schema": "public",
         "table": "email_verifications",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32392,7 +31495,7 @@
         "schema": "public",
         "table": "email_verifications",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -32403,7 +31506,7 @@
         ],
         "schema": "public",
         "table": "email_verifications",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -32415,7 +31518,7 @@
         ],
         "schema": "public",
         "table": "email_verifications",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -32439,7 +31542,7 @@
         ],
         "schema": "public",
         "table": "feature_flags",
-        "using": "(EXISTS ( SELECT 1\n   FROM user_roles ur\n  WHERE ((ur.user_id = auth.uid()) AND (ur.role = 'admin'::app_role) AND (ur.is_active = true))))",
+        "using": "(EXISTS ( SELECT 1\n   FROM user_roles ur\n  WHERE ((ur.user_id = ( SELECT auth.uid() AS uid)) AND (ur.role = 'admin'::app_role) AND (ur.is_active = true))))",
         "with_check": null
       },
       {
@@ -32451,7 +31554,7 @@
         ],
         "schema": "public",
         "table": "geo_blocks",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32464,7 +31567,7 @@
         "schema": "public",
         "table": "geo_blocks",
         "using": null,
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "ALL",
@@ -32475,7 +31578,7 @@
         ],
         "schema": "public",
         "table": "geo_blocks",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32487,7 +31590,7 @@
         ],
         "schema": "public",
         "table": "geo_blocks",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32499,7 +31602,7 @@
         ],
         "schema": "public",
         "table": "geo_blocks",
-        "using": "has_role(auth.uid(), 'manager'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'manager'::app_role)",
         "with_check": null
       },
       {
@@ -32511,8 +31614,8 @@
         ],
         "schema": "public",
         "table": "geo_budget",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -32523,7 +31626,7 @@
         ],
         "schema": "public",
         "table": "geo_budget",
-        "using": "(auth.role() = 'authenticated'::text)",
+        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
         "with_check": null
       },
       {
@@ -32535,8 +31638,8 @@
         ],
         "schema": "public",
         "table": "geo_defaults",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -32547,7 +31650,7 @@
         ],
         "schema": "public",
         "table": "geo_defaults",
-        "using": "(auth.role() = 'authenticated'::text)",
+        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
         "with_check": null
       },
       {
@@ -32559,8 +31662,8 @@
         ],
         "schema": "public",
         "table": "geo_price_list",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -32571,7 +31674,7 @@
         ],
         "schema": "public",
         "table": "geo_price_list",
-        "using": "(auth.role() = 'authenticated'::text)",
+        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
         "with_check": null
       },
       {
@@ -32583,8 +31686,8 @@
         ],
         "schema": "public",
         "table": "geo_settings",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -32595,7 +31698,7 @@
         ],
         "schema": "public",
         "table": "geo_settings",
-        "using": "(auth.role() = 'authenticated'::text)",
+        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
         "with_check": null
       },
       {
@@ -32607,7 +31710,7 @@
         ],
         "schema": "public",
         "table": "geo_usage",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_permission(auth.uid(), 'maps.usage.read'::text))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_permission(( SELECT auth.uid() AS uid), 'maps.usage.read'::text))",
         "with_check": null
       },
       {
@@ -32619,7 +31722,7 @@
         ],
         "schema": "public",
         "table": "ip_whitelist",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32632,7 +31735,7 @@
         "schema": "public",
         "table": "ip_whitelist",
         "using": null,
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "ALL",
@@ -32643,7 +31746,7 @@
         ],
         "schema": "public",
         "table": "ip_whitelist",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32655,7 +31758,7 @@
         ],
         "schema": "public",
         "table": "ip_whitelist",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32667,7 +31770,7 @@
         ],
         "schema": "public",
         "table": "ip_whitelist",
-        "using": "has_role(auth.uid(), 'manager'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'manager'::app_role)",
         "with_check": null
       },
       {
@@ -32679,7 +31782,7 @@
         ],
         "schema": "public",
         "table": "job_queue",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32703,7 +31806,7 @@
         ],
         "schema": "public",
         "table": "job_queue_processing_log",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32715,7 +31818,7 @@
         ],
         "schema": "public",
         "table": "lalamove_order_replacements",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32727,7 +31830,7 @@
         ],
         "schema": "public",
         "table": "lalamove_order_replacements",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32739,7 +31842,7 @@
         ],
         "schema": "public",
         "table": "lalamove_orders",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32751,7 +31854,7 @@
         ],
         "schema": "public",
         "table": "lalamove_orders",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32764,7 +31867,7 @@
         "schema": "public",
         "table": "lalamove_orders",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -32775,7 +31878,7 @@
         ],
         "schema": "public",
         "table": "lalamove_orders",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32787,7 +31890,7 @@
         ],
         "schema": "public",
         "table": "lalamove_orders",
-        "using": "has_role(auth.uid(), 'operator'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'operator'::app_role)",
         "with_check": null
       },
       {
@@ -32799,7 +31902,7 @@
         ],
         "schema": "public",
         "table": "lalamove_orders",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -32812,7 +31915,7 @@
         "schema": "public",
         "table": "lalamove_priority_fee_history",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "SELECT",
@@ -32823,7 +31926,7 @@
         ],
         "schema": "public",
         "table": "lalamove_priority_fee_history",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32835,7 +31938,7 @@
         ],
         "schema": "public",
         "table": "lalamove_rate_limits",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32848,7 +31951,7 @@
         "schema": "public",
         "table": "lalamove_rate_limits",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "DELETE",
@@ -32859,7 +31962,7 @@
         ],
         "schema": "public",
         "table": "lalamove_status_history",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32871,7 +31974,7 @@
         ],
         "schema": "public",
         "table": "lalamove_status_history",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -32883,7 +31986,7 @@
         ],
         "schema": "public",
         "table": "lalamove_status_history",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32896,7 +31999,7 @@
         "schema": "public",
         "table": "lalamove_status_history",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "SELECT",
@@ -32907,7 +32010,7 @@
         ],
         "schema": "public",
         "table": "lalamove_status_history",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -32919,7 +32022,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stop_proofs",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32931,7 +32034,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stop_proofs",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32943,7 +32046,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stop_proofs",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -32956,7 +32059,7 @@
         "schema": "public",
         "table": "lalamove_stop_proofs",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "SELECT",
@@ -32967,7 +32070,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stop_proofs",
-        "using": "has_role(auth.uid(), 'operator'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'operator'::app_role)",
         "with_check": null
       },
       {
@@ -32979,7 +32082,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stops",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -32991,7 +32094,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stops",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33003,7 +32106,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stops",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33016,7 +32119,7 @@
         "schema": "public",
         "table": "lalamove_stops",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       },
       {
         "cmd": "SELECT",
@@ -33027,7 +32130,7 @@
         ],
         "schema": "public",
         "table": "lalamove_stops",
-        "using": "has_role(auth.uid(), 'operator'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'operator'::app_role)",
         "with_check": null
       },
       {
@@ -33039,8 +32142,8 @@
         ],
         "schema": "public",
         "table": "lalamove_uapi_sessions",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -33051,7 +32154,7 @@
         ],
         "schema": "public",
         "table": "lalamove_uapi_snapshot",
-        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33075,8 +32178,8 @@
         ],
         "schema": "public",
         "table": "lalamove_webhook_config",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "DELETE",
@@ -33087,7 +32190,7 @@
         ],
         "schema": "public",
         "table": "login_attempts",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33100,7 +32203,7 @@
         "schema": "public",
         "table": "login_attempts",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -33111,8 +32214,8 @@
         ],
         "schema": "public",
         "table": "login_attempts",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -33123,7 +32226,7 @@
         ],
         "schema": "public",
         "table": "login_attempts",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33135,8 +32238,8 @@
         ],
         "schema": "public",
         "table": "map_settings_overrides",
-        "using": "(auth.uid() = user_id)",
-        "with_check": "(auth.uid() = user_id)"
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "ALL",
@@ -33147,8 +32250,8 @@
         ],
         "schema": "public",
         "table": "mcp_diagnostics_grants",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "ALL",
@@ -33159,8 +32262,8 @@
         ],
         "schema": "public",
         "table": "message_templates",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -33171,7 +32274,7 @@
         ],
         "schema": "public",
         "table": "message_templates",
-        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33195,8 +32298,8 @@
         ],
         "schema": "public",
         "table": "messaging_settings",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -33207,7 +32310,7 @@
         ],
         "schema": "public",
         "table": "messaging_settings",
-        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33231,7 +32334,7 @@
         ],
         "schema": "public",
         "table": "messaging_usage",
-        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33255,7 +32358,7 @@
         ],
         "schema": "public",
         "table": "mfa_sessions",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33268,7 +32371,7 @@
         "schema": "public",
         "table": "mfa_sessions",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "ALL",
@@ -33279,8 +32382,8 @@
         ],
         "schema": "public",
         "table": "mfa_sessions",
-        "using": "(auth.uid() = user_id)",
-        "with_check": "(auth.uid() = user_id)"
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -33291,7 +32394,7 @@
         ],
         "schema": "public",
         "table": "mfa_sessions",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -33303,7 +32406,7 @@
         ],
         "schema": "public",
         "table": "mfa_sessions",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -33315,7 +32418,7 @@
         ],
         "schema": "public",
         "table": "new_device_alerts",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33328,7 +32431,7 @@
         "schema": "public",
         "table": "new_device_alerts",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -33339,7 +32442,7 @@
         ],
         "schema": "public",
         "table": "new_device_alerts",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33351,7 +32454,7 @@
         ],
         "schema": "public",
         "table": "new_device_alerts",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -33363,7 +32466,7 @@
         ],
         "schema": "public",
         "table": "notification_messages",
-        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33387,8 +32490,8 @@
         ],
         "schema": "public",
         "table": "notification_optouts",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "ALL",
@@ -33411,8 +32514,8 @@
         ],
         "schema": "public",
         "table": "notification_routes",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -33423,7 +32526,7 @@
         ],
         "schema": "public",
         "table": "notification_routes",
-        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -33447,7 +32550,7 @@
         ],
         "schema": "public",
         "table": "order_geo_events",
-        "using": "(auth.role() = 'authenticated'::text)",
+        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
         "with_check": null
       },
       {
@@ -33459,7 +32562,7 @@
         ],
         "schema": "public",
         "table": "password_reset_requests",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33471,8 +32574,8 @@
         ],
         "schema": "public",
         "table": "password_reset_requests",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "INSERT",
@@ -33484,7 +32587,7 @@
         "schema": "public",
         "table": "password_reset_requests",
         "using": null,
-        "with_check": "(user_email = (( SELECT users.email\n   FROM auth.users\n  WHERE (users.id = auth.uid())))::text)"
+        "with_check": "(user_email = (( SELECT users.email\n   FROM auth.users\n  WHERE (users.id = ( SELECT auth.uid() AS uid))))::text)"
       },
       {
         "cmd": "DELETE",
@@ -33495,7 +32598,7 @@
         ],
         "schema": "public",
         "table": "password_reset_tokens",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33508,7 +32611,7 @@
         "schema": "public",
         "table": "password_reset_tokens",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "SELECT",
@@ -33519,7 +32622,7 @@
         ],
         "schema": "public",
         "table": "password_reset_tokens",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -33531,7 +32634,7 @@
         ],
         "schema": "public",
         "table": "password_reset_tokens",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -33543,7 +32646,7 @@
         ],
         "schema": "public",
         "table": "permissions",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33556,7 +32659,7 @@
         "schema": "public",
         "table": "permissions",
         "using": null,
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "UPDATE",
@@ -33567,7 +32670,7 @@
         ],
         "schema": "public",
         "table": "permissions",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33579,7 +32682,7 @@
         ],
         "schema": "public",
         "table": "permissions",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33591,8 +32694,8 @@
         ],
         "schema": "public",
         "table": "query_telemetry",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "SELECT",
@@ -33603,7 +32706,7 @@
         ],
         "schema": "public",
         "table": "query_telemetry",
-        "using": "has_role(auth.uid(), 'manager'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'manager'::app_role)",
         "with_check": null
       },
       {
@@ -33616,7 +32719,7 @@
         "schema": "public",
         "table": "query_telemetry",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR can_run_db_diagnostics(auth.uid()))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR can_run_db_diagnostics(( SELECT auth.uid() AS uid)))"
       },
       {
         "cmd": "SELECT",
@@ -33627,7 +32730,7 @@
         ],
         "schema": "public",
         "table": "rate_limit_logs",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33640,7 +32743,7 @@
         "schema": "public",
         "table": "rate_limit_logs",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))"
       },
       {
         "cmd": "INSERT",
@@ -33675,8 +32778,8 @@
         ],
         "schema": "public",
         "table": "report_presets",
-        "using": "(auth.uid() = user_id)",
-        "with_check": "(auth.uid() = user_id)"
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "DELETE",
@@ -33687,7 +32790,7 @@
         ],
         "schema": "public",
         "table": "risk_rules",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33699,7 +32802,7 @@
         ],
         "schema": "public",
         "table": "risk_rules",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))",
         "with_check": null
       },
       {
@@ -33712,7 +32815,7 @@
         "schema": "public",
         "table": "risk_rules",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))"
       },
       {
         "cmd": "UPDATE",
@@ -33723,7 +32826,7 @@
         ],
         "schema": "public",
         "table": "risk_rules",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33735,7 +32838,7 @@
         ],
         "schema": "public",
         "table": "risk_rules",
-        "using": "has_role(auth.uid(), 'viewer'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role)",
         "with_check": null
       },
       {
@@ -33747,7 +32850,7 @@
         ],
         "schema": "public",
         "table": "role_permissions",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33760,7 +32863,7 @@
         "schema": "public",
         "table": "role_permissions",
         "using": null,
-        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
       },
       {
         "cmd": "ALL",
@@ -33771,7 +32874,7 @@
         ],
         "schema": "public",
         "table": "role_permissions",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33783,7 +32886,7 @@
         ],
         "schema": "public",
         "table": "role_permissions",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33795,7 +32898,7 @@
         ],
         "schema": "public",
         "table": "role_permissions",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33807,7 +32910,7 @@
         ],
         "schema": "public",
         "table": "runtime_error_logs",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33819,7 +32922,7 @@
         ],
         "schema": "public",
         "table": "runtime_error_logs",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33831,7 +32934,7 @@
         ],
         "schema": "public",
         "table": "runtime_error_logs",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -33844,7 +32947,7 @@
         "schema": "public",
         "table": "runtime_error_logs",
         "using": null,
-        "with_check": "(auth.uid() IS NOT NULL)"
+        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
       },
       {
         "cmd": "SELECT",
@@ -33855,7 +32958,7 @@
         ],
         "schema": "public",
         "table": "security_test_logs",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -33867,7 +32970,7 @@
         ],
         "schema": "public",
         "table": "tracking_events",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33879,7 +32982,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_default",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33891,7 +32994,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m05",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33903,7 +33006,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m06",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33915,7 +33018,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m07",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33927,7 +33030,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m08",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33939,7 +33042,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m09",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33951,7 +33054,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m10",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33963,7 +33066,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m11",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33975,7 +33078,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2026m12",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33987,7 +33090,7 @@
         ],
         "schema": "public",
         "table": "tracking_events_y2027m01",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -33999,7 +33102,7 @@
         ],
         "schema": "public",
         "table": "user_devices",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -34012,7 +33115,7 @@
         "schema": "public",
         "table": "user_devices",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "ALL",
@@ -34023,8 +33126,8 @@
         ],
         "schema": "public",
         "table": "user_devices",
-        "using": "(auth.uid() = user_id)",
-        "with_check": "(auth.uid() = user_id)"
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -34035,7 +33138,7 @@
         ],
         "schema": "public",
         "table": "user_devices",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -34047,7 +33150,7 @@
         ],
         "schema": "public",
         "table": "user_devices",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -34059,7 +33162,7 @@
         ],
         "schema": "public",
         "table": "user_passkeys",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -34072,7 +33175,7 @@
         "schema": "public",
         "table": "user_passkeys",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -34083,8 +33186,8 @@
         ],
         "schema": "public",
         "table": "user_passkeys",
-        "using": "(auth.uid() = user_id)",
-        "with_check": "(auth.uid() = user_id)"
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "SELECT",
@@ -34095,7 +33198,7 @@
         ],
         "schema": "public",
         "table": "user_passkeys",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -34107,7 +33210,7 @@
         ],
         "schema": "public",
         "table": "user_roles",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())",
         "with_check": null
       },
       {
@@ -34120,7 +33223,7 @@
         "schema": "public",
         "table": "user_roles",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())"
       },
       {
         "cmd": "UPDATE",
@@ -34131,8 +33234,8 @@
         ],
         "schema": "public",
         "table": "user_roles",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())",
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) AND is_aal2())"
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())",
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AND is_aal2())"
       },
       {
         "cmd": "SELECT",
@@ -34143,7 +33246,7 @@
         ],
         "schema": "public",
         "table": "user_roles",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -34156,7 +33259,7 @@
         "schema": "public",
         "table": "webauthn_challenges",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "SELECT",
@@ -34167,7 +33270,7 @@
         ],
         "schema": "public",
         "table": "webauthn_challenges",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -34179,7 +33282,7 @@
         ],
         "schema": "public",
         "table": "webauthn_challenges",
-        "using": "((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))",
         "with_check": null
       },
       {
@@ -34192,7 +33295,7 @@
         "schema": "public",
         "table": "webauthn_challenges",
         "using": null,
-        "with_check": "(auth.uid() = user_id)"
+        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -34203,7 +33306,7 @@
         ],
         "schema": "public",
         "table": "webauthn_challenges",
-        "using": "(auth.uid() = user_id)",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
         "with_check": null
       },
       {
@@ -34215,7 +33318,7 @@
         ],
         "schema": "public",
         "table": "webhook_events",
-        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -34227,7 +33330,7 @@
         ],
         "schema": "public",
         "table": "webhook_events",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'viewer'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'viewer'::app_role))",
         "with_check": null
       },
       {
@@ -34239,7 +33342,7 @@
         ],
         "schema": "public",
         "table": "webhook_events",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))",
         "with_check": null
       },
       {
@@ -34252,7 +33355,7 @@
         "schema": "public",
         "table": "webhook_events",
         "using": null,
-        "with_check": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))"
+        "with_check": "(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'operator'::app_role))"
       }
     ],
     "queues": {

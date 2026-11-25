@@ -55,9 +55,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
-| WITH CHECK | `true` |
+| WITH CHECK | `(user_id = ( SELECT auth.uid() AS uid))` |
 
 ### `audit_log_select`
 
@@ -65,8 +65,8 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
-| USING | `(auth.uid() IS NOT NULL)` |
+| roles | authenticated |
+| USING | `(has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) OR has_role(( SELECT auth.uid() AS uid), 'manager'::app_role))` |
 | WITH CHECK |  |
 
 
@@ -79,5 +79,5 @@ _nenhum_
 
 | role | privilégios |
 |---|---|
-| authenticated | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| authenticated | INSERT, SELECT |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

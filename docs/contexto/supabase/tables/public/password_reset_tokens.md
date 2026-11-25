@@ -54,7 +54,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | WITH CHECK |  |
 
 ### `Authenticated can insert own reset tokens`
@@ -65,7 +65,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(auth.uid() = user_id)` |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
 ### `Users can select own reset tokens`
 
@@ -74,7 +74,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own reset tokens`
@@ -84,7 +84,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(auth.uid() = user_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
 

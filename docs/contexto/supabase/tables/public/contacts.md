@@ -62,8 +62,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | public |
-| USING | `(auth.uid() = owner_id)` |
-| WITH CHECK | `(auth.uid() = owner_id)` |
+| USING | `(( SELECT auth.uid() AS uid) = owner_id)` |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) = owner_id)` |
 
 
 ## Triggers
