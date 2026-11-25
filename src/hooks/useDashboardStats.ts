@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, subDays } from 'date-fns';
+import { TZDate } from '@date-fns/tz';
 import { DashboardStats } from '@/types';
 
 export type { DashboardStats } from '@/types';
@@ -13,7 +14,9 @@ interface QueryError {
 export type DashboardStatsResult = DashboardStats & { errors: QueryError[] };
 
 async function fetchDashboardStats(): Promise<DashboardStatsResult> {
-  const today = startOfDay(new Date()).toISOString();
+  // O dia da operação é o de São Paulo (mesma convenção de useCachedStats/useDeliveryMetrics):
+  // startOfDay(new Date()) usava o fuso da máquina de quem abre o painel.
+  const today = startOfDay(TZDate.tz('America/Sao_Paulo', new Date())).toISOString();
   const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
 
   const results = await Promise.allSettled([

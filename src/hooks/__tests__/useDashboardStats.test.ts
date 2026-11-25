@@ -152,4 +152,47 @@ describe('useDashboardStats', () => {
     expect(data.alertsCount).toBe(0);
     expect(data.errors.map((e) => e.name)).toEqual(['alertsCount']);
   });
+
+  it('limita "hoje" ao dia de São Paulo, não ao fuso da máquina', async () => {
+    const gteArgs: string[] = [];
+    // Captura o valor passado em gte('actual_delivery', today)
+    const capture = (value: unknown) => {
+      const self = chainable(value);
+      self.gte = vi.fn().mockImplementation((_column: string, val: string) => {
+        gteArgs.push(val);
+        return self;
+      });
+      return self;
+    };
+
+    let callIdx = 0;
+    (supabase.from as ReturnType<typeof vi.fn>).mockImplementation(() => {
+      callIdx++;
+      if (callIdx <= 6) return capture({ count: 0, error: null });
+      return capture({ data: [], error: null });
+    });
+
+    const { result } = renderHook(() => useDashboardStats(), {
+      wrapper: createWrapper(),
+    });
+
+    await vi.waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    // O limite de "hoje" é a meia-noite de São Paulo (UTC-3, sem horário de verão
+    // desde 2019). O fuso da máquina de quem abre o painel não entra mais na conta.
+    const todayArg = gteArgs.find((v) => v.includes('-03:00'));
+    expect(todayArg).toBeDefined();
+
+    const spMidnight = new Date(todayArg as string);
+    expect(spMidnight.getUTCHours()).toBe(3);
+    expect(spMidnight.getUTCMinutes()).toBe(0);
+
+    const spDay = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
+    expect(spMidnight.toISOString().slice(0, 10)).toBe(spDay);
+  });
 });
