@@ -182,7 +182,13 @@ Deno.serve(async (req) => {
     if (!contract.ok) return errorResponse(contract, corsHeaders);
 
     // ── 0. Watchdog do snapshot (independe da sessão) ──────────────────────
-    await checkSnapshotFreshness(admin);
+    const snapshotAgeMinutes = await checkSnapshotFreshness(admin);
+    // Idade do token sozinha não é sintoma: o token pode continuar aceito bem
+    // depois das 24 h previstas. Quem mede saúde de verdade é o snapshot — se a
+    // coleta está fresca, carteira/extrato/cupons/frota estão funcionando e não
+    // há nada a avisar.
+    const collectorHealthy =
+      snapshotAgeMinutes !== null && snapshotAgeMinutes <= SNAPSHOT_STALE_MINUTES;
 
     // ── 1. Sessão ativa ────────────────────────────────────────────────────
     const { data: sessions, error: sessionError } = await admin
@@ -219,6 +225,14 @@ Deno.serve(async (req) => {
 
     // ── 2. Janela perdida → alerta imediato ────────────────────────────────
     if (ageHours >= EXPIRY_HOURS) {
+      if (collectorHealthy) {
+        return json({
+          ok: true,
+          refreshed: false,
+          reason: 'collector_healthy',
+          age_hours: Number(ageHours.toFixed(2)),
+        });
+      }
       await raiseAlert(
         admin,
         'CRITICAL',
@@ -246,11 +260,27 @@ Deno.serve(async (req) => {
     }
 
     // ── 5. Renovação: proxy externo quando configurado, UAPI direta caso ────
-    // Os secrets do proxy nunca existiram em produção; sem a via direta a
-    // renovação sempre falhava e a sessão morria em 24 h.
+    // Os secrets do proxy nunca existiram em produção. A via direta também não
+    // funciona: o gateway responde `ret 10010 "Gateway signature error"` a
+    // qualquer chamada feita fora de uma página de web.lalamove.com, com ou sem
+    // refresh_token. Quem renova de verdade é o coletor
+    // (scripts/uapi-collector/collect.mjs), que chama `_m=refresh_token` dentro
+    // da página; este worker só vigia. Sem refresh_token, tentar aqui é falha
+    // certa — melhor registrar e deixar o watchdog do snapshot falar.
     const baseUrl = Deno.env.get('LALAMOVE_UNIFIED_PROXY_URL');
     const proxyKey = Deno.env.get('LALAMOVE_UNIFIED_PROXY_KEY');
     const useProxy = Boolean(baseUrl && proxyKey);
+    const hasRefreshToken = (session.refresh_token ?? '').trim().length >= 16;
+
+    if (!useProxy && !hasRefreshToken) {
+      console.log('sem refresh_token e sem proxy: renovação depende do coletor');
+      return json({
+        ok: true,
+        refreshed: false,
+        reason: 'no_refresh_token',
+        age_hours: Number(ageHours.toFixed(2)),
+      });
+    }
 
     const url = useProxy ? new URL(baseUrl!) : null;
     if (url && proxyKey) {

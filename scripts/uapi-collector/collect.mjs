@@ -15,13 +15,20 @@
  *   SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/uapi-collector/collect.mjs
  *   node scripts/uapi-collector/collect.mjs --login   [janela unica de login]
  *
- * Renovacao do token: o script trabalha sobre um perfil Chromium persistente
- * (`UAPI_PROFILE_DIR`). O site mantem e renova o token dentro dessa sessao; a
- * cada coleta as requisicoes que o proprio site faz para a UAPI sao observadas,
- * o token atual e validado contra a UAPI e, se for diferente do que esta em
- * `lalamove_uapi_sessions`, gravado ali. Assim o painel nao morre quando o token
- * anterior expira. `--login` abre a janela uma unica vez (SMS/captcha sao
- * humanos), espera o token aparecer e o grava.
+ * Renovacao do token: este script e o unico caminho de renovacao possivel. O
+ * gateway responde `ret 10010 "Gateway signature error"` a qualquer chamada de
+ * servidor (inclusive a edge `lalamove-token-refresh`), entao renovar depende de
+ * rodar dentro de uma pagina de `web.lalamove.com`.
+ *
+ * Duas fontes de token sao tentadas a cada coleta, nesta ordem:
+ *  1. token que o site usa no perfil persistente (`UAPI_PROFILE_DIR`);
+ *  2. `_m=refresh_token` com o refresh_token gravado em
+ *     `lalamove_uapi_sessions` (a resposta traz um par novo).
+ * Quando qualquer uma devolve um token diferente do do banco, ele e gravado
+ * junto do `refresh_token` e de `last_refreshed_at`, e a janela de 24 h recomeca
+ * sem intervencao humana. `--login` abre a janela uma unica vez (SMS/captcha sao
+ * humanos) e grava o par access/refresh token — e dai que sai o refresh_token
+ * que permite a renovacao automatica das coletas seguintes.
  *
  * Variaveis:
  *   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY  (obrigatorias)
@@ -119,22 +126,27 @@ async function sbFetch(pathname, init = {}) {
 
 async function activeSession() {
   const rows = await sbFetch(
-    '/rest/v1/lalamove_uapi_sessions?select=id,access_token,city_id,user_fid&is_active=eq.true&order=token_obtained_at.desc&limit=1',
+    '/rest/v1/lalamove_uapi_sessions?select=id,access_token,refresh_token,city_id,user_fid&is_active=eq.true&order=token_obtained_at.desc&limit=1',
   );
   return rows?.[0] ?? null;
 }
 
-async function saveSessionToken(session, token) {
+async function saveSessionToken(session, token, refreshToken) {
   if (!session?.id) return;
+  const now = new Date();
+  const patch = {
+    access_token: token,
+    token_obtained_at: now.toISOString(),
+    token_expires_at: new Date(now.getTime() + 24 * 3600_000).toISOString(),
+    last_refreshed_at: now.toISOString(),
+    refresh_method: 'browser_profile',
+    is_active: true,
+  };
+  if (refreshToken) patch.refresh_token = refreshToken;
   await sbFetch(`/rest/v1/lalamove_uapi_sessions?id=eq.${session.id}`, {
     method: 'PATCH',
     headers: { Prefer: 'return=minimal' },
-    body: JSON.stringify({
-      access_token: token,
-      token_obtained_at: new Date().toISOString(),
-      refresh_method: 'browser_profile',
-      is_active: true,
-    }),
+    body: JSON.stringify(patch),
   });
 }
 
@@ -158,6 +170,25 @@ function buildUrl(method, args, { token, deviceId, su }) {
 }
 
 const UAPI_TOKEN_RE = /^[0-9a-f]{32}$/;
+
+// O refresh_token so aparece em dois lugares: resposta do login/refresh e o
+// `args` das chamadas que o site faz para a UAPI. Sem ele a renovacao automatica
+// nao existe (o gateway bloqueia a chamada de fora do navegador).
+function harvestRefreshTokens(node, out, depth = 0) {
+  if (!node || depth > 6) return;
+  if (Array.isArray(node)) {
+    for (const item of node) harvestRefreshTokens(item, out, depth + 1);
+    return;
+  }
+  if (typeof node !== 'object') return;
+  for (const [key, value] of Object.entries(node)) {
+    if (/refresh_?token/i.test(key) && typeof value === 'string' && value.length >= 16) {
+      out.add(value);
+    } else {
+      harvestRefreshTokens(value, out, depth + 1);
+    }
+  }
+}
 
 // Candidatos a token de sessao, na ordem em que o site os usa: URL das
 // requisicoes da UAPI (fonte fiel), storage da pagina, cookies do perfil.
@@ -228,6 +259,37 @@ async function resolveSiteToken(page, context, capturedTokens, { deviceId, su })
 }
 
 const ALERT_DEDUP_MS = 6 * 60 * 60 * 1000;
+
+/**
+ * Renova o token dentro da pagina (`_m=refresh_token`), a unica via que o WAF
+ * aceita. Devolve `null` quando nao ha refresh_token gravado ou quando a UAPI
+ * recusa (`10001` = refresh expirado -> so um novo `--login` resolve).
+ */
+async function renewSessionToken(page, session, { deviceId, su }) {
+  const refreshToken = (session?.refresh_token ?? '').trim();
+  if (refreshToken.length < 16) return null;
+
+  try {
+    const raw = await page.evaluate(
+      async (url) => (await fetch(url, { credentials: 'include' })).text(),
+      buildUrl('refresh_token', { refresh_token: refreshToken }, { token: session.access_token, deviceId, su }),
+    );
+    const parsed = JSON.parse(raw);
+    if (parsed?.ret !== 0) {
+      console.log(`renovacao por refresh_token recusada: ret ${parsed?.ret} ${parsed?.msg ?? ''}`.trim());
+      return null;
+    }
+    const accessToken = parsed?.data?.token;
+    if (!accessToken) return null;
+    return {
+      accessToken,
+      refreshToken: parsed?.data?.raw?.refresh_token || refreshToken,
+    };
+  } catch (err) {
+    console.error(`aviso: renovacao por refresh_token falhou (${String(err).slice(0, 200)})`);
+    return null;
+  }
+}
 
 /**
  * Coleta que nao grava nada e silenciosa: o snapshot simplesmente para de
@@ -303,14 +365,33 @@ async function main() {
   }
 
   // O proprio site chama a UAPI o tempo todo; essas requisicoes carregam o token
-  // vivo da sessao e sao observadas aqui.
+  // vivo da sessao e sao observadas aqui. O `args` das chamadas tambem carrega o
+  // refresh_token, e a resposta de login/refresh e a outra fonte.
   const capturedTokens = new Set();
+  const capturedRefreshTokens = new Set();
   context.on('request', (req) => {
-    const match = /[?&]token=([^&]+)/.exec(req.url());
+    const url = req.url();
+    const match = /[?&]token=([^&]+)/.exec(url);
     if (match) capturedTokens.add(decodeURIComponent(match[1]));
+    const args = /[?&]args=([^&]+)/.exec(url);
+    if (args) {
+      try {
+        harvestRefreshTokens(JSON.parse(decodeURIComponent(args[1])), capturedRefreshTokens);
+      } catch {
+        // args nao-JSON (alguns endpoints usam querystring simples)
+      }
+    }
+  });
+  const page = context.pages()[0] ?? (await context.newPage());
+  page.on('response', (res) => {
+    if (!res.url().includes('br-uapi.lalamove.com')) return;
+    if (!/_m=(login|refresh_token|verify)/.test(res.url())) return;
+    res
+      .json()
+      .then((body) => harvestRefreshTokens(body, capturedRefreshTokens))
+      .catch(() => {});
   });
 
-  const page = context.pages()[0] ?? (await context.newPage());
   const collected = [];
   const failed = [];
   let tokenOrigin = 'banco';
@@ -332,17 +413,33 @@ async function main() {
         await context.close().catch(() => {});
         process.exit(4);
       }
-      await saveSessionToken(session, siteToken);
+      await saveSessionToken(session, siteToken, [...capturedRefreshTokens].pop());
       await context.close().catch(() => {});
       console.log(`LOGIN OK: token da sessao gravado (${siteToken.slice(0, 8)}...)`);
+      if (capturedRefreshTokens.size) {
+        console.log('refresh_token gravado: renovacao automatica habilitada');
+      } else {
+        console.error(
+          'aviso: refresh_token nao apareceu no login — a proxima expiracao do token vai exigir novo --login',
+        );
+      }
       process.exit(0);
     }
 
     let activeToken = session.access_token;
     if (siteToken && siteToken !== session.access_token) {
-      await saveSessionToken(session, siteToken);
+      await saveSessionToken(session, siteToken, [...capturedRefreshTokens].pop());
       activeToken = siteToken;
       tokenOrigin = 'site';
+    } else {
+      // Sem token novo no perfil: tenta renovar com o refresh_token do banco.
+      const renewed = await renewSessionToken(page, session, { deviceId, su });
+      if (renewed && renewed.accessToken !== session.access_token) {
+        await saveSessionToken(session, renewed.accessToken, renewed.refreshToken);
+        activeToken = renewed.accessToken;
+        tokenOrigin = 'refresh_token';
+        console.log('token renovado por refresh_token: validade de 24 h reiniciada');
+      }
     }
 
     const collectResource = async (resource, method, args, token) => {
