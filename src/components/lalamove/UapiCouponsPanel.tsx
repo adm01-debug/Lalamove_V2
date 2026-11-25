@@ -10,6 +10,7 @@ import { useUapiCoupons, useExchangeCoupon, UapiError } from '@/hooks/useLalamov
 import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
 import { isUapiSessionMissing } from '@/lib/uapiErrors';
 import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { UapiSnapshotBadge } from '@/components/lalamove/UapiSnapshotBadge';
 import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 /** Etapa 22 — resgate e listagem de cupons com erros `qp` traduzidos. */
@@ -18,7 +19,7 @@ export function UapiCouponsPanel() {
   const { data, isLoading, isError, error, isFetching, refetch } = useUapiCoupons();
   const exchange = useExchangeCoupon();
 
-  const coupons = data ?? [];
+  const coupons = data?.items ?? [];
 
   const handleExchange = async () => {
     if (!code.trim()) {
@@ -45,6 +46,7 @@ export function UapiCouponsPanel() {
           <Ticket className="h-4 w-4" />
           Cupons
         </CardTitle>
+        <UapiSnapshotBadge info={data?.freshness} />
         <CardDescription>
           Resgate códigos promocionais. Erros da Lalamove são traduzidos para PT-BR.
         </CardDescription>

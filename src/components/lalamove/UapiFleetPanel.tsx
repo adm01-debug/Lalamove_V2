@@ -14,6 +14,7 @@ import {
 } from '@/hooks/useLalamoveUapi';
 import { isUapiSessionMissing } from '@/lib/uapiErrors';
 import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { UapiSnapshotBadge } from '@/components/lalamove/UapiSnapshotBadge';
 import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 interface FleetListProps {
@@ -28,7 +29,7 @@ function FleetList({ kind, search }: FleetListProps) {
   );
   const mutate = useFleetMutation();
 
-  const drivers = data ?? [];
+  const drivers = data?.items ?? [];
 
   const handleAction = async (driverFid: string) => {
     const action = kind === 'favorites' ? 'remove' : 'unblock';
@@ -55,33 +56,41 @@ function FleetList({ kind, search }: FleetListProps) {
     );
   }
   if (drivers.length === 0) {
-    return <p className="text-sm text-muted-foreground">Nenhum motorista nesta lista.</p>;
+    return (
+      <div className="space-y-2">
+        <UapiSnapshotBadge info={data?.freshness} />
+        <p className="text-sm text-muted-foreground">Nenhum motorista nesta lista.</p>
+      </div>
+    );
   }
 
   return (
-    <ul className="space-y-2">
-      {drivers.map((driver) => (
-        <li
-          key={driver.driver_fid}
-          className="flex items-center justify-between rounded-md border border-border p-3"
-        >
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-foreground">{driver.name || driver.driver_fid}</p>
-            <p className="truncate text-xs text-muted-foreground">
-              {driver.plate_number || '—'} · {driver.vehicle_type || '—'}
-            </p>
-          </div>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => handleAction(driver.driver_fid)}
-            disabled={mutate.isPending}
+    <div className="space-y-2">
+      <UapiSnapshotBadge info={data?.freshness} />
+      <ul className="space-y-2">
+        {drivers.map((driver) => (
+          <li
+            key={driver.driver_fid}
+            className="flex items-center justify-between rounded-md border border-border p-3"
           >
-            {kind === 'favorites' ? 'Remover' : 'Desbloquear'}
-          </Button>
-        </li>
-      ))}
-    </ul>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-foreground">{driver.name || driver.driver_fid}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {driver.plate_number || '—'} · {driver.vehicle_type || '—'}
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleAction(driver.driver_fid)}
+              disabled={mutate.isPending}
+            >
+              {kind === 'favorites' ? 'Remover' : 'Desbloquear'}
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

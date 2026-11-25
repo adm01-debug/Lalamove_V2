@@ -15,12 +15,28 @@ import { parseEdgeError } from '@/lib/edge-error';
  * Camada de acesso às operações UAPI já expostas pela Edge Function
  * `lalamove-uapi`. Etapas 20–23: histórico com cursor, extratos/comprovantes,
  * cupons e frota (favoritos/bloqueados).
+ *
+ * Os hooks de leitura também devolvem `freshness` — a UAPI só responde de dentro
+ * do navegador, então o painel costuma ser servido por uma cópia coletada pelo
+ * robô e o operador precisa saber a idade dela.
  */
 
 export interface UapiEnvelope<T> {
   ret: number;
   msg?: string;
   data?: T;
+}
+
+/** Procedência da resposta: se veio da cópia coletada pelo robô e quando foi coletada. */
+export interface UapiFreshness {
+  servedFromSnapshot: boolean;
+  snapshotCollectedAt: string | null;
+}
+
+/** Formato padrão das listas UAPI: itens + procedência do dado. */
+export interface UapiList<T> {
+  items: T[];
+  freshness: UapiFreshness;
 }
 
 export class UapiError extends Error {
@@ -35,7 +51,15 @@ export class UapiError extends Error {
   }
 }
 
-async function invokeUapi<T>(action: string, body: Record<string, unknown> = {}): Promise<T> {
+interface UapiRawResponse<T> {
+  data: T;
+  freshness: UapiFreshness;
+}
+
+async function invokeUapiRaw<T>(
+  action: string,
+  body: Record<string, unknown> = {},
+): Promise<UapiRawResponse<T>> {
   const { data, error } = await supabase.functions.invoke('lalamove-uapi', {
     body: { action, ...body },
   });
@@ -63,7 +87,18 @@ async function invokeUapi<T>(action: string, body: Record<string, unknown> = {})
     throw new UapiError(info.code, info.message, info.hint);
   }
 
-  return (envelope.data ?? ({} as T)) as T;
+  const meta = (envelope as { _meta?: Partial<UapiFreshness> })._meta;
+  return {
+    data: (envelope.data ?? ({} as T)) as T,
+    freshness: {
+      servedFromSnapshot: meta?.servedFromSnapshot === true,
+      snapshotCollectedAt: meta?.snapshotCollectedAt ?? null,
+    },
+  };
+}
+
+async function invokeUapi<T>(action: string, body: Record<string, unknown> = {}): Promise<T> {
+  return (await invokeUapiRaw<T>(action, body)).data;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -83,6 +118,7 @@ export interface UapiOrderSummary {
 interface OrderListPage {
   orders: UapiOrderSummary[];
   nextCursor: string | null;
+  freshness: UapiFreshness;
 }
 
 const PAGE_SIZE = 20;
@@ -103,7 +139,7 @@ export function useUapiOrderHistory(statuses?: number[]) {
     queryKey: ['uapi', 'order-history', statuses ?? 'all'],
     initialPageParam: '',
     queryFn: async ({ pageParam }) => {
-      const raw = await invokeUapi<unknown>('list-orders', {
+      const { data: raw, freshness } = await invokeUapiRaw<unknown>('list-orders', {
         limit: PAGE_SIZE,
         last_id: (pageParam as string) || '',
         ...(statuses?.length ? { order_statuses: statuses } : {}),
@@ -113,6 +149,7 @@ export function useUapiOrderHistory(statuses?: number[]) {
       return {
         orders,
         nextCursor: orders.length === PAGE_SIZE && last ? last.order_uuid : null,
+        freshness,
       };
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
@@ -137,6 +174,11 @@ export function flattenOrderPages(pages: OrderListPage[] | undefined): UapiOrder
   return result;
 }
 
+/** Frescor da última página carregada (a coleta pode mudar entre páginas). */
+export function lastPageFreshness(pages: OrderListPage[] | undefined): UapiFreshness | undefined {
+  return pages?.[pages.length - 1]?.freshness;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Etapa 21 — extratos e comprovantes
 // ─────────────────────────────────────────────────────────────────────────────
@@ -152,19 +194,22 @@ export interface UapiWalletTransaction {
 }
 
 export function useUapiWalletStatement(page: number, startTime?: string, endTime?: string) {
-  return useQuery<UapiWalletTransaction[], UapiError>({
+  return useQuery<UapiList<UapiWalletTransaction>, UapiError>({
     queryKey: ['uapi', 'wallet-statement', page, startTime, endTime],
     queryFn: async () => {
-      const raw = await invokeUapi<unknown>('wallet-transactions', {
+      const { data: raw, freshness } = await invokeUapiRaw<unknown>('wallet-transactions', {
         page_no: page,
         page_size: PAGE_SIZE,
         ...(startTime ? { start_time: startTime } : {}),
         ...(endTime ? { end_time: endTime } : {}),
       });
-      if (!raw || typeof raw !== 'object') return [];
+      if (!raw || typeof raw !== 'object') return { items: [], freshness };
       const record = raw as Record<string, unknown>;
       const list = record.list ?? record.items;
-      return Array.isArray(list) ? (list as UapiWalletTransaction[]) : [];
+      return {
+        items: Array.isArray(list) ? (list as UapiWalletTransaction[]) : [],
+        freshness,
+      };
     },
     placeholderData: keepPreviousData,
     staleTime: 60_000,
@@ -209,14 +254,20 @@ export interface UapiCoupon {
 }
 
 export function useUapiCoupons(page = 1) {
-  return useQuery<UapiCoupon[], UapiError>({
+  return useQuery<UapiList<UapiCoupon>, UapiError>({
     queryKey: ['uapi', 'coupons', page],
     queryFn: async () => {
-      const raw = await invokeUapi<unknown>('coupons', { page_no: page, page_size: PAGE_SIZE });
-      if (!raw || typeof raw !== 'object') return [];
+      const { data: raw, freshness } = await invokeUapiRaw<unknown>('coupons', {
+        page_no: page,
+        page_size: PAGE_SIZE,
+      });
+      if (!raw || typeof raw !== 'object') return { items: [], freshness };
       const record = raw as Record<string, unknown>;
       const list = record.list ?? record.coupons ?? record.items;
-      return Array.isArray(list) ? (list as UapiCoupon[]) : [];
+      return {
+        items: Array.isArray(list) ? (list as UapiCoupon[]) : [],
+        freshness,
+      };
     },
     staleTime: 60_000,
     enabled: isLalamoveConfigured(),
@@ -251,17 +302,20 @@ export interface UapiFleetDriver {
 }
 
 export function useUapiFleet(kind: FleetKind, search?: string) {
-  return useQuery<UapiFleetDriver[], UapiError>({
+  return useQuery<UapiList<UapiFleetDriver>, UapiError>({
     queryKey: ['uapi', 'fleet', kind, search ?? ''],
     queryFn: async () => {
-      const raw = await invokeUapi<unknown>(
+      const { data: raw, freshness } = await invokeUapiRaw<unknown>(
         kind === 'favorites' ? 'fleet-favorites' : 'fleet-blocked',
         { page_no: 1, page_size: 50, ...(search ? { search } : {}) },
       );
-      if (!raw || typeof raw !== 'object') return [];
+      if (!raw || typeof raw !== 'object') return { items: [], freshness };
       const record = raw as Record<string, unknown>;
       const list = record.list ?? record.drivers ?? record.items;
-      return Array.isArray(list) ? (list as UapiFleetDriver[]) : [];
+      return {
+        items: Array.isArray(list) ? (list as UapiFleetDriver[]) : [],
+        freshness,
+      };
     },
     staleTime: 60_000,
     enabled: isLalamoveConfigured(),
