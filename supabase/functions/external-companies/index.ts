@@ -48,6 +48,46 @@ async function requireOperator(req: Request): Promise<{ error: Response | null }
   return { error: null };
 }
 
+/**
+ * Tabelas que existem no banco externo de produto (projeto doufsxqlfjyuvxuezpln)
+ * e as colunas reais de cada uma.
+ *
+ * O endpoint foi escrito contra um schema genérico (address/city/state/zip_code
+ * em todas as tabelas). O PostgREST devolve erro para coluna inexistente, então
+ * cada `select`/filtro com esse schema derrubava a ação inteira em 500 e a busca
+ * de endereço nunca devolvia nada. No banco real `customers`, `carriers` e
+ * `contacts` não existem, `companies` só tem marca e nome, e endereço existe
+ * apenas em `suppliers` (sede) e `supplier_branches` (filial/CD).
+ */
+interface ExternalTableConfig {
+  /** Colunas reais da tabela, usadas em `select` e nos filtros `ilike`. */
+  fields: string[];
+  /** Colunas de texto pesquisáveis. */
+  searchFields: string[];
+  /** Campos que compõem o endereço completo, na ordem de exibição. */
+  addressFields: string[];
+}
+
+const EXTERNAL_TABLES: Record<string, ExternalTableConfig | undefined> = {
+  companies: {
+    fields: ['id', 'name'],
+    searchFields: ['name'],
+    addressFields: [],
+  },
+  suppliers: {
+    fields: ['id', 'name', 'trading_name', 'address', 'state_uf', 'phone', 'email'],
+    searchFields: ['name', 'trading_name', 'address'],
+    // `address` já vem com cidade/UF/CEP ("... - São Paulo/SP - 04551-080");
+    // somar cidade e UF aqui duplicaria o final do endereço exibido.
+    addressFields: ['address'],
+  },
+  supplier_branches: {
+    fields: ['id', 'branch_name', 'address', 'city', 'state_uf'],
+    searchFields: ['branch_name', 'address'],
+    addressFields: ['address'],
+  },
+};
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -97,6 +137,15 @@ serve(async (req) => {
           );
         }
 
+        const listConfig = EXTERNAL_TABLES[table];
+        // Tabela prevista no contrato mas inexistente no banco de produto: lista
+        // vazia em vez de 500 — a página mostra "sem registros" e o operador segue.
+        if (!listConfig) {
+          return new Response(JSON.stringify({ data: [], count: 0, table, unavailable: true }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+
         let query = externalClient
           .from(table)
           .select('*', { count: 'exact' })
@@ -104,15 +153,13 @@ serve(async (req) => {
           .order('id', { ascending: true });
 
         if (search) {
-          // Build search filter based on table type
-          const searchFilters = buildSearchFilter(table, search);
-          query = query.or(searchFilters);
+          query = query.or(buildSearchFilter(listConfig, search));
         }
 
         const { data, error, count } = await query;
         if (error) throw error;
 
-        return new Response(JSON.stringify({ data, count, table }), {
+        return new Response(JSON.stringify({ data: (data ?? []).map(normalizeRow), count, table }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
@@ -134,6 +181,12 @@ serve(async (req) => {
           );
         }
 
+        if (!EXTERNAL_TABLES[table]) {
+          return new Response(JSON.stringify({ data: null, unavailable: true }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+
         const { data, error } = await externalClient
           .from(table)
           .select('*')
@@ -148,7 +201,8 @@ serve(async (req) => {
       }
 
       case 'search_address': {
-        // Unified address search across all tables
+        // Busca unificada nos cadastros externos que têm endereço: sede do
+        // fornecedor e suas filiais (o CD é o ponto de coleta real do pedido).
         const { search, limit = 20 } = params;
         
         if (!search || search.length < 2) {
@@ -158,86 +212,48 @@ serve(async (req) => {
         }
 
         const results: any[] = [];
-        const term = `%${escapeIlike(search)}%`;
+        const supplierConfig = EXTERNAL_TABLES.suppliers!;
 
-        // Search companies
-        const { data: companies } = await externalClient
-          .from('companies')
-          .select('id, name, address, city, state, zip_code, phone, email, type')
-          .or(`name.ilike.${term},address.ilike.${term}`)
-          .limit(limit);
-        
-        if (companies) {
-          results.push(...companies.map(c => ({
-            ...c,
-            source_table: 'companies',
-            display_name: c.name,
-            full_address: formatAddress(c),
-          })));
-        }
-
-        // Search customers
-        const { data: customers } = await externalClient
-          .from('customers')
-          .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.${term},address.ilike.${term}`)
-          .limit(limit);
-        
-        if (customers) {
-          results.push(...customers.map(c => ({
-            ...c,
-            source_table: 'customers',
-            display_name: c.name,
-            full_address: formatAddress(c),
-          })));
-        }
-
-        // Search suppliers
-        const { data: suppliers } = await externalClient
+        // `select` montado em runtime perde a inferência do supabase-js (o retorno
+        // vira GenericStringError); as colunas vêm de EXTERNAL_TABLES.
+        const { data: suppliers } = (await externalClient
           .from('suppliers')
-          .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.${term},address.ilike.${term}`)
-          .limit(limit);
-        
-        if (suppliers) {
-          results.push(...suppliers.map(c => ({
-            ...c,
+          .select(supplierConfig.fields.join(', '))
+          .or(buildSearchFilter(supplierConfig, search))
+          .limit(limit)) as { data: any[] | null };
+
+        for (const supplier of suppliers ?? []) {
+          const fullAddress = formatAddress(supplier, supplierConfig.addressFields);
+          // Registro sem endereço não serve para uma busca de endereço.
+          if (!fullAddress) continue;
+          results.push({
+            ...normalizeRow(supplier),
             source_table: 'suppliers',
-            display_name: c.name,
-            full_address: formatAddress(c),
-          })));
+            display_name: supplier.name,
+            full_address: fullAddress,
+          });
         }
 
-        // Search carriers
-        const { data: carriers } = await externalClient
-          .from('carriers')
-          .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.${term},address.ilike.${term}`)
-          .limit(limit);
-        
-        if (carriers) {
-          results.push(...carriers.map(c => ({
-            ...c,
-            source_table: 'carriers',
-            display_name: c.name,
-            full_address: formatAddress(c),
-          })));
-        }
+        const branchConfig = EXTERNAL_TABLES.supplier_branches!;
+        const supplierNames = new Map<string, string>(
+          (suppliers ?? []).map((s: any) => [s.id, s.name] as [string, string]),
+        );
+        const { data: branches } = (await externalClient
+          .from('supplier_branches')
+          .select([...branchConfig.fields, 'supplier_id'].join(', '))
+          .or(buildSearchFilter(branchConfig, search))
+          .limit(limit)) as { data: any[] | null };
 
-        // Search contacts
-        const { data: contacts } = await externalClient
-          .from('contacts')
-          .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.${term},address.ilike.${term}`)
-          .limit(limit);
-        
-        if (contacts) {
-          results.push(...contacts.map(c => ({
-            ...c,
-            source_table: 'contacts',
-            display_name: c.name,
-            full_address: formatAddress(c),
-          })));
+        for (const branch of branches ?? []) {
+          const fullAddress = formatAddress(branch, branchConfig.addressFields);
+          if (!fullAddress) continue;
+          const owner = branch.supplier_id ? supplierNames.get(branch.supplier_id) : undefined;
+          results.push({
+            ...normalizeRow(branch),
+            source_table: 'suppliers',
+            display_name: owner ? `${owner} — ${branch.branch_name}` : branch.branch_name,
+            full_address: fullAddress,
+          });
         }
 
         return new Response(JSON.stringify({ results }), {
@@ -253,6 +269,12 @@ serve(async (req) => {
             JSON.stringify({ error: `Invalid table. Allowed: ${ALLOWED_TABLES.join(', ')}` }),
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
+        }
+
+        if (!EXTERNAL_TABLES[table]) {
+          return new Response(JSON.stringify({ columns: [], sample: [], table, unavailable: true }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
         }
 
         const { data, error } = await externalClient
@@ -273,6 +295,13 @@ serve(async (req) => {
         const counts: Record<string, number> = {};
         
         for (const table of ALLOWED_TABLES) {
+          // Tabela do contrato sem equivalente no banco de produto: 0 explícito,
+          // para a UI mostrar zero em vez de erro.
+          if (!EXTERNAL_TABLES[table]) {
+            counts[table] = 0;
+            continue;
+          }
+
           const { count, error } = await externalClient
             .from(table)
             .select('*', { count: 'exact', head: true });
@@ -310,18 +339,21 @@ function escapeIlike(value: string): string {
   return value.replace(/[,().%\\]/g, '');
 }
 
-function buildSearchFilter(table: string, search: string): string {
-  // Common fields across all tables
+function buildSearchFilter(config: ExternalTableConfig, search: string): string {
   const term = `%${escapeIlike(search)}%`;
-  return `name.ilike.${term},address.ilike.${term}`;
+  return config.searchFields.map((field) => `${field}.ilike.${term}`).join(',');
 }
 
-function formatAddress(record: any): string {
-  const parts = [
-    record.address,
-    record.city,
-    record.state,
-    record.zip_code,
-  ].filter(Boolean);
-  return parts.join(', ');
+// A UI do painel consome `state` (ExternalRecord); o banco de produto chama a
+// coluna de `state_uf`, então a UF chegaria vazia e a coluna Cidade/UF ficaria "—".
+function normalizeRow(row: any): any {
+  if (!row || row.state_uf === undefined || row.state !== undefined) return row;
+  return { ...row, state: row.state_uf };
+}
+
+function formatAddress(record: Record<string, unknown>, fields: string[]): string {
+  return fields
+    .map((field) => record[field])
+    .filter((part): part is string => typeof part === 'string' && part.length > 0)
+    .join(', ');
 }
