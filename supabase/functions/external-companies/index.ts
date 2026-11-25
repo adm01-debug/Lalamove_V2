@@ -90,7 +90,7 @@ serve(async (req) => {
     const { action, ...params } = contract.data as { action: string } & Record<string, any>;
 
     // Supported tables
-    const ALLOWED_TABLES = ['companies', 'customers', 'suppliers', 'carriers', 'contacts'] as const;
+    const ALLOWED_TABLES = ['companies', 'customers', 'suppliers', 'carriers', 'contacts', 'supplier_branches'] as const;
     type AllowedTable = typeof ALLOWED_TABLES[number];
 
     switch (action) {
@@ -409,8 +409,13 @@ function matchesAllTerms(
 // A UI do painel consome `state` (ExternalRecord); o banco de produto chama a
 // coluna de `state_uf`, então a UF chegaria vazia e a coluna Cidade/UF ficaria "—".
 function normalizeRow(row: any): any {
-  if (!row || row.state_uf === undefined || row.state !== undefined) return row;
-  return { ...row, state: row.state_uf };
+  if (!row) return row;
+  const patch: Record<string, unknown> = {};
+  if (row.state === undefined && row.state_uf !== undefined) patch.state = row.state_uf;
+  // Filiais nomeiam a linha em `branch_name`; a tabela do painel e o
+  // autocomplete de endereco leem `name`.
+  if (row.name === undefined && typeof row.branch_name === 'string') patch.name = row.branch_name;
+  return Object.keys(patch).length ? { ...row, ...patch } : row;
 }
 
 function formatAddress(record: Record<string, unknown>, fields: string[]): string {

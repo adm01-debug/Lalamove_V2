@@ -3,7 +3,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { isBitrixConfigured } from '@/lib/bitrix-config';
 import { parseEdgeError, formatEdgeError } from '@/lib/edge-error';
 
-export type ExternalTable = 'companies' | 'customers' | 'suppliers' | 'carriers' | 'contacts';
+export type ExternalTable =
+  | 'companies'
+  | 'customers'
+  | 'suppliers'
+  | 'carriers'
+  | 'contacts'
+  | 'supplier_branches';
 
 export interface ExternalRecord {
   id: string;
@@ -30,6 +36,7 @@ const TABLE_LABELS: Record<ExternalTable, string> = {
   suppliers: 'Fornecedores',
   carriers: 'Transportadoras',
   contacts: 'Contatos',
+  supplier_branches: 'Filiais',
 };
 
 export function useExternalList(table: ExternalTable, search?: string, page = 1, pageSize = 50) {

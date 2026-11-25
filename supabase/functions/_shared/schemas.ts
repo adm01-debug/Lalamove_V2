@@ -395,7 +395,7 @@ const bitrix24SyncV2 = bitrix24SyncV1;
 // `table` tem allowlist no próprio handler (index.ts:29) e `get` exige `id`
 // (index.ts:74-76). `id: 0` é rejeitado porque o handler trata falsy como ausente.
 const externalCompaniesTable = z
-  .enum(["companies", "customers", "suppliers", "carriers", "contacts"])
+  .enum(["companies", "customers", "suppliers", "carriers", "contacts", "supplier_branches"])
   .default("companies");
 
 const externalCompaniesV1 = z.discriminatedUnion("action", [
