@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1ded4709ece7ccc32e706bee7bad8567a09f50c6",
+  "commit": "29a49eda1369c00a3a46ec0ef1bb8399b793ccf0",
   "branch": "main",
-  "data_commit": "2026-11-25T09:03:40-03:00",
+  "data_commit": "2026-11-25T09:34:06-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "29a49ed",
+    "data": "2026-11-25",
+    "assunto": "fix: fecha leitura anonima das views de metrica (#379)"
+   },
    {
     "sha": "1ded470",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "53d3496",
     "data": "2026-11-24",
     "assunto": "fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)"
-   },
-   {
-    "sha": "71cf6b0",
-    "data": "2026-11-24",
-    "assunto": "fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)"
    }
   ],
-  "arquivos_mudados_7d": 526,
+  "arquivos_mudados_7d": 527,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 19
+    "mudancas": 18
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 278
+    "commits": 279
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1140,
+  "arquivos_total": 1141,
   "arquivos_codigo": 726,
   "linhas_codigo": 143140,
   "rotas": 57,
@@ -322,7 +322,7 @@
   "hooks": 102,
   "edge_functions": 28,
   "tabelas": 94,
-  "migrations": 205,
+  "migrations": 206,
   "cron_jobs": 24,
   "testes": 189,
   "workflows": 5,

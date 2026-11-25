@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: fecha leitura anonima das views de metrica (#379)",
    "chore: least privilege nas funcoes internas de manutencao (#378)",
    "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)",
    "fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)",
-   "fix: renovacao do token UAPI pelo coletor via refresh_token (#374)",
-   "feat: alerta quando o snapshot da UAPI para de atualizar (#373)"
+   "fix: renovacao do token UAPI pelo coletor via refresh_token (#374)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

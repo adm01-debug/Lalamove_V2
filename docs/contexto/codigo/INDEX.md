@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1ded4709ece7ccc32e706bee7bad8567a09f50c6` (2026-11-25T09:03:40-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `29a49eda1369c00a3a46ec0ef1bb8399b793ccf0` (2026-11-25T09:34:06-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (612), SQL (216), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
+- linguagens: TypeScript (612), SQL (217), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1140 |
+| arquivos_total | 1141 |
 | arquivos_codigo | 726 |
 | linhas_codigo | 143140 |
 | rotas | 57 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 102 |
 | edge_functions | 28 |
 | tabelas | 94 |
-| migrations | 205 |
+| migrations | 206 |
 | cron_jobs | 24 |
 | testes | 189 |
 | workflows | 5 |
@@ -293,7 +293,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10002 nós · 20763 arestas · 702 comunidades · grafo do commit `1ded4709`
+- 10003 nós · 20763 arestas · 703 comunidades · grafo do commit `29a49eda`
 - comunidades maiores: cn (249), ref_https (124), card.tsx (111), button.tsx (108), AlertConfigCard.tsx (103), App.tsx (101), AppLayout.tsx (99), ref_node_path (97), @tanstack/react-query (91), job-worker/index.ts (86), send-notification/index.ts (83), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -302,7 +302,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package.json (33)
 - package-lock.json (31)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- .github/workflows/ci.yml (19)
+- .github/workflows/ci.yml (18)
 - supabase/functions/job-worker/index.ts (15)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-25 `29a49ed` fix: fecha leitura anonima das views de metrica (#379)
 - 2026-11-25 `1ded470` chore: least privilege nas funcoes internas de manutencao (#378)
 - 2026-11-25 `6736c92` feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)
 - 2026-11-25 `18c1aff` fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `c804662` chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)
 - 2026-11-24 `4bbb1fc` fix: falha de dados mostra erro e retry em 6 páginas (#365)
 - 2026-11-24 `569b237` fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)
-- 2026-11-24 `42b967e` chore: docs do gateway e do refresh uapi sem proxy inexistente (#363)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

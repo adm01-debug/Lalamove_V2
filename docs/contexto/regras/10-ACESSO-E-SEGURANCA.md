@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1ded4709ec` · branch `main` · 2026-11-25 12:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `29a49eda13` · branch `main` · 2026-11-25 12:35 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -424,7 +424,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | anon | all | `mcp_introspect`, `can_run_db_diagnostics` |
 | revoke | anon | all privileges | `public`, `public` |
 | revoke | anon | execute | `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `get_cron_jobs_health`, `get_active_uapi_token`, `get_user_permissions`, `get_user_roles`, `is_aal2`, `is_known_device`, `clear_login_attempts`, `clear_login_attempts`, `has_role` … +1 |
-| revoke | anon | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view` |
+| revoke | anon | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view`, `driver_stats_cache`, `delivery_metrics_cache`, `hourly_metrics_cache`, `cache_status` |
 | revoke | anon, authenticated | execute | `cleanup_old_login_attempts`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `test_rls_policies`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `ensure_tracking_events_partition`, `rollup_contract_version_usage`, `increment_contract_usage`, `update_updated_at_column`, `trigger_bitrix24_sync`, `invalidate_old_tokens` … +21 |
 | revoke | anon, public | execute | `claim_alert_notification`, `get_pending_escalations`, `acknowledge_alert`, `claim_alert_notification` |
 | revoke | authenticated | all | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view` |
