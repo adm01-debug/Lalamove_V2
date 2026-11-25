@@ -4,7 +4,7 @@
  "presente": true,
  "como_gerar": "npm run graph:setup (uma vez) e `graphify update .` depois de mexer no código; saída em graphify-out/, não versionada. Consulta: graphify query/path/explain.",
  "relatorio": null,
- "commit_do_grafo": "63359d69e0a940d1da4529e473b2fc95852c8ca6",
+ "commit_do_grafo": "870d6e6018fc59f279fc4e1f8bfa2086e43493bb",
  "grafo_atual": true,
  "nos": 10005,
  "arestas": 20769,

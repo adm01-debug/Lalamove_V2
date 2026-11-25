@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "63359d69e0a940d1da4529e473b2fc95852c8ca6",
+  "commit": "870d6e6018fc59f279fc4e1f8bfa2086e43493bb",
   "branch": "main",
-  "data_commit": "2026-11-25T10:56:03-03:00",
+  "data_commit": "2026-11-25T11:05:56-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "870d6e6",
+    "data": "2026-11-25",
+    "assunto": "fix: filial na busca de endereco mostra o fornecedor dono (#382)"
+   },
    {
     "sha": "63359d6",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "d4f8bc7",
     "data": "2026-11-24",
     "assunto": "fix: rota/ETA so recalcula com posicao viva do motorista (#357)"
-   },
-   {
-    "sha": "1e34334",
-    "data": "2026-11-24",
-    "assunto": "fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)"
    }
   ],
   "arquivos_mudados_7d": 529,
@@ -203,11 +203,11 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 33
+    "mudancas": 32
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 31
+    "mudancas": 30
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 281
+    "commits": 282
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1142,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143164,
+  "linhas_codigo": 143178,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29679
+   "linhas": 29693
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -686,7 +686,7 @@
   }
  ],
  "qualidade": {
-  "any": 142,
+  "any": 144,
   "console_log": 427,
   "ts_ignore": 0,
   "eslint_disable": 1,

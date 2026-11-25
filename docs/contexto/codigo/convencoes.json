@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: filial na busca de endereco mostra o fornecedor dono (#382)",
    "fix: external-companies usa o helper de auth compartilhado (#381)",
    "fix: busca de endereco externa usa o schema real do banco de produtos (#380)",
    "fix: fecha leitura anonima das views de metrica (#379)",
-   "chore: least privilege nas funcoes internas de manutencao (#378)",
-   "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)"
+   "chore: least privilege nas funcoes internas de manutencao (#378)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

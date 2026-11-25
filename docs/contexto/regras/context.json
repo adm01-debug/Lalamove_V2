@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "63359d69e0a940d1da4529e473b2fc95852c8ca6",
+  "sha": "870d6e6018fc59f279fc4e1f8bfa2086e43493bb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 13:56 UTC",
+  "generated_at": "2026-11-25 14:06 UTC",
   "files_total": 1136,
   "code_files": 953,
-  "code_lines": 165202
+  "code_lines": 165216
  },
  "version": "1.3.2",
- "facts_hash": "15230d4d8bc44b60",
+ "facts_hash": "bdc919ecbc03c5bc",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -23117,7 +23117,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29679,
+   "lines": 29693,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -24717,6 +24717,10 @@
    "runtime_error_logs": [
     "created_at",
     "occurrence_count"
+   ],
+   "suppliers": [
+    "id",
+    "name"
    ],
    "tracking_events": [
     "created_at",
@@ -76039,7 +76043,7 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 327,
+   "lines": 341,
    "tables": [
     {
      "table": "suppliers",
@@ -76048,8 +76052,18 @@
     {
      "table": "supplier_branches",
      "op": "select"
+    },
+    {
+     "table": "suppliers",
+     "op": "select"
     }
    ],
+   "table_cols": {
+    "suppliers": [
+     "id",
+     "name"
+    ]
+   },
    "dyn_from": 4,
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
@@ -80604,10 +80618,19 @@
   }
  },
  "git": {
-  "sha": "63359d69e0a940d1da4529e473b2fc95852c8ca6",
+  "sha": "870d6e6018fc59f279fc4e1f8bfa2086e43493bb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "870d6e6",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: filial na busca de endereco mostra o fornecedor dono (#382)",
+    "files": [
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
    {
     "sha": "63359d6",
     "date": "2026-11-25",
@@ -80946,15 +80969,6 @@
      "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/check-driver-alerts/index.ts"
     ]
-   },
-   {
-    "sha": "8d7ec0f",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: retorno do Guardian expoe quantas confirmacoes (M2) foram pedidas (#351)",
-    "files": [
-     "supabase/functions/check-driver-alerts/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80967,12 +80981,12 @@
     5
    ],
    [
-    "supabase/functions/check-driver-alerts/index.ts",
-    4
+    "supabase/functions/external-companies/index.ts",
+    3
    ],
    [
-    "supabase/functions/external-companies/index.ts",
-    2
+    "supabase/functions/check-driver-alerts/index.ts",
+    3
    ],
    [
     "src/components/lalamove/UapiCouponsPanel.tsx",
