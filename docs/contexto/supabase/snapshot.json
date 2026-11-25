@@ -19823,8 +19823,8 @@
         ],
         "definition": null,
         "definition_sha": "b14f50d476bbad18",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
         "language": "plpgsql",
@@ -20344,8 +20344,8 @@
         ],
         "definition": null,
         "definition_sha": "6a1a9928c58f3c3a",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
         "language": "plpgsql",
@@ -20414,7 +20414,7 @@
         ],
         "definition": null,
         "definition_sha": "241393134e35daf3",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20439,9 +20439,13 @@
             {
               "file": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.trg_close_tracking_on_order_end"
@@ -20455,7 +20459,7 @@
         ],
         "definition": null,
         "definition_sha": "82985e9d1b26d2b5",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -20576,7 +20580,7 @@
         ],
         "definition": null,
         "definition_sha": "4f710c046fe42172",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22061,7 +22065,7 @@
         ],
         "definition": null,
         "definition_sha": "b58291d250d16249",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22232,9 +22236,13 @@
             {
               "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [
             "20:process-job-queue"
           ],
@@ -22248,8 +22256,8 @@
         ],
         "definition": null,
         "definition_sha": "df1dee3c0dd974cb",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
         "language": "plpgsql",
@@ -22389,9 +22397,13 @@
             {
               "file": "src/hooks/useLoginLockout.ts",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -22438,7 +22450,7 @@
         ],
         "definition": null,
         "definition_sha": "129b43d62c80dd91",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22532,7 +22544,7 @@
         ],
         "definition": null,
         "definition_sha": "233d33dbf515b154",
-        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -22872,8 +22884,8 @@
         ],
         "definition": null,
         "definition_sha": "156ef858d57b090e",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
         "language": "plpgsql",
@@ -30383,37 +30395,7 @@
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.cache_view_count(p_view text)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.check_login_lockout_v2(p_email text, p_ip_address inet)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.cleanup_processing_logs()",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.create_audit_log(p_action text, p_resource_type text, p_resource_id uuid, p_changes jsonb)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.end_order_tracking(p_order_id uuid, p_reason text)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.geo_budget_notify_if_needed()",
         "severity": "INFO"
       },
       {
@@ -30431,37 +30413,13 @@
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.notification_messages_scrub_bodies(p_keep_days integer)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.process_job_queue(p_limit integer)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.record_failed_login_v2(p_email text, p_ip_address inet, p_user_agent text)",
         "severity": "INFO"
       },
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.record_messaging_usage(p_channel text, p_provider text, p_messages integer, p_segments integer, p_cost_cents integer, p_day date)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.refresh_cache_view(p_view_name text, p_triggered_by text)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.refresh_geo_jobs()",
         "severity": "INFO"
       }
     ],
@@ -31497,6 +31455,12 @@
         "name": "uapi_snapshot",
         "statements": null,
         "version": "20261126140000"
+      },
+      {
+        "name": "least_privilege_funcoes_manutencao",
+        "statements": 21,
+        "statements_sha": "16b9a8045b07df85",
+        "version": "20261126150000"
       }
     ],
     "policies": [

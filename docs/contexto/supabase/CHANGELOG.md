@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-25 12:21 UTC
+
+- **functions** alterado (11): `public.cache_view_count(p_view text)`, `public.cleanup_processing_logs()`, `public.create_audit_log(p_action text, p_resource_type text, p_resource_id uuid, p_changes jsonb)`, `public.end_order_tracking(p_order_id uuid, p_reason text)`, `public.geo_budget_notify_if_needed()`, `public.notification_messages_scrub_bodies(p_keep_days integer)`, `public.process_job_queue(p_limit integer)`, `public.record_failed_login_v2(p_email text, p_ip_address inet, p_user_agent text)`, `public.record_messaging_usage(p_channel text, p_provider text, p_messages integer, p_segments integer, p_cost_cents integer, p_day date)`, `public.refresh_geo_jobs()`, `public.trg_close_tracking_on_order_end()`
+- **lints** removido (9): `rpc_anon_executable:public.cache_view_count(p_view text)`, `rpc_anon_executable:public.cleanup_processing_logs()`, `rpc_anon_executable:public.create_audit_log(p_action text, p_resource_type text, p_resource_id uuid, p_changes jsonb)`, `rpc_anon_executable:public.end_order_tracking(p_order_id uuid, p_reason text)`, `rpc_anon_executable:public.geo_budget_notify_if_needed()`, `rpc_anon_executable:public.notification_messages_scrub_bodies(p_keep_days integer)`, `rpc_anon_executable:public.process_job_queue(p_limit integer)`, `rpc_anon_executable:public.record_messaging_usage(p_channel text, p_provider text, p_messages integer, p_segments integer, p_cost_cents integer, p_day date)`, `rpc_anon_executable:public.refresh_geo_jobs()`
+- **migrations** adicionado (1): `20261126150000_least_privilege_funcoes_manutencao`
+
 ## 2026-11-24 21:13 UTC
 
 - **functions** alterado (2): `public.can_run_db_diagnostics(_user_id uuid)`, `public.mcp_introspect(p_operation text, p_params jsonb)`

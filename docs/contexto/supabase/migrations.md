@@ -208,3 +208,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261126120000 | [messaging_foundation](migrations/20261126120000_messaging_foundation.sql) | 0 |
 | 20261126130000 | [geo_jobs_freshness](migrations/20261126130000_geo_jobs_freshness.sql) | 0 |
 | 20261126140000 | [uapi_snapshot](migrations/20261126140000_uapi_snapshot.sql) | 0 |
+| 20261126150000 | [least_privilege_funcoes_manutencao](migrations/20261126150000_least_privilege_funcoes_manutencao.sql) | 21 |
