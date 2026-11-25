@@ -49,7 +49,9 @@ const EXTERNAL_TABLES: Record<string, ExternalTableConfig | undefined> = {
     addressFields: ['address'],
   },
   supplier_branches: {
-    fields: ['id', 'branch_name', 'address', 'city', 'state_uf'],
+    // `supplier_id` e `is_active` alimentam a coluna Fornecedor e o selo de
+    // filial inativa; sem o id o painel não sabe de quem é o ponto de coleta.
+    fields: ['id', 'branch_name', 'address', 'city', 'state_uf', 'is_active', 'supplier_id'],
     searchFields: ['branch_name', 'address'],
     addressFields: ['address'],
   },
@@ -129,7 +131,26 @@ serve(async (req) => {
         const { data, error, count } = await query;
         if (error) throw error;
 
-        return new Response(JSON.stringify({ data: (data ?? []).map(normalizeRow), count, table }), {
+        const rows = (data ?? []).map(normalizeRow);
+        // Filial sem o nome do fornecedor aparece como "Matriz SP" solta na
+        // lista e o operador não sabe de quem é o ponto de coleta.
+        if (table === 'supplier_branches' && rows.length) {
+          const ownerIds = [...new Set(
+            (rows as any[]).map((row) => row.supplier_id).filter((id: unknown): id is string => typeof id === 'string' && id.length > 0),
+          )];
+          if (ownerIds.length) {
+            const { data: owners } = (await externalClient
+              .from('suppliers')
+              .select('id, name')
+              .in('id', ownerIds)) as { data: any[] | null };
+            const ownerNames = new Map<string, string>(
+              (owners ?? []).map((owner: any) => [owner.id, owner.name] as [string, string]),
+            );
+            for (const row of rows as any[]) row.supplier_name = ownerNames.get(row.supplier_id) ?? null;
+          }
+        }
+
+        return new Response(JSON.stringify({ data: rows, count, table }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
@@ -327,12 +348,14 @@ serve(async (req) => {
       case 'stats': {
         // Get counts for all tables
         const counts: Record<string, number> = {};
-        
+        // Tabela prevista no contrato que não existe no banco de produto: o
+        // painel esconde a aba em vez de mostrar "sem registros" para sempre.
+        const unavailable: string[] = [];
+
         for (const table of ALLOWED_TABLES) {
-          // Tabela do contrato sem equivalente no banco de produto: 0 explícito,
-          // para a UI mostrar zero em vez de erro.
           if (!EXTERNAL_TABLES[table]) {
             counts[table] = 0;
+            unavailable.push(table);
             continue;
           }
 
@@ -345,7 +368,7 @@ serve(async (req) => {
           }
         }
 
-        return new Response(JSON.stringify({ counts }), {
+        return new Response(JSON.stringify({ counts, unavailable }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
