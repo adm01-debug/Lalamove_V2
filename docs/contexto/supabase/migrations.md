@@ -210,3 +210,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261126140000 | [uapi_snapshot](migrations/20261126140000_uapi_snapshot.sql) | 0 |
 | 20261126150000 | [least_privilege_funcoes_manutencao](migrations/20261126150000_least_privilege_funcoes_manutencao.sql) | 21 |
 | 20261126160000 | [revoke_anon_metric_views](migrations/20261126160000_revoke_anon_metric_views.sql) | 5 |
+| 20261126170000 | [enable_delivery_alert_notifications](migrations/20261126170000_enable_delivery_alert_notifications.sql) | 1 |

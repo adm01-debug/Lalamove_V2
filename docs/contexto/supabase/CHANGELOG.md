@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-25 18:16 UTC
+
+- **migrations** adicionado (1): `20261126170000_enable_delivery_alert_notifications`
+
 ## 2026-11-25 13:16 UTC
 
 - **grants** removido (1): `public.cache_status:anon`
