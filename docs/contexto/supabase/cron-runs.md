@@ -74,54 +74,54 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 18:15:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 18:10:00 | succeeded | 0.01 | 1 row |
-| 2026-11-25 18:05:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 20:10:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 20:05:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 20:00:00 | succeeded | 0.02 | 1 row |
 
 
 ## 19 · lalamove_uapi_token_refresh_hourly
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-25 19:17:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 18:17:00 | succeeded | 0.01 | 1 row |
 | 2026-11-25 17:17:00 | succeeded | 0.01 | 1 row |
-| 2026-11-25 16:17:00 | succeeded | 0.01 | 1 row |
-| 2026-11-25 15:17:00 | succeeded | 0.02 | 1 row |
 
 
 ## 20 · process-job-queue
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 18:16:00 | succeeded | 0.03 | 1 row |
-| 2026-11-25 18:15:00 | succeeded | 0.03 | 1 row |
-| 2026-11-25 18:14:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 20:14:00 | succeeded | 0.10 | 1 row |
+| 2026-11-25 20:13:00 | succeeded | 0.03 | 1 row |
+| 2026-11-25 20:12:00 | succeeded | 0.01 | 1 row |
 
 
 ## 25 · geo-jobs-refresh
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 18:16:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 18:11:00 | succeeded | 0.01 | 1 row |
-| 2026-11-25 18:06:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 20:11:00 | succeeded | 0.03 | 1 row |
+| 2026-11-25 20:06:00 | succeeded | 0.02 | 1 row |
+| 2026-11-25 20:01:00 | succeeded | 0.02 | 1 row |
 
 
 ## 26 · refresh-cache-views
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-25 20:03:00 | succeeded | 0.30 | 3 rows |
+| 2026-11-25 19:03:00 | succeeded | 0.22 | 3 rows |
 | 2026-11-25 18:03:00 | succeeded | 0.30 | 3 rows |
-| 2026-11-25 17:03:00 | succeeded | 0.22 | 3 rows |
-| 2026-11-25 16:03:00 | succeeded | 0.23 | 3 rows |
 
 
 ## 29 · check-driver-alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-25 18:16:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 18:14:00 | succeeded | 0.02 | 1 row |
-| 2026-11-25 18:12:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 20:14:00 | succeeded | 0.05 | 1 row |
+| 2026-11-25 20:12:00 | succeeded | 0.01 | 1 row |
+| 2026-11-25 20:10:00 | succeeded | 0.02 | 1 row |
 
 
 ## 30 · notification_messages_scrub_bodies
