@@ -353,7 +353,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/external-companies/index.ts",
    "arquivos": 1,
-   "linhas": 328,
+   "linhas": 360,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -361,10 +361,7 @@
    "assina_hmac": false,
    "usa_service_role": true,
    "tabelas": [
-    "carriers",
-    "companies",
-    "contacts",
-    "customers",
+    "supplier_branches",
     "suppliers"
    ],
    "rpcs": [],

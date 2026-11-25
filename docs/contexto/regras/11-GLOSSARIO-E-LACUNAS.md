@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `29a49eda13` · branch `main` · 2026-11-25 12:35 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `56e3472897` · branch `main` · 2026-11-25 13:48 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -258,19 +258,11 @@ _nenhum item encontrado_
 | status | valor `CLOSED` para `state` usado no código não existe em nenhum enum do banco/TS | `escreve:src/utils/circuitBreaker.ts` |
 | status | valor `OPEN` para `state` usado no código não existe em nenhum enum do banco/TS | `compara:src/utils/circuitBreaker.ts` |
 | status | valor `synced` para `sync_status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useJobQueue.ts`<br>`filtra:src/hooks/useJobQueue.ts` |
-| coluna | coluna `city` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `email` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `phone` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `state` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `zip_code` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `count` usada no código não existe no schema de `drivers` |  |
 | coluna | coluna `delivery_contact_name` usada no código não existe no schema de `lalamove_orders` |  |
 | coluna | coluna `delivery_contact_phone` usada no código não existe no schema de `lalamove_orders` |  |
 | coluna | coluna `driver_id` usada no código não existe no schema de `driver_locations` |  |
 | tabela | tabela `a` usada no código não existe nas migrations/types do repo | `scripts/ci/gerar-matriz-edge-tabela.unit.mjs` |
-| tabela | tabela `carriers` usada no código não existe nas migrations/types do repo | `supabase/functions/external-companies/index.ts` |
-| tabela | tabela `companies` usada no código não existe nas migrations/types do repo | `supabase/functions/external-companies/index.ts` |
-| tabela | tabela `customers` usada no código não existe nas migrations/types do repo | `supabase/functions/external-companies/index.ts` |
 | tabela | tabela `fantasma` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
 | tabela | tabela `ignorada` usada no código não existe nas migrations/types do repo | `scripts/ci/gerar-matriz-edge-tabela.unit.mjs` |
 | tabela | tabela `information_schema.tables` usada no código não existe nas migrations/types do repo | `scripts/list-tables.ts` |
@@ -278,6 +270,7 @@ _nenhum item encontrado_
 | tabela | tabela `profiles` usada no código não existe nas migrations/types do repo | `scripts/ci/gerar-matriz-edge-tabela.unit.mjs` |
 | tabela | tabela `shared_nao_conta` usada no código não existe nas migrations/types do repo | `scripts/ci/gerar-matriz-edge-tabela.unit.mjs` |
 | tabela | tabela `so_teste` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
+| tabela | tabela `supplier_branches` usada no código não existe nas migrations/types do repo | `supabase/functions/external-companies/index.ts` |
 | tabela | tabela `suppliers` usada no código não existe nas migrations/types do repo | `supabase/functions/external-companies/index.ts` |
 | tabela | tabela `t` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
 | tabela | tabela `t1` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |

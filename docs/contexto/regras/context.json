@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "29a49eda1369c00a3a46ec0ef1bb8399b793ccf0",
+  "sha": "56e3472897dc8c4032265788f42e869a6dd1129f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 12:35 UTC",
-  "files_total": 1135,
-  "code_files": 952,
-  "code_lines": 165178
+  "generated_at": "2026-11-25 13:48 UTC",
+  "files_total": 1136,
+  "code_files": 953,
+  "code_lines": 165235
  },
  "version": "1.3.2",
- "facts_hash": "bf2cce5f4eb154e8",
+ "facts_hash": "2245e3c9ee971837",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 366,
+   ".ts": 367,
    ".tsx": 246,
    ".sql": 217,
    ".mjs": 110,
@@ -19274,10 +19274,7 @@
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [
-     "carriers",
-     "companies",
-     "contacts",
-     "customers",
+     "supplier_branches",
      "suppliers"
     ],
     "env": [
@@ -22733,8 +22730,8 @@
   },
   {
    "module": "src/lib",
-   "files": 53,
-   "lines": 4513,
+   "files": 54,
+   "lines": 4538,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -22770,7 +22767,7 @@
     "utils.ts: cn"
    ],
    "docs": [
-    "bitrix-config.ts: Verifica se as credenciais Bitrix24 estão configuradas no backend Usado para desabilitar chamadas que retornariam 500",
+    "bitrix-config.ts: Habilita o cadastro externo (ação `external-companies` da Edge Function) e a página /external-data. O gate exigia `bitrix24_configured=true` no localStorage, mas nenhum código grava essa flag — nem existe tela para isso. Resultado: a busca de endereço do cadastro e a página de dados externos nunca l …",
     "cep.ts: Utilidades para CEP brasileiro: - Validação de formato (8 dígitos, não sequencial) - Máscara automática (00000-000) - Consulta ViaCEP com timeout e normalização de endereço",
     "html.ts: Escapa texto para interpolação segura em HTML (defesa contra dados imprevistos). Fonte de verdade única para o escape de valores de usuário (nomes, endereços, IDs) antes de interpolação em `innerHTML`/`setHTML`. Cobre as 5 entidades essenciais de HTML.",
     "lalamove-config.ts: Verifica se as credenciais Lalamove estão configuradas no backend Usado para desabilitar chamadas que retornariam 500",
@@ -22794,6 +22791,7 @@
     "src/types"
    ],
    "file_list": [
+    "src/lib/bitrix-config.test.ts",
     "src/lib/bitrix-config.ts",
     "src/lib/cep.ts",
     "src/lib/edge-error.test.ts",
@@ -23123,7 +23121,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29680,
+   "lines": 29712,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -23135,10 +23133,6 @@
     "bitrix24_stage_mappings",
     "bitrix24_sync",
     "bitrix24_tokens",
-    "carriers",
-    "companies",
-    "contacts",
-    "customers",
     "driver_approval_queue",
     "driver_evaluations",
     "driver_incidents",
@@ -23169,6 +23163,7 @@
     "order_geo_events",
     "query_telemetry",
     "risk_rules",
+    "supplier_branches",
     "suppliers",
     "tracking_events",
     "user_devices",
@@ -23616,16 +23611,6 @@
      "src/hooks/useCacheViews.ts"
     ]
    },
-   "carriers": {
-    "select": [
-     "supabase/functions/external-companies/index.ts"
-    ]
-   },
-   "companies": {
-    "select": [
-     "supabase/functions/external-companies/index.ts"
-    ]
-   },
    "contacts": {
     "delete": [
      "scripts/seed-contacts.ts",
@@ -23637,8 +23622,7 @@
     ],
     "select": [
      "scripts/seed-contacts.ts",
-     "src/hooks/useContacts.ts",
-     "supabase/functions/external-companies/index.ts"
+     "src/hooks/useContacts.ts"
     ],
     "update": [
      "src/hooks/useContacts.ts"
@@ -23652,11 +23636,6 @@
    "contract_version_usage_monthly": {
     "select": [
      "src/hooks/useContractVersionUsageMonthly.ts"
-    ]
-   },
-   "customers": {
-    "select": [
-     "supabase/functions/external-companies/index.ts"
     ]
    },
    "delivery_metrics_cache": {
@@ -24221,6 +24200,11 @@
      "scripts/ai-context/cenarios.mjs"
     ]
    },
+   "supplier_branches": {
+    "select": [
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
    "suppliers": {
     "select": [
      "supabase/functions/external-companies/index.ts"
@@ -24429,40 +24413,12 @@
     "status",
     "view_name"
    ],
-   "carriers": [
-    "address",
-    "city",
-    "email",
-    "id",
-    "name",
-    "phone",
-    "state",
-    "zip_code"
-   ],
-   "companies": [
-    "address",
-    "city",
-    "email",
-    "id",
-    "name",
-    "phone",
-    "state",
-    "type",
-    "zip_code"
-   ],
    "contacts": [
-    "address",
-    "city",
-    "email",
     "id",
     "kind",
-    "name",
     "owner_id",
-    "phone",
     "phone_e164",
-    "state",
-    "usage_count",
-    "zip_code"
+    "usage_count"
    ],
    "contract_version_usage": [
     "contract_name",
@@ -24476,16 +24432,6 @@
     "contract_version",
     "request_count",
     "usage_month"
-   ],
-   "customers": [
-    "address",
-    "city",
-    "email",
-    "id",
-    "name",
-    "phone",
-    "state",
-    "zip_code"
    ],
    "delivery_metrics_cache": [
     "avg_value",
@@ -24775,16 +24721,6 @@
    "runtime_error_logs": [
     "created_at",
     "occurrence_count"
-   ],
-   "suppliers": [
-    "address",
-    "city",
-    "email",
-    "id",
-    "name",
-    "phone",
-    "state",
-    "zip_code"
    ],
    "tracking_events": [
     "created_at",
@@ -25679,9 +25615,6 @@
   },
   "tables_only_in_code": [
    "a",
-   "carriers",
-   "companies",
-   "customers",
    "fantasma",
    "ignorada",
    "information_schema.tables",
@@ -25689,6 +25622,7 @@
    "profiles",
    "shared_nao_conta",
    "so_teste",
+   "supplier_branches",
    "suppliers",
    "t",
    "t1",
@@ -25729,26 +25663,6 @@
    "users"
   ],
   "columns_unknown": [
-   {
-    "table": "contacts",
-    "column": "city"
-   },
-   {
-    "table": "contacts",
-    "column": "email"
-   },
-   {
-    "table": "contacts",
-    "column": "phone"
-   },
-   {
-    "table": "contacts",
-    "column": "state"
-   },
-   {
-    "table": "contacts",
-    "column": "zip_code"
-   },
    {
     "table": "drivers",
     "column": "count"
@@ -28988,6 +28902,10 @@
    {
     "file": "supabase/functions/external-companies/index.ts",
     "text": "significa que admin, manager e operator passam; apenas viewer é negado."
+   },
+   {
+    "file": "supabase/functions/external-companies/index.ts",
+    "text": "apenas em `suppliers` (sede) e `supplier_branches` (filial/CD)."
    },
    {
     "file": "supabase/functions/external-db-bridge/index.ts",
@@ -40799,6 +40717,22 @@
     "name": "deve retornar vazio sem dados"
    },
    {
+    "file": "src/lib/bitrix-config.test.ts",
+    "name": "isBitrixConfigured"
+   },
+   {
+    "file": "src/lib/bitrix-config.test.ts",
+    "name": "libera o cadastro externo por padrão (nunca houve tela para gravar a flag)"
+   },
+   {
+    "file": "src/lib/bitrix-config.test.ts",
+    "name": "respeita o desligamento explícito"
+   },
+   {
+    "file": "src/lib/bitrix-config.test.ts",
+    "name": "volta a liberar quando religado"
+   },
+   {
     "file": "src/lib/edge-error.test.ts",
     "name": "parseEdgeError"
    },
@@ -52196,6 +52130,7 @@
    "scripts/test-after-fix.ts",
    "scripts/test-user-permissions.ts",
    "scripts/uapi-collector/collect.mjs",
+   "src/lib/bitrix-config.ts",
    "supabase/functions/_shared/auth.ts",
    "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/apply-fixes/index.ts",
@@ -56599,31 +56534,6 @@
    },
    {
     "kind": "coluna",
-    "msg": "coluna `city` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `email` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `phone` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `state` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `zip_code` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
     "msg": "coluna `count` usada no código não existe no schema de `drivers`",
     "where": []
    },
@@ -56647,27 +56557,6 @@
     "msg": "tabela `a` usada no código não existe nas migrations/types do repo",
     "where": [
      "scripts/ci/gerar-matriz-edge-tabela.unit.mjs"
-    ]
-   },
-   {
-    "kind": "tabela",
-    "msg": "tabela `carriers` usada no código não existe nas migrations/types do repo",
-    "where": [
-     "supabase/functions/external-companies/index.ts"
-    ]
-   },
-   {
-    "kind": "tabela",
-    "msg": "tabela `companies` usada no código não existe nas migrations/types do repo",
-    "where": [
-     "supabase/functions/external-companies/index.ts"
-    ]
-   },
-   {
-    "kind": "tabela",
-    "msg": "tabela `customers` usada no código não existe nas migrations/types do repo",
-    "where": [
-     "supabase/functions/external-companies/index.ts"
     ]
    },
    {
@@ -56717,6 +56606,13 @@
     "msg": "tabela `so_teste` usada no código não existe nas migrations/types do repo",
     "where": [
      "scripts/ai-context/cenarios.mjs"
+    ]
+   },
+   {
+    "kind": "tabela",
+    "msg": "tabela `supplier_branches` usada no código não existe nas migrations/types do repo",
+    "where": [
+     "supabase/functions/external-companies/index.ts"
     ]
    },
    {
@@ -70420,14 +70316,26 @@
     "notify_whatsapp"
    ]
   },
+  "src/lib/bitrix-config.test.ts": {
+   "path": "src/lib/bitrix-config.test.ts",
+   "lines": 23,
+   "is_test": true,
+   "tests": [
+    "isBitrixConfigured",
+    "libera o cadastro externo por padrão (nunca houve tela para gravar a flag)",
+    "respeita o desligamento explícito",
+    "volta a liberar quando religado"
+   ]
+  },
   "src/lib/bitrix-config.ts": {
    "path": "src/lib/bitrix-config.ts",
-   "lines": 26,
+   "lines": 28,
    "exports": [
     "function isBitrixConfigured",
     "function setBitrixConfigured"
    ],
-   "doc": "Verifica se as credenciais Bitrix24 estão configuradas no backend Usado para desabilitar chamadas que retornariam 500"
+   "doc": "Habilita o cadastro externo (ação `external-companies` da Edge Function) e a página /external-data. O gate exigia `bitrix24_configured=true` no localStorage, mas nenhum código grava essa flag — nem existe tela para isso. Resultado: a busca de endereço do cadastro e a página de dados externos nunca l …",
+   "uses_service_role": true
   },
   "src/lib/cep.ts": {
    "path": "src/lib/cep.ts",
@@ -76149,82 +76057,17 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 328,
+   "lines": 360,
    "tables": [
-    {
-     "table": "companies",
-     "op": "select"
-    },
-    {
-     "table": "customers",
-     "op": "select"
-    },
     {
      "table": "suppliers",
      "op": "select"
     },
     {
-     "table": "carriers",
-     "op": "select"
-    },
-    {
-     "table": "contacts",
+     "table": "supplier_branches",
      "op": "select"
     }
    ],
-   "table_cols": {
-    "companies": [
-     "address",
-     "city",
-     "email",
-     "id",
-     "name",
-     "phone",
-     "state",
-     "type",
-     "zip_code"
-    ],
-    "customers": [
-     "address",
-     "city",
-     "email",
-     "id",
-     "name",
-     "phone",
-     "state",
-     "zip_code"
-    ],
-    "suppliers": [
-     "address",
-     "city",
-     "email",
-     "id",
-     "name",
-     "phone",
-     "state",
-     "zip_code"
-    ],
-    "carriers": [
-     "address",
-     "city",
-     "email",
-     "id",
-     "name",
-     "phone",
-     "state",
-     "zip_code"
-    ],
-    "contacts": [
-     "address",
-     "city",
-     "email",
-     "id",
-     "name",
-     "phone",
-     "state",
-     "zip_code"
-    ]
-   },
    "dyn_from": 4,
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
@@ -76237,7 +76080,8 @@
     "Unauthorized"
    ],
    "rule_comments": [
-    "significa que admin, manager e operator passam; apenas viewer é negado."
+    "significa que admin, manager e operator passam; apenas viewer é negado.",
+    "apenas em `suppliers` (sede) e `supplier_branches` (filial/CD)."
    ],
    "pagination": [
     "3"
@@ -80785,10 +80629,21 @@
   }
  },
  "git": {
-  "sha": "29a49eda1369c00a3a46ec0ef1bb8399b793ccf0",
+  "sha": "56e3472897dc8c4032265788f42e869a6dd1129f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "56e3472",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: busca de endereco externa usa o schema real do banco de produtos (#380)",
+    "files": [
+     "src/lib/bitrix-config.test.ts",
+     "src/lib/bitrix-config.ts",
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
    {
     "sha": "29a49ed",
     "date": "2026-11-25",
@@ -81128,15 +80983,6 @@
      "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/check-driver-alerts/index.ts"
     ]
-   },
-   {
-    "sha": "520a9a2",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)",
-    "files": [
-     "docs/agentes/mensageria.md"
-    ]
    }
   ],
   "hot_files": [
@@ -81189,10 +81035,6 @@
     2
    ],
    [
-    "docs/agentes/mensageria.md",
-    2
-   ],
-   [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     2
    ],
@@ -81205,19 +81047,23 @@
     2
    ],
    [
+    "src/lib/bitrix-config.test.ts",
+    1
+   ],
+   [
+    "src/lib/bitrix-config.ts",
+    1
+   ],
+   [
+    "supabase/functions/external-companies/index.ts",
+    1
+   ],
+   [
     "supabase/migrations/20261126160000_revoke_anon_metric_views.sql",
     1
    ],
    [
     "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
-    1
-   ],
-   [
-    "src/components/lalamove/UapiSnapshotBadge.tsx",
-    1
-   ],
-   [
-    "src/lib/uapiSnapshot.test.ts",
     1
    ]
   ]

@@ -169,7 +169,7 @@
     "setBitrixConfigured"
    ],
    "export_default": null,
-   "linhas": 26,
+   "linhas": 28,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -182,7 +182,7 @@
    "usado_por_modulos": [
     "hooks"
    ],
-   "coberto_por_testes": 0,
+   "coberto_por_testes": 1,
    "orfao": false
   },
   {

@@ -2968,9 +2968,7 @@
     "so_no_types": []
    },
    "usada_no_front": 1,
-   "usada_em_edges": [
-    "external-companies"
-   ],
+   "usada_em_edges": [],
    "triggers": [
     "trg_contacts_updated_at"
    ],
@@ -12316,9 +12314,7 @@
   }
  },
  "tabelas_usadas_no_codigo_sem_definicao": [
-  "carriers",
-  "companies",
-  "customers",
+  "supplier_branches",
   "suppliers"
  ],
  "rpcs_usadas_no_codigo": [

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `29a49eda13` · branch `main` · 2026-11-25 12:35 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `56e3472897` · branch `main` · 2026-11-25 13:48 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2088,7 +2088,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1572 testes em 139 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1576 testes em 140 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2216,6 +2216,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |
 | `src/hooks/__tests__/useMapProviderPolicy.test.ts` | 4 | allowedProvidersFor · libera tudo quando a política é off (fail-open) · restrito a mapbox mantém raster gratuito e tira Google · restrito a google mantém raster gratuito e tira Mapbox |
 | `src/hooks/__tests__/useRateLimiting.test.ts` | 4 | useRateLimiting · deve calcular estatísticas básicas corretamente · deve simular stress com 780 cenários agregados sem quebrar · deve executar blockIP com sucesso |
+| `src/lib/bitrix-config.test.ts` | 4 | isBitrixConfigured · libera o cadastro externo por padrão (nunca houve tela para gravar a flag) · respeita o desligamento explícito · volta a liberar quando religado |
 | `src/pages/NotificationHistoryPage.geo.test.tsx` | 4 | NotificationHistoryPage — avisos geo pendentes (etapa 73) · mostra evento deferred com rótulo em PT-BR, distância e ETA · mostra no_recipient e failed como casos que exigem ação · não renderiza o card quando não há evento pendente |
 | `src/pages/alert-configurations/AlertConfigCard.test.tsx` | 4 | AlertConfigCard — eventos geo (etapa 72) · mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru · renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto · preserva variável desconhecida no preview em vez de apagar |
 | `supabase/functions/job-worker/geo-freshness.test.ts` | 4 | posicao dentro da janela nao bloqueia rota/ETA · posicao velha e barrada com o motivo e a idade · tracking orfao (GPS de meses atras) nunca recalcula · sem data de atualizacao tambem bloqueia |
@@ -2508,6 +2509,7 @@ _nenhum item encontrado_
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
 | significa que admin, manager e operator passam; apenas viewer é negado. | `supabase/functions/external-companies/index.ts` |
+| apenas em `suppliers` (sede) e `supplier_branches` (filial/CD). | `supabase/functions/external-companies/index.ts` |
 | Apenas administradores podem acessar o banco externo. | `supabase/functions/external-db-bridge/index.ts` |
 | Qual id o passo 3 do runbook deve revogar. `pickTokenToRevoke` devolve null | `supabase/functions/geo-admin/index.ts` |
 | apenas quando ele está presente. | `supabase/functions/geo-admin/rotation.ts` |

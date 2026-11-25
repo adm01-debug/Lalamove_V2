@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 189,
+ "total": 190,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 47,
   "guard (node --test)": 34,
-  "unit (vitest)": 90
+  "unit (vitest)": 91
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 16
+   "arquivos": 17
   },
   {
    "padrao": "e2e/",
@@ -1119,6 +1119,15 @@
    "casos": 8
   },
   {
+   "arquivo": "src/lib/bitrix-config.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 23,
+   "testa": [
+    "src/lib/bitrix-config.ts"
+   ],
+   "casos": 3
+  },
+  {
    "arquivo": "src/lib/edge-error.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 91,
@@ -1828,6 +1837,7 @@
   "src/hooks/useWebhookEvents.ts": 1,
   "src/i18n/index.ts": 1,
   "src/integrations/supabase/client.ts": 14,
+  "src/lib/bitrix-config.ts": 1,
   "src/lib/edge-error.ts": 1,
   "src/lib/geo-gateway.ts": 6,
   "src/lib/html.ts": 1,
