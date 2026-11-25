@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3d6697ce0d55e1035b24a580de019f52019b09f2",
+  "sha": "962d1b5b640d8287318875f96eafa3bf6bf8e946",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 15:42 UTC",
+  "generated_at": "2026-11-25 17:57 UTC",
   "files_total": 1136,
   "code_files": 953,
-  "code_lines": 165371
+  "code_lines": 165417
  },
  "version": "1.3.2",
- "facts_hash": "b5286866475c996f",
+ "facts_hash": "bcbc40f2fd895499",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22467,7 +22467,7 @@
   {
    "module": "src/hooks",
    "files": 115,
-   "lines": 19937,
+   "lines": 19983,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -40194,6 +40194,10 @@
    {
     "file": "src/hooks/__tests__/useDashboardStats.test.ts",
     "name": "uma query rejeitada não derruba os outros KPIs"
+   },
+   {
+    "file": "src/hooks/__tests__/useDashboardStats.test.ts",
+    "name": "limita "
    },
    {
     "file": "src/hooks/__tests__/useDeliveryMetrics.test.ts",
@@ -66262,7 +66266,7 @@
   },
   "src/hooks/useDashboardStats.ts": {
    "path": "src/hooks/useDashboardStats.ts",
-   "lines": 153,
+   "lines": 156,
    "exports": [
     "type DashboardStatsResult",
     "function useDashboardStats"
@@ -69948,10 +69952,11 @@
   },
   "src/hooks/__tests__/useDashboardStats.test.ts": {
    "path": "src/hooks/__tests__/useDashboardStats.test.ts",
-   "lines": 156,
+   "lines": 199,
    "is_test": true,
    "rule_comments": [
-    "With no deliveries the dashboard must report real zeros, not fabricated defaults."
+    "With no deliveries the dashboard must report real zeros, not fabricated defaults.",
+    "O limite de \"hoje\" é a meia-noite de São Paulo (UTC-3, sem horário de verão"
    ],
    "temporal": [
     "const estimated = new Date(now.getTime() + 10 * 60 * 1000);",
@@ -69962,7 +69967,8 @@
     "deve retornar stats padrão quando supabase retorna zeros",
     "deve calcular onTimeRate corretamente com dados de entrega",
     "deve consultar 7 queries do supabase",
-    "uma query rejeitada não derruba os outros KPIs"
+    "uma query rejeitada não derruba os outros KPIs",
+    "limita "
    ]
   },
   "src/hooks/__tests__/useDeliveryMetrics.test.ts": {
@@ -80652,10 +80658,20 @@
   }
  },
  "git": {
-  "sha": "3d6697ce0d55e1035b24a580de019f52019b09f2",
+  "sha": "962d1b5b640d8287318875f96eafa3bf6bf8e946",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "962d1b5",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: limita \"hoje\" do dashboard ao fuso de São Paulo (#388)",
+    "files": [
+     "src/hooks/__tests__/useDashboardStats.test.ts",
+     "src/hooks/useDashboardStats.ts"
+    ]
+   },
    {
     "sha": "3d6697c",
     "date": "2026-11-25",
@@ -80977,16 +80993,6 @@
     "files": [
      "supabase/migrations/20261126130000_geo_jobs_freshness.sql"
     ]
-   },
-   {
-    "sha": "d4f8bc7",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: rota/ETA so recalcula com posicao viva do motorista (#357)",
-    "files": [
-     "supabase/functions/job-worker/geo-freshness.test.ts",
-     "supabase/functions/job-worker/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -81031,6 +81037,14 @@
     2
    ],
    [
+    "src/hooks/__tests__/useDashboardStats.test.ts",
+    1
+   ],
+   [
+    "src/hooks/useDashboardStats.ts",
+    1
+   ],
+   [
     "src/components/orders/AddressAutocomplete.tsx",
     1
    ],
@@ -81060,14 +81074,6 @@
    ],
    [
     "src/lib/bitrix-config.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20261126160000_revoke_anon_metric_views.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
     1
    ]
   ]

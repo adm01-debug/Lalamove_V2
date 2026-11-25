@@ -4,11 +4,11 @@
  "presente": true,
  "como_gerar": "npm run graph:setup (uma vez) e `graphify update .` depois de mexer no código; saída em graphify-out/, não versionada. Consulta: graphify query/path/explain.",
  "relatorio": null,
- "commit_do_grafo": "3d6697ce0d55e1035b24a580de019f52019b09f2",
+ "commit_do_grafo": "962d1b5b640d8287318875f96eafa3bf6bf8e946",
  "grafo_atual": true,
  "nos": 10009,
- "arestas": 20777,
- "comunidades_total": 702,
+ "arestas": 20778,
+ "comunidades_total": 704,
  "relacoes": {
   "calls": 2671,
   "case_of": 41,
@@ -18,7 +18,7 @@
   "dynamic_import": 122,
   "implements": 2,
   "imports": 3987,
-  "imports_from": 3531,
+  "imports_from": 3532,
   "indexes": 241,
   "indirect_call": 137,
   "inherits": 16,
@@ -30,7 +30,7 @@
   "triggers": 33
  },
  "origem": {
-  "EXTRACTED": 19517,
+  "EXTRACTED": 19518,
   "INFERRED": 1260
  },
  "comunidades": [
@@ -54,7 +54,7 @@
   {
    "id": 1,
    "nome": "client.ts",
-   "nos": 156,
+   "nos": 157,
    "callables": 81,
    "arquivos": 47,
    "exemplos_arquivos": [
@@ -155,23 +155,6 @@
   },
   {
    "id": 7,
-   "nome": "ref_node_path",
-   "nos": 92,
-   "callables": 34,
-   "arquivos": 22,
-   "exemplos_arquivos": [
-    "scripts/ai-context/gerar.unit.mjs",
-    "scripts/ai-context/pages/AuthPage",
-    "scripts/ai-context/pages/DashboardPage",
-    "scripts/ai-context/pages/NotFound",
-    "scripts/ai-context/pages/OrdersPage",
-    "scripts/ai-context/pages/RolesPage",
-    "scripts/ai-context/pages/WebhooksPage",
-    "scripts/ci/a11y-button-name-ratchet.unit.mjs"
-   ]
-  },
-  {
-   "id": 8,
    "nome": "App.tsx",
    "nos": 91,
    "callables": 37,
@@ -188,7 +171,7 @@
    ]
   },
   {
-   "id": 9,
+   "id": 8,
    "nome": "react",
    "nos": 89,
    "callables": 43,
@@ -202,6 +185,23 @@
     "src/components/notifications/SoundSettingsPanel.tsx",
     "src/components/ui/data-refresh-indicator.tsx",
     "src/components/ui/empty-state.tsx"
+   ]
+  },
+  {
+   "id": 9,
+   "nome": "ref_node_path",
+   "nos": 85,
+   "callables": 32,
+   "arquivos": 17,
+   "exemplos_arquivos": [
+    "scripts/ci/a11y-button-name-ratchet.unit.mjs",
+    "scripts/ci/implicit-any-ratchet.unit.mjs",
+    "scripts/db-audit/catalog-from-types.mjs",
+    "scripts/db-audit/catalog-from-types.test.mjs",
+    "scripts/db-audit/check-grants-fresh.test.mjs",
+    "scripts/db-audit/check-manifest-fresh.test.mjs",
+    "scripts/db-audit/check-realtime-subscriptions.test.mjs",
+    "scripts/db-audit/check-screen-permission-db-guards.test.mjs"
    ]
   },
   {
@@ -273,23 +273,6 @@
   },
   {
    "id": 15,
-   "nome": "register-migration.mjs",
-   "nos": 67,
-   "callables": 31,
-   "arquivos": 10,
-   "exemplos_arquivos": [
-    "scripts/db-audit/check-manifest-fresh.mjs",
-    "scripts/db-audit/check-manifest-fresh.test.mjs",
-    "scripts/db-audit/database-identity.mjs",
-    "scripts/db-audit/database-identity.test.mjs",
-    "scripts/db-audit/diff.mjs",
-    "scripts/db-audit/manifest-lib.mjs",
-    "scripts/db-audit/psql-environment.mjs",
-    "scripts/db-audit/psql-safe.mjs"
-   ]
-  },
-  {
-   "id": 16,
    "nome": "seed-database.ts",
    "nos": 67,
    "callables": 34,
@@ -306,7 +289,7 @@
    ]
   },
   {
-   "id": 17,
+   "id": 16,
    "nome": "lalamove-api/index.ts",
    "nos": 65,
    "callables": 31,
@@ -322,7 +305,7 @@
    ]
   },
   {
-   "id": 18,
+   "id": 17,
    "nome": "useRealtimeSubscriptions.ts",
    "nos": 62,
    "callables": 45,
@@ -339,7 +322,7 @@
    ]
   },
   {
-   "id": 19,
+   "id": 18,
    "nome": "NotificationPreferences.tsx",
    "nos": 62,
    "callables": 31,
@@ -356,7 +339,7 @@
    ]
   },
   {
-   "id": 20,
+   "id": 19,
    "nome": "send-notification/index.ts",
    "nos": 61,
    "callables": 29,
@@ -370,6 +353,23 @@
     "supabase/functions/_shared/channels/sms.ts",
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/send-notification/message-id.test.ts"
+   ]
+  },
+  {
+   "id": 20,
+   "nome": "register-migration.mjs",
+   "nos": 61,
+   "callables": 30,
+   "arquivos": 9,
+   "exemplos_arquivos": [
+    "scripts/db-audit/check-manifest-fresh.mjs",
+    "scripts/db-audit/database-identity.mjs",
+    "scripts/db-audit/database-identity.test.mjs",
+    "scripts/db-audit/diff.mjs",
+    "scripts/db-audit/manifest-lib.mjs",
+    "scripts/db-audit/psql-environment.mjs",
+    "scripts/db-audit/psql-safe.mjs",
+    "scripts/db-audit/register-migration.mjs"
    ]
   },
   {
@@ -988,16 +988,6 @@
   },
   {
    "id": 65,
-   "nome": "Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)",
-   "nos": 34,
-   "callables": 0,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
-   ]
-  },
-  {
-   "id": 66,
    "nome": "lalamove-uapi/index.ts",
    "nos": 34,
    "callables": 30,
@@ -1007,7 +997,7 @@
    ]
   },
   {
-   "id": 67,
+   "id": 66,
    "nome": "Promo Supply V2 = só compras · catálogo vive no Promo Gifts V4",
    "nos": 33,
    "callables": 0,
@@ -1017,7 +1007,7 @@
    ]
   },
   {
-   "id": 68,
+   "id": 67,
    "nome": "ProviderResolver",
    "nos": 32,
    "callables": 25,
@@ -1033,7 +1023,7 @@
    ]
   },
   {
-   "id": 69,
+   "id": 68,
    "nome": "Plano Mensageria aos Motoristas — Zapp Web V2 (WhatsApp) + SMS × Lalamove V2 — 150 etapas (22/11/2026)",
    "nos": 32,
    "callables": 0,
@@ -1043,7 +1033,7 @@
    ]
   },
   {
-   "id": 70,
+   "id": 69,
    "nome": "auto-notices.ts",
    "nos": 32,
    "callables": 20,
@@ -1055,7 +1045,7 @@
    ]
   },
   {
-   "id": 71,
+   "id": 70,
    "nome": "Onda 2 — Fluxos principais quebrados",
    "nos": 32,
    "callables": 8,
@@ -1070,7 +1060,7 @@
    ]
   },
   {
-   "id": 72,
+   "id": 71,
    "nome": "helpers/auth.ts",
    "nos": 32,
    "callables": 15,
@@ -1087,7 +1077,7 @@
    ]
   },
   {
-   "id": 73,
+   "id": 72,
    "nome": "useCommandPaletteSearch.ts",
    "nos": 31,
    "callables": 22,
@@ -1104,7 +1094,7 @@
    ]
   },
   {
-   "id": 74,
+   "id": 73,
    "nome": "router.ts",
    "nos": 31,
    "callables": 13,
@@ -1117,7 +1107,7 @@
    ]
   },
   {
-   "id": 75,
+   "id": 74,
    "nome": "useErrorLogs.ts",
    "nos": 30,
    "callables": 16,
@@ -1134,7 +1124,7 @@
    ]
   },
   {
-   "id": 76,
+   "id": 75,
    "nome": "metering.ts",
    "nos": 30,
    "callables": 7,
@@ -1147,7 +1137,7 @@
    ]
   },
   {
-   "id": 77,
+   "id": 76,
    "nome": "zapp.ts",
    "nos": 30,
    "callables": 22,
@@ -1161,6 +1151,21 @@
     "supabase/functions/_shared/channels/zapp.ts",
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/test-notification/index.ts"
+   ]
+  },
+  {
+   "id": 77,
+   "nome": "ref_node_url",
+   "nos": 30,
+   "callables": 13,
+   "arquivos": 6,
+   "exemplos_arquivos": [
+    "scripts/ci/check-pr-workflow-secrets.mjs",
+    "scripts/ci/check-pr-workflow-secrets.unit.mjs",
+    "scripts/ci/commit-msg-lint.mjs",
+    "scripts/ci/commit-msg-lint.unit.mjs",
+    "scripts/ci/vercel-env-baseline.mjs",
+    "scripts/ci/vercel-env-baseline.unit.mjs"
    ]
   },
   {
@@ -2026,7 +2031,7 @@
   "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md": "code",
   "components.json": "components.json",
   "docs/ACHADO_GATEWAY_PROXY_2026-11.md": "Achado: o `lalamove-gateway` aponta para um proxy que não existe",
-  "docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md": "useJobQueue.ts",
+  "docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md": "lalamove-api/index.ts",
   "docs/API_CONTRACTS.md": "📑 Contratos de API — Webhooks & Edge Functions",
   "docs/API_REFERENCE.md": "📘 API Reference - Lalamove Guardian",
   "docs/ARCHITECTURE.md": "🏗️ Arquitetura - Lalamove Guardian",
@@ -2142,15 +2147,15 @@
   "scripts/ai-context/README.md": "ProtectedRoute",
   "scripts/ai-context/cenarios.mjs": "cenarios.mjs",
   "scripts/ai-context/gerar.mjs": "gerar.mjs",
-  "scripts/ai-context/gerar.unit.mjs": "ref_node_path",
+  "scripts/ai-context/gerar.unit.mjs": "gerar.unit.mjs",
   "scripts/ai-context/lib/y": "cenarios.mjs",
-  "scripts/ai-context/pages/AuthPage": "ref_node_path",
+  "scripts/ai-context/pages/AuthPage": "gerar.unit.mjs",
   "scripts/ai-context/pages/C": "cenarios.mjs",
-  "scripts/ai-context/pages/DashboardPage": "ref_node_path",
-  "scripts/ai-context/pages/NotFound": "ref_node_path",
-  "scripts/ai-context/pages/OrdersPage": "ref_node_path",
-  "scripts/ai-context/pages/RolesPage": "ref_node_path",
-  "scripts/ai-context/pages/WebhooksPage": "ref_node_path",
+  "scripts/ai-context/pages/DashboardPage": "gerar.unit.mjs",
+  "scripts/ai-context/pages/NotFound": "gerar.unit.mjs",
+  "scripts/ai-context/pages/OrdersPage": "gerar.unit.mjs",
+  "scripts/ai-context/pages/RolesPage": "gerar.unit.mjs",
+  "scripts/ai-context/pages/WebhooksPage": "gerar.unit.mjs",
   "scripts/apply-dashboard-fixes.ts": "pg",
   "scripts/apply-final-sql.ts": "apply-final-sql.ts",
   "scripts/apply-permissions-via-api.ts": "medir-tipografia.cjs",
@@ -2180,8 +2185,8 @@
   "scripts/ci/check-edge-error-exposure.unit.mjs": "check-edge-error-exposure.mjs",
   "scripts/ci/check-i18n-parity.mjs": "check-i18n-parity.unit.mjs",
   "scripts/ci/check-i18n-parity.unit.mjs": "check-i18n-parity.unit.mjs",
-  "scripts/ci/check-pr-workflow-secrets.mjs": "check-pr-workflow-secrets.mjs",
-  "scripts/ci/check-pr-workflow-secrets.unit.mjs": "check-pr-workflow-secrets.mjs",
+  "scripts/ci/check-pr-workflow-secrets.mjs": "ref_node_url",
+  "scripts/ci/check-pr-workflow-secrets.unit.mjs": "ref_node_url",
   "scripts/ci/check-quarantine.mjs": "check-quarantine.unit.mjs",
   "scripts/ci/check-quarantine.unit.mjs": "item",
   "scripts/ci/check-test-inventory.mjs": "check-test-inventory.mjs",
@@ -2194,8 +2199,8 @@
   "scripts/ci/commit-msg-lint.unit.mjs": "ref_node_url",
   "scripts/ci/fila-merge.mjs": "ref_node_child_process",
   "scripts/ci/fila-merge.unit.mjs": "ref_node_child_process",
-  "scripts/ci/gerar-matriz-edge-tabela.mjs": "ref_node_url",
-  "scripts/ci/gerar-matriz-edge-tabela.unit.mjs": "ref_node_url",
+  "scripts/ci/gerar-matriz-edge-tabela.mjs": "gerar-matriz-edge-tabela.unit.mjs",
+  "scripts/ci/gerar-matriz-edge-tabela.unit.mjs": "gerar-matriz-edge-tabela.unit.mjs",
   "scripts/ci/github-settings-guard.mjs": "github-settings-guard.mjs",
   "scripts/ci/github-settings-guard.unit.mjs": "github-settings-guard.mjs",
   "scripts/ci/implicit-any-ratchet.mjs": "implicit-any-ratchet.mjs",
@@ -2225,7 +2230,7 @@
   "scripts/db-audit/check-grants-fresh.mjs": "check-screen-permission-db-guards.mjs",
   "scripts/db-audit/check-grants-fresh.test.mjs": "ref_node_path",
   "scripts/db-audit/check-manifest-fresh.mjs": "register-migration.mjs",
-  "scripts/db-audit/check-manifest-fresh.test.mjs": "register-migration.mjs",
+  "scripts/db-audit/check-manifest-fresh.test.mjs": "ref_node_path",
   "scripts/db-audit/check-migration-drift.mjs": "check-migration-drift.mjs",
   "scripts/db-audit/check-migration-drift.test.mjs": "check-migration-drift.test.mjs",
   "scripts/db-audit/check-realtime-subscriptions.mjs": "check-realtime-subscriptions.mjs",

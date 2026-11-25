@@ -767,12 +767,12 @@
   {
    "arquivo": "src/hooks/__tests__/useDashboardStats.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 156,
+   "linhas": 199,
    "testa": [
     "src/hooks/useDashboardStats.ts",
     "src/integrations/supabase/client.ts"
    ],
-   "casos": 4
+   "casos": 5
   },
   {
    "arquivo": "src/hooks/__tests__/useDeliveryMetrics.test.ts",
