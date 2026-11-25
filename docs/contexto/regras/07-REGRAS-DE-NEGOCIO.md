@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b3e820b11f` · branch `main` · 2026-11-25 15:38 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3d6697ce0d` · branch `main` · 2026-11-25 15:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -877,7 +877,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | GroupBy | none \| severity \| type \| time | `src/hooks/useAlertGrouping.ts` |
 | SortBy | newest \| oldest \| severity | `src/hooks/useAlertGrouping.ts` |
 | ViewMode | list \| compact | `src/hooks/useAlertGrouping.ts` |
-| ExternalTable | companies \| customers \| suppliers \| carriers \| contacts | `src/hooks/useExternalData.ts` |
+| ExternalTable | companies \| customers \| suppliers \| carriers \| contacts \| supplier_branches | `src/hooks/useExternalData.ts` |
 | FusePreset | strict \| balanced \| fuzzy | `src/hooks/useFuseSearch.ts` |
 | GeoProviderName | mapbox \| google | `src/hooks/useGeoAdmin.ts` |
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `src/hooks/useGeoAdmin.ts` |
@@ -1039,7 +1039,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```
 - **externalCompaniesTable** (`supabase/functions/_shared/schemas.ts`, z.enum, encadeia default):
   ```ts
-  ["companies", "customers", "suppliers", "carriers", "contacts"]
+  ["companies", "customers", "suppliers", "carriers", "contacts", "supplier_branches"]
   ```
 - **externalCompaniesV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
   ```ts
@@ -2089,12 +2089,12 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1576 testes em 140 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1578 testes em 140 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
 | `scripts/db-audit/check-migration-drift.test.mjs` | 76 | aceita migration com nome e SQL equivalentes no ledger · aceita registro legado sem name/statements, sem inventar evidencia · fixa arquivo legado por hash sem chamar seus bytes de conteudo historico · name-and-file-pinned falha para arquivo/nome alterado ou SQL recuperado no ledger … |
-| `supabase/functions/_shared/contract.test.ts` | 58 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
+| `supabase/functions/_shared/contract.test.ts` | 60 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
 | `src/components/map/__tests__/markerFactories.test.ts` | 24 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |

@@ -1033,7 +1033,7 @@
     "AddressAutocomplete"
    ],
    "export_default": null,
-   "linhas": 411,
+   "linhas": 413,
    "dominio": "components/orders",
    "hooks_locais": [
     "useAddressSearch",
@@ -2705,7 +2705,7 @@
     "ExternalDataPage"
    ],
    "export_default": "ExternalDataPage",
-   "linhas": 245,
+   "linhas": 247,
    "dominio": "pages",
    "hooks_locais": [
     "useDebouncedValue",

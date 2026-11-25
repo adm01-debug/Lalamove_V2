@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b3e820b11f5d9612e87cc6a5cde215c1023b7996",
+  "sha": "3d6697ce0d55e1035b24a580de019f52019b09f2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 15:38 UTC",
+  "generated_at": "2026-11-25 15:42 UTC",
   "files_total": 1136,
   "code_files": 953,
-  "code_lines": 165331
+  "code_lines": 165371
  },
  "version": "1.3.2",
- "facts_hash": "fbd4dd083b22bb9f",
+ "facts_hash": "b5286866475c996f",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22289,7 +22289,7 @@
   {
    "module": "src/components",
    "files": 167,
-   "lines": 29925,
+   "lines": 29927,
    "tables": [
     "active_tracking",
     "lalamove_orders",
@@ -22467,7 +22467,7 @@
   {
    "module": "src/hooks",
    "files": 115,
-   "lines": 19930,
+   "lines": 19937,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22846,7 +22846,7 @@
   {
    "module": "src/pages",
    "files": 93,
-   "lines": 21742,
+   "lines": 21744,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -23117,7 +23117,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29785,
+   "lines": 29814,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -25839,7 +25839,7 @@
     "file": "supabase/functions/_shared/schemas.ts",
     "name": "externalCompaniesTable",
     "kind": "enum",
-    "body": "[\"companies\", \"customers\", \"suppliers\", \"carriers\", \"contacts\"]",
+    "body": "[\"companies\", \"customers\", \"suppliers\", \"carriers\", \"contacts\", \"supplier_branches\"]",
     "refines": [],
     "chain": [
      "default"
@@ -26075,7 +26075,7 @@
    {
     "file": "src/hooks/useExternalData.ts",
     "name": "ExternalTable",
-    "values": "companies | customers | suppliers | carriers | contacts"
+    "values": "companies | customers | suppliers | carriers | contacts | supplier_branches"
    },
    {
     "file": "src/hooks/useFuseSearch.ts",
@@ -42318,6 +42318,14 @@
    {
     "file": "supabase/functions/_shared/contract.test.ts",
     "name": "[lalamove-uapi] set-token exige access_token e refresh_token"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[external-companies] supplier_branches é uma tabela válida"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[external-companies] tabela fora do contrato continua 422"
    },
    {
     "file": "supabase/functions/_shared/geo-precision.test.ts",
@@ -63513,7 +63521,7 @@
   },
   "src/components/orders/AddressAutocomplete.tsx": {
    "path": "src/components/orders/AddressAutocomplete.tsx",
-   "lines": 411,
+   "lines": 413,
    "exports": [
     "function AddressAutocomplete"
    ],
@@ -66795,7 +66803,7 @@
   },
   "src/hooks/useExternalData.ts": {
    "path": "src/hooks/useExternalData.ts",
-   "lines": 113,
+   "lines": 120,
    "exports": [
     "type ExternalTable",
     "interface ExternalRecord",
@@ -66811,7 +66819,7 @@
    "enums": [
     {
      "name": "ExternalTable",
-     "values": "companies | customers | suppliers | carriers | contacts"
+     "values": "companies | customers | suppliers | carriers | contacts | supplier_branches"
     }
    ],
    "hooks": [
@@ -71772,7 +71780,7 @@
   },
   "src/pages/ExternalDataPage.tsx": {
    "path": "src/pages/ExternalDataPage.tsx",
-   "lines": 245,
+   "lines": 247,
    "exports": [
     "function ExternalDataPage"
    ],
@@ -73817,7 +73825,7 @@
   },
   "supabase/functions/_shared/contract.test.ts": {
    "path": "supabase/functions/_shared/contract.test.ts",
-   "lines": 892,
+   "lines": 916,
    "is_test": true,
    "errors": [
     ": {\n    payload: { ...VALID_PAYLOADS[",
@@ -73890,7 +73898,9 @@
     "[lalamove-uapi] ação inexistente retorna 422 nomeando action",
     "[lalamove-uapi] favorite-driver/block-driver exigem driver_action",
     "[lalamove-uapi] ação ",
-    "[lalamove-uapi] set-token exige access_token e refresh_token"
+    "[lalamove-uapi] set-token exige access_token e refresh_token",
+    "[external-companies] supplier_branches é uma tabela válida",
+    "[external-companies] tabela fora do contrato continua 422"
    ]
   },
   "supabase/functions/_shared/contract.ts": {
@@ -74203,7 +74213,7 @@
     {
      "name": "externalCompaniesTable",
      "kind": "enum",
-     "body": "[\"companies\", \"customers\", \"suppliers\", \"carriers\", \"contacts\"]",
+     "body": "[\"companies\", \"customers\", \"suppliers\", \"carriers\", \"contacts\", \"supplier_branches\"]",
      "refines": [],
      "chain": [
       "default"
@@ -76052,7 +76062,7 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 422,
+   "lines": 427,
    "tables": [
     {
      "table": "suppliers",
@@ -80642,10 +80652,33 @@
   }
  },
  "git": {
-  "sha": "b3e820b11f5d9612e87cc6a5cde215c1023b7996",
+  "sha": "3d6697ce0d55e1035b24a580de019f52019b09f2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "3d6697c",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "feat: painel lista as filiais dos fornecedores (#386)",
+    "files": [
+     "src/components/orders/AddressAutocomplete.tsx",
+     "src/hooks/useExternalData.ts",
+     "src/pages/ExternalDataPage.tsx",
+     "supabase/functions/_shared/contract.test.ts",
+     "supabase/functions/_shared/schemas.ts",
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
+   {
+    "sha": "9a49234",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "chore: CI executa os testes do lalamove-token-refresh (#376)",
+    "files": [
+     ".github/workflows/ci.yml"
+    ]
+   },
    {
     "sha": "b3e820b",
     "date": "2026-11-25",
@@ -80954,37 +80987,6 @@
      "supabase/functions/job-worker/geo-freshness.test.ts",
      "supabase/functions/job-worker/index.ts"
     ]
-   },
-   {
-    "sha": "1e34334",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)",
-    "files": [
-     "src/components/ui/data-error-banner.tsx",
-     "src/hooks/usePermissions.ts",
-     "src/hooks/useUserDevices.ts",
-     "src/pages/ApprovalsPage.tsx",
-     "src/pages/DashboardRedesigned.tsx",
-     "src/pages/ExternalDataPage.tsx",
-     "src/pages/HeatmapPage.tsx",
-     "src/pages/LalamoveSettingsPage.tsx",
-     "src/pages/NotificationHistoryPage.tsx",
-     "src/pages/PermissionsPage.tsx",
-     "src/pages/ProfilePage.tsx",
-     "src/pages/error-state.test.tsx"
-    ]
-   },
-   {
-    "sha": "49c9a83",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)",
-    "files": [
-     "supabase/functions/_shared/guardian-freshness.test.ts",
-     "supabase/functions/_shared/guardian-freshness.ts",
-     "supabase/functions/check-driver-alerts/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80994,7 +80996,7 @@
    ],
    [
     "supabase/functions/external-companies/index.ts",
-    5
+    6
    ],
    [
     "supabase/functions/lalamove-token-refresh/index.ts",
@@ -81029,12 +81031,28 @@
     2
    ],
    [
-    "src/pages/error-state.test.tsx",
-    2
+    "src/components/orders/AddressAutocomplete.tsx",
+    1
    ],
    [
-    "supabase/functions/check-driver-alerts/index.ts",
-    2
+    "src/hooks/useExternalData.ts",
+    1
+   ],
+   [
+    "src/pages/ExternalDataPage.tsx",
+    1
+   ],
+   [
+    "supabase/functions/_shared/contract.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/_shared/schemas.ts",
+    1
+   ],
+   [
+    ".github/workflows/ci.yml",
+    1
    ],
    [
     "src/lib/bitrix-config.test.ts",
@@ -81050,22 +81068,6 @@
    ],
    [
     "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
-    1
-   ],
-   [
-    "src/components/lalamove/UapiSnapshotBadge.tsx",
-    1
-   ],
-   [
-    "src/lib/uapiSnapshot.test.ts",
-    1
-   ],
-   [
-    "src/lib/uapiSnapshot.ts",
-    1
-   ],
-   [
-    "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
     1
    ]
   ]

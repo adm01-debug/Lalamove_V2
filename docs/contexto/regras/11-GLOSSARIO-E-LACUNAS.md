@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b3e820b11f` · branch `main` · 2026-11-25 15:38 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3d6697ce0d` · branch `main` · 2026-11-25 15:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -126,7 +126,7 @@
 | `GroupBy` (TS) | none \| severity \| type \| time |  | `src/hooks/useAlertGrouping.ts` |
 | `SortBy` (TS) | newest \| oldest \| severity |  | `src/hooks/useAlertGrouping.ts` |
 | `ViewMode` (TS) | list \| compact |  | `src/hooks/useAlertGrouping.ts` |
-| `ExternalTable` (TS) | companies \| customers \| suppliers \| carriers \| contacts |  | `src/hooks/useExternalData.ts` |
+| `ExternalTable` (TS) | companies \| customers \| suppliers \| carriers \| contacts \| supplier_branches |  | `src/hooks/useExternalData.ts` |
 | `FusePreset` (TS) | strict \| balanced \| fuzzy |  | `src/hooks/useFuseSearch.ts` |
 | `GeoProviderName` (TS) | mapbox \| google |  | `src/hooks/useGeoAdmin.ts` |
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `src/hooks/useGeoAdmin.ts` |

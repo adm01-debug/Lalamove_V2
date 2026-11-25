@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b3e820b11f5d9612e87cc6a5cde215c1023b7996` (2026-11-25T12:37:47-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3d6697ce0d55e1035b24a580de019f52019b09f2` (2026-11-25T12:41:59-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1142 |
 | arquivos_codigo | 727 |
-| linhas_codigo | 143293 |
+| linhas_codigo | 143333 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -293,26 +293,26 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10009 nós · 20777 arestas · 702 comunidades · grafo do commit `b3e820b1`
+- 10009 nós · 20777 arestas · 702 comunidades · grafo do commit `3d6697ce`
 - comunidades maiores: cn (262), client.ts (156), badge.tsx (127), lucide-react (121), ref_https (120), 4. Componentes, hooks, libs e estado — **revisado** (113), RateLimitDashboardPage.tsx (106), ref_node_path (92), App.tsx (91), react (89), dependencies (81), job-worker/index.ts (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (40)
-- package.json (27)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- package-lock.json (25)
-- .github/workflows/ci.yml (20)
-- supabase/functions/job-worker/index.ts (18)
-- supabase/functions/send-notification/index.ts (16)
-- supabase/functions/_shared/schemas.ts (15)
-- supabase/functions/check-driver-alerts/index.ts (15)
-- src/App.tsx (14)
-- src/components/orders/NewOrderDialog.tsx (14)
-- src/pages/LiveMapPage.tsx (14)
-- supabase/functions/lalamove-api/index.ts (14)
-- supabase/functions/lalamove-webhook/index.ts (14)
+- package.json (22)
+- package-lock.json (20)
+- .github/workflows/ci.yml (19)
+- supabase/functions/job-worker/index.ts (16)
+- supabase/functions/_shared/schemas.ts (14)
+- supabase/functions/send-notification/index.ts (14)
 - docs/MAPBOX.md (13)
+- docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
+- supabase/functions/check-driver-alerts/index.ts (13)
+- src/App.tsx (12)
+- src/components/orders/AddressAutocomplete.tsx (12)
+- src/components/orders/NewOrderDialog.tsx (12)
+- src/pages/LiveMapPage.tsx (12)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -396,6 +396,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-25 `3d6697c` feat: painel lista as filiais dos fornecedores (#386)
+- 2026-11-25 `9a49234` chore: CI executa os testes do lalamove-token-refresh (#376)
 - 2026-11-25 `b3e820b` fix: sessao UAPI registra a ultima verificacao real do token (#385)
 - 2026-11-25 `a3a43e6` fix: painel deixa de receber a credencial da API do fornecedor (#384)
 - 2026-11-25 `c1a0a10` fix: busca de endereco acha sem acento e com termos fora de ordem (#383)
@@ -409,8 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `3ce0ba6` fix: renovacao do token UAPI pelo coletor via refresh_token (#374)
 - 2026-11-24 `1d31dac` feat: alerta quando o snapshot da UAPI para de atualizar (#373)
 - 2026-11-24 `e340ad4` chore: reconcilia versoes de migration aplicadas direto no banco (#372)
-- 2026-11-24 `b70d145` fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)
-- 2026-11-24 `484eb15` fix: coleta agendada nao falha quando o perfil esta em uso (#370)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

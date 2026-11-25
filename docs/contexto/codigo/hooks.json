@@ -1240,7 +1240,7 @@
     "useExternalRecord",
     "useExternalStats"
    ],
-   "linhas": 113,
+   "linhas": 120,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

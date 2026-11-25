@@ -353,7 +353,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/external-companies/index.ts",
    "arquivos": 1,
-   "linhas": 422,
+   "linhas": 427,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

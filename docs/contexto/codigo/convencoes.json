@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: painel lista as filiais dos fornecedores (#386)",
+   "chore: CI executa os testes do lalamove-token-refresh (#376)",
    "fix: sessao UAPI registra a ultima verificacao real do token (#385)",
    "fix: painel deixa de receber a credencial da API do fornecedor (#384)",
-   "fix: busca de endereco acha sem acento e com termos fora de ordem (#383)",
-   "fix: filial na busca de endereco mostra o fornecedor dono (#382)",
-   "fix: external-companies usa o helper de auth compartilhado (#381)"
+   "fix: busca de endereco acha sem acento e com termos fora de ordem (#383)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
