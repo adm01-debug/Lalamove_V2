@@ -8,6 +8,7 @@ import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
 import { toAccountingRows, summarizeAccountingRows } from '@/lib/uapiStatement';
 import { isUapiSessionMissing } from '@/lib/uapiErrors';
 import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { UapiSnapshotBadge } from '@/components/lalamove/UapiSnapshotBadge';
 import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import { exportToCSV, exportToExcel } from '@/utils/exportUtils';
 
@@ -16,7 +17,7 @@ export function UapiStatementPanel() {
   const [page, setPage] = useState(1);
   const { data, isLoading, isError, error, isFetching, refetch } = useUapiWalletStatement(page);
 
-  const rows = data ?? [];
+  const rows = data?.items ?? [];
   const accountingRows = useMemo(() => toAccountingRows(rows), [rows]);
   const totals = useMemo(() => summarizeAccountingRows(accountingRows), [accountingRows]);
   const fileBase = `extrato-lalamove-pagina-${page}`;
@@ -28,6 +29,7 @@ export function UapiStatementPanel() {
           <Receipt className="h-4 w-4" />
           Extrato da carteira
         </CardTitle>
+        <UapiSnapshotBadge info={data?.freshness} />
         <CardDescription>Movimentações financeiras da conta Lalamove (UAPI).</CardDescription>
       </CardHeader>
 

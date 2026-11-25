@@ -7,12 +7,14 @@ import { toast } from 'sonner';
 import {
   useUapiOrderHistory,
   flattenOrderPages,
+  lastPageFreshness,
   useDownloadReceipt,
   UapiError,
 } from '@/hooks/useLalamoveUapi';
 import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
 import { isUapiSessionMissing } from '@/lib/uapiErrors';
 import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { UapiSnapshotBadge } from '@/components/lalamove/UapiSnapshotBadge';
 import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 /** Etapa 20 + 21 — histórico com cursor real e download de comprovante. */
@@ -40,6 +42,7 @@ export function UapiOrderHistoryPanel() {
           <PackageSearch className="h-4 w-4" />
           Histórico Lalamove (cursor)
         </CardTitle>
+        <UapiSnapshotBadge info={lastPageFreshness(data?.pages)} />
         <CardDescription>
           Paginação por cursor oficial (`last_id`), sem duplicatas entre páginas.
         </CardDescription>
