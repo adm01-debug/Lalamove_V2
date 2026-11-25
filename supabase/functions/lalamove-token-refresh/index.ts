@@ -9,6 +9,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { buildUapiRefreshRequest, parseUapiRefreshResponse } from "./uapi-direct.ts";
+import { evaluateSnapshotHealth } from "./snapshot-watchdog.ts";
 
 /**
  * Etapa 24 — Auto-refresh do token UAPI com fallback.
@@ -127,29 +128,27 @@ async function checkSnapshotFreshness(admin: Admin): Promise<number | null> {
 
     if (error) throw new Error(error.message);
 
-    const updatedAt = data?.updated_at ? new Date(data.updated_at as string) : null;
-    const ageMinutes = updatedAt ? (Date.now() - updatedAt.getTime()) / 60_000 : null;
+    const updatedAt = (data?.updated_at as string | undefined) ?? null;
+    const health = evaluateSnapshotHealth(updatedAt, Date.now(), SNAPSHOT_STALE_MINUTES);
 
-    if (updatedAt && (ageMinutes as number) <= SNAPSHOT_STALE_MINUTES) {
-      return Number((ageMinutes as number).toFixed(1));
-    }
+    if (health.healthy) return health.ageMinutes;
 
     await raiseAlert(
       admin,
       'CRITICAL',
       'Snapshot UAPI desatualizado',
-      updatedAt
-        ? `A coleta da UAPI não grava nada há ${Math.round(ageMinutes as number)} min (última: ${updatedAt.toISOString()}). Carteira, extrato, cupons e frota estão congelados e passam a dar erro quando o snapshot vencer. Verifique a tarefa agendada LalamoveUapiCollector.`
+      health.reason === 'stale'
+        ? `A coleta da UAPI não grava nada há ${Math.round(health.ageMinutes as number)} min (última: ${updatedAt}). Carteira, extrato, cupons e frota estão congelados e passam a dar erro quando o snapshot vencer. Verifique a tarefa agendada LalamoveUapiCollector.`
         : 'O snapshot da UAPI está vazio: carteira, extrato, cupons e frota não têm de onde ser servidos. Verifique a tarefa agendada LalamoveUapiCollector.',
       {
-        last_updated_at: updatedAt?.toISOString() ?? null,
-        age_minutes: updatedAt ? Number((ageMinutes as number).toFixed(1)) : null,
+        last_updated_at: updatedAt,
+        age_minutes: health.ageMinutes,
         stale_after_minutes: SNAPSHOT_STALE_MINUTES,
       },
       'UAPI_SNAPSHOT_STALE',
     );
 
-    return updatedAt ? Number((ageMinutes as number).toFixed(1)) : null;
+    return health.ageMinutes;
   } catch (err) {
     // Watchdog nao pode derrubar o worker de refresh.
     console.error('watchdog do snapshot falhou:', err instanceof Error ? err.message : err);
