@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a3a43e6ba3d6b7fc8aef162647d8deba3544f1d5",
+  "commit": "b3e820b11f5d9612e87cc6a5cde215c1023b7996",
   "branch": "main",
-  "data_commit": "2026-11-25T12:16:43-03:00",
+  "data_commit": "2026-11-25T12:37:47-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "b3e820b",
+    "data": "2026-11-25",
+    "assunto": "fix: sessao UAPI registra a ultima verificacao real do token (#385)"
+   },
    {
     "sha": "a3a43e6",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "1b18f65",
     "data": "2026-11-24",
     "assunto": "fix: guardian so avalia tracking ativo (#360)"
-   },
-   {
-    "sha": "aacd178",
-    "data": "2026-11-24",
-    "assunto": "fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)"
    }
   ],
   "arquivos_mudados_7d": 529,
@@ -203,7 +203,7 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 28
+    "mudancas": 27
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -211,26 +211,46 @@
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 26
+    "mudancas": 25
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
-    "mudancas": 15
+    "mudancas": 16
    },
    {
     "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 14
+    "mudancas": 15
    },
    {
     "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "mudancas": 15
+   },
+   {
+    "arquivo": "src/App.tsx",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 14
    },
    {
@@ -242,31 +262,19 @@
     "mudancas": 13
    },
    {
-    "arquivo": "src/App.tsx",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 13
-   },
-   {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/config.toml",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/functions/external-companies/index.ts",
+    "mudancas": 12
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
     "mudancas": 12
    },
    {
@@ -274,7 +282,7 @@
     "mudancas": 11
    },
    {
-    "arquivo": "supabase/functions/external-companies/index.ts",
+    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 11
    },
    {
@@ -282,26 +290,18 @@
     "mudancas": 11
    },
    {
-    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
-    "mudancas": 11
-   },
-   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 10
-   },
-   {
     "arquivo": "src/components/layout/sidebar-config.ts",
-    "mudancas": 9
+    "mudancas": 10
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 284
+    "commits": 285
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1142,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143259,
+  "linhas_codigo": 143293,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -504,7 +504,7 @@
   },
   "scripts/uapi-collector": {
    "arquivos": 1,
-   "linhas": 540
+   "linhas": 563
   },
   "scripts/ui-audit": {
    "arquivos": 6,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29774
+   "linhas": 29785
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -629,12 +629,12 @@
    "linhas": 994
   },
   {
-   "arquivo": "scripts/ai-context/gerar.mjs",
-   "linhas": 901
+   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+   "linhas": 905
   },
   {
-   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-   "linhas": 894
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "linhas": 901
   },
   {
    "arquivo": "supabase/functions/evaluate-driver/index.ts",
@@ -657,16 +657,16 @@
    "linhas": 619
   },
   {
+   "arquivo": "scripts/uapi-collector/collect.mjs",
+   "linhas": 563
+  },
+  {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",
    "linhas": 547
   },
   {
    "arquivo": "src/hooks/useAdvancedReports.ts",
    "linhas": 543
-  },
-  {
-   "arquivo": "scripts/uapi-collector/collect.mjs",
-   "linhas": 540
   },
   {
    "arquivo": "scripts/seed-database.ts",

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "a3a43e6ba3d6b7fc8aef162647d8deba3544f1d5",
+  "sha": "b3e820b11f5d9612e87cc6a5cde215c1023b7996",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 15:17 UTC",
+  "generated_at": "2026-11-25 15:38 UTC",
   "files_total": 1136,
   "code_files": 953,
-  "code_lines": 165297
+  "code_lines": 165331
  },
  "version": "1.3.2",
- "facts_hash": "005fe3c1a1abfe67",
+ "facts_hash": "fbd4dd083b22bb9f",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22036,7 +22036,7 @@
   {
    "module": "scripts",
    "files": 147,
-   "lines": 33369,
+   "lines": 33392,
    "tables": [
     "a",
     "active_tracking",
@@ -23117,7 +23117,7 @@
   {
    "module": "supabase/functions",
    "files": 124,
-   "lines": 29774,
+   "lines": 29785,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -60848,7 +60848,7 @@
   },
   "scripts/uapi-collector/collect.mjs": {
    "path": "scripts/uapi-collector/collect.mjs",
-   "lines": 540,
+   "lines": 563,
    "env": [
     "CHROMIUM_PATH",
     "PLAYWRIGHT_ROOT",
@@ -77979,7 +77979,7 @@
   },
   "supabase/functions/lalamove-uapi/index.ts": {
    "path": "supabase/functions/lalamove-uapi/index.ts",
-   "lines": 894,
+   "lines": 905,
    "tables": [
     {
      "table": "lalamove_uapi_sessions",
@@ -80642,10 +80642,20 @@
   }
  },
  "git": {
-  "sha": "a3a43e6ba3d6b7fc8aef162647d8deba3544f1d5",
+  "sha": "b3e820b11f5d9612e87cc6a5cde215c1023b7996",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "b3e820b",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: sessao UAPI registra a ultima verificacao real do token (#385)",
+    "files": [
+     "scripts/uapi-collector/collect.mjs",
+     "supabase/functions/lalamove-uapi/index.ts"
+    ]
+   },
    {
     "sha": "a3a43e6",
     "date": "2026-11-25",
@@ -80975,22 +80985,12 @@
      "supabase/functions/_shared/guardian-freshness.ts",
      "supabase/functions/check-driver-alerts/index.ts"
     ]
-   },
-   {
-    "sha": "53d3496",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)",
-    "files": [
-     "src/pages/NotificationHistoryPage.tsx",
-     "src/pages/alert-configurations/AlertConfigCard.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "scripts/uapi-collector/collect.mjs",
-    6
+    7
    ],
    [
     "supabase/functions/external-companies/index.ts",
@@ -80999,6 +80999,10 @@
    [
     "supabase/functions/lalamove-token-refresh/index.ts",
     5
+   ],
+   [
+    "supabase/functions/lalamove-uapi/index.ts",
+    3
    ],
    [
     "src/components/lalamove/UapiCouponsPanel.tsx",
@@ -81025,19 +81029,11 @@
     2
    ],
    [
-    "supabase/functions/lalamove-uapi/index.ts",
-    2
-   ],
-   [
     "src/pages/error-state.test.tsx",
     2
    ],
    [
     "supabase/functions/check-driver-alerts/index.ts",
-    2
-   ],
-   [
-    "src/pages/NotificationHistoryPage.tsx",
     2
    ],
    [
@@ -81066,6 +81062,10 @@
    ],
    [
     "src/lib/uapiSnapshot.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
     1
    ]
   ]
