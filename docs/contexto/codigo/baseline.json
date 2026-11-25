@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "148b65702f92462ebd9a47933a2df747e31e3feb",
+  "commit": "70c35c58663f727c69d8cfb407edfc28f12127b2",
   "branch": "main",
-  "data_commit": "2026-11-25T15:43:28-03:00",
+  "data_commit": "2026-11-25T18:33:47-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "70c35c5",
+    "data": "2026-11-25",
+    "assunto": "feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)"
+   },
    {
     "sha": "148b657",
     "data": "2026-11-25",
@@ -126,26 +131,25 @@
     "sha": "c804662",
     "data": "2026-11-24",
     "assunto": "chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)"
-   },
-   {
-    "sha": "4bbb1fc",
-    "data": "2026-11-24",
-    "assunto": "fix: falha de dados mostra erro e retry em 6 páginas (#365)"
    }
   ],
   "arquivos_mudados_7d": 530,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 69
+    "mudancas": 76
+   },
+   {
+    "pasta": "src/components/map",
+    "mudancas": 74
+   },
+   {
+    "pasta": "src/components/ui",
+    "mudancas": 65
    },
    {
     "pasta": "supabase/functions/geo-gateway",
     "mudancas": 62
-   },
-   {
-    "pasta": "src/components/map",
-    "mudancas": 50
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -153,7 +157,11 @@
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 29
+    "mudancas": 37
+   },
+   {
+    "pasta": "src/hooks/__tests__",
+    "mudancas": 30
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -161,39 +169,31 @@
    },
    {
     "pasta": "supabase/functions/job-worker",
-    "mudancas": 23
+    "mudancas": 24
    },
    {
     "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 23
+    "mudancas": 24
    },
    {
     "pasta": "supabase/functions/send-notification",
-    "mudancas": 21
-   },
-   {
-    "pasta": "package.json",
-    "mudancas": 17
-   },
-   {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 16
-   },
-   {
-    "pasta": "package-lock.json",
-    "mudancas": 15
+    "mudancas": 22
    },
    {
     "pasta": "src/components/layout",
-    "mudancas": 15
+    "mudancas": 21
    },
    {
-    "pasta": "supabase/functions/lalamove-webhook",
-    "mudancas": 14
+    "pasta": "src/components/dashboard",
+    "mudancas": 18
    },
    {
-    "pasta": "docs/MAPBOX.md",
-    "mudancas": 13
+    "pasta": "src/lib/__tests__",
+    "mudancas": 18
+   },
+   {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 17
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -206,11 +206,11 @@
     "mudancas": 26
    },
    {
-    "arquivo": "package.json",
-    "mudancas": 18
+    "arquivo": ".github/workflows/ci.yml",
+    "mudancas": 17
    },
    {
-    "arquivo": ".github/workflows/ci.yml",
+    "arquivo": "package.json",
     "mudancas": 17
    },
    {
@@ -270,6 +270,10 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/functions/external-companies/index.ts",
+    "mudancas": 10
+   },
+   {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 10
    },
@@ -279,10 +283,6 @@
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "supabase/functions/external-companies/index.ts",
     "mudancas": 9
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 290
+    "commits": 291
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1143,
   "arquivos_codigo": 727,
-  "linhas_codigo": 143462,
+  "linhas_codigo": 143508,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -528,7 +528,7 @@
   },
   "src/hooks": {
    "arquivos": 115,
-   "linhas": 19983
+   "linhas": 19986
   },
   "src/i18n": {
    "arquivos": 1,
@@ -548,7 +548,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21744
+   "linhas": 21764
   },
   "src/services": {
    "arquivos": 1,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 124,
-   "linhas": 29897
+   "linhas": 29920
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -686,7 +686,7 @@
   }
  ],
  "qualidade": {
-  "any": 146,
+  "any": 150,
   "console_log": 427,
   "ts_ignore": 0,
   "eslint_disable": 1,
