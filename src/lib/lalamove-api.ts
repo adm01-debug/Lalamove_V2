@@ -119,6 +119,46 @@ export interface QuoteParams {
   special?: string;
 }
 
+/**
+ * Grava a sessão UAPI pela via sancionada: a edge `lalamove-uapi` (ação
+ * `set-token`, restrita a admin), que insere uma linha nova em
+ * `lalamove_uapi_sessions` e desativa as anteriores.
+ *
+ * O gateway bloqueia `update_uapi_token`/`update_token` de propósito
+ * (`lalamove-gateway/route.ts`: "credenciais não são gravadas por requisição"),
+ * então as telas de configuração não têm como gravar o token por lá — era por
+ * isso que o botão "Atualizar Token" falhava sempre.
+ */
+export async function setUapiSessionToken(
+  accessToken: string,
+  refreshToken: string,
+): Promise<{ ok: boolean; message?: string }> {
+  const { data, error } = await supabase.functions.invoke('lalamove-uapi', {
+    body: {
+      action: 'set-token',
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    },
+  });
+  // Respostas 4xx/5xx chegam em `error`; o corpo traz o motivo real
+  // (401 sem sessão, 403 sem papel admin, 400 token faltando).
+  if (error) {
+    let message: string | undefined;
+    const context = (error as unknown as { context?: Response }).context;
+    if (context && typeof context.json === 'function') {
+      try {
+        const payload = (await context.json()) as { error?: string };
+        message = payload?.error;
+      } catch {
+        // corpo não-JSON: cai na mensagem padrão abaixo
+      }
+    }
+    return { ok: false, message: message ?? error.message };
+  }
+  const payload = (data ?? {}) as { success?: boolean; message?: string; error?: string };
+  return { ok: payload.success === true, message: payload.message ?? payload.error };
+}
+
 export const lalamove = {
   // Status & Test
   status: () => api('status'),
@@ -153,12 +193,8 @@ export const lalamove = {
   refreshToken: () => api('refresh_token'),
 
   // Credentials
-  updateUapiToken: (token: string, xSignJs?: string, xFingerprint?: string) => {
-    const params: Record<string, string> = { token };
-    if (xSignJs) params.x_sign_js = xSignJs;
-    if (xFingerprint) params.x_fingerprint = xFingerprint;
-    return api('update_uapi_token', params);
-  },
+  updateUapiToken: (accessToken: string, refreshToken: string) =>
+    setUapiSessionToken(accessToken, refreshToken),
   updateV3Keys: (apiKey: string, apiSecret: string) =>
     api('update_v3_keys', { api_key: apiKey, api_secret: apiSecret }),
 };

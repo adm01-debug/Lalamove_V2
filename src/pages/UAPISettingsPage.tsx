@@ -14,22 +14,25 @@ export default function UAPISettingsPage() {
   const { data: wallet } = useWalletBalance();
   const updateToken = useUpdateToken();
   const [newToken, setNewToken] = useState('');
+  const [newRefreshToken, setNewRefreshToken] = useState('');
   const [showNewToken, setShowNewToken] = useState(false);
 
   const isConnected = status?.ok !== false && status?.session?.is_active;
 
   const handleUpdate = async () => {
-    if (!newToken.trim()) return toast.error('Token não pode ser vazio');
+    if (!newToken.trim()) return toast.error('Token de acesso não pode ser vazio');
+    if (!newRefreshToken.trim()) return toast.error('O refresh token é obrigatório para salvar a sessão');
     try {
-      const result = await updateToken.mutateAsync({ token: newToken });
+      const result = await updateToken.mutateAsync({ token: newToken, refreshToken: newRefreshToken });
       if (result.ok) {
-        toast.success('Token atualizado e verificado com sucesso!');
+        toast.success('Sessão UAPI salva. As anteriores foram desativadas.');
         setNewToken('');
+        setNewRefreshToken('');
       } else {
-        toast.error('Token inválido ou expirado. Tente novamente.');
+        toast.error(result.message || 'Não foi possível salvar a sessão UAPI.');
       }
     } catch {
-      toast.error('Erro ao atualizar token');
+      toast.error('Erro ao atualizar token. Só um perfil admin pode gravar a sessão.');
     }
   };
 
@@ -139,7 +142,7 @@ export default function UAPISettingsPage() {
             Atualizar Token
           </CardTitle>
           <CardDescription>
-            Quando o token expirar (~24h), cole um novo abaixo. Use a ação <code className="text-xs bg-muted px-1.5 py-0.5 rounded">set-token</code> (requer perfil admin) para definir a sessão UAPI.
+            Quando o token expirar (~24h), cole o par access token + refresh token abaixo. Grava a sessão UAPI e desativa a anterior; exige perfil admin.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -161,7 +164,17 @@ export default function UAPISettingsPage() {
               {showNewToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          <Button onClick={handleUpdate} disabled={updateToken.isPending || !newToken.trim()}>
+          <div className="relative">
+            <Input
+              placeholder="Cole o refresh token aqui..."
+              type={showNewToken ? 'text' : 'password'}
+              autoComplete="off"
+              value={newRefreshToken}
+              onChange={(e) => setNewRefreshToken(e.target.value)}
+              className="font-mono text-sm"
+            />
+          </div>
+          <Button onClick={handleUpdate} disabled={updateToken.isPending || !newToken.trim() || !newRefreshToken.trim()}>
             {updateToken.isPending ? (
               <>
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />

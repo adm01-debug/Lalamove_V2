@@ -27,6 +27,9 @@ Ler quando mexer em cotação, pedido, rastreamento, POD, token de sessão ou we
    `VITE_SUPABASE_URL`/`VITE_SUPABASE_PUBLISHABLE_KEY` (sobra de script de teste): não copie esse padrão.
 2. **Chamada nova da Lalamove passa pelo `lalamove-gateway`**, não direto do front e não com chave nova no
    bundle. Pedido/cancelamento pela v3 oficial → `lalamove-api`; dado de portal/sessão → `lalamove-uapi`.
+   Exceção única, e por isso mesmo restrita a admin + MFA: **gravar a sessão UAPI** (`set-token`). O gateway
+   recusa escrita de credencial por requisição (`lalamove-gateway/route.ts`), então as telas
+   `/settings/uapi` e `/settings/lalamove` chamam a edge direto por `setUapiSessionToken`.
 3. **Não invoque em massa para "testar".** Criar pedido na v3 é **operação paga e real**; `route-analyzer`
    gasta `LOVABLE_API_KEY` por token. Teste com payload inócuo (validação/dry-run) e registre o que rodou.
 4. **Não mexa na janela de replay nem na validação de HMAC** do webhook sem rodar os testes que já existem:

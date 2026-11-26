@@ -9,6 +9,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { requireRole } from "../_shared/auth.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -26,7 +27,6 @@ const APP_REVISION = '53700';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 
 // Anti-WAF headers required for UAPI
 const UAPI_HEADERS: HeadersInit = {
@@ -69,30 +69,61 @@ function buildUapiUrl(method: string, su?: string): string {
   return `${UAPI_BASE_URL}?${params.toString()}`;
 }
 
-// Verifica se o caller tem role admin via JWT claims (app_metadata.role).
-// Retorna { error: Response } se não autorizado, { error: null } se OK.
-async function requireAdmin(req: Request): Promise<{ error: Response | null }> {
-  const authHeader = req.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
-  }
-  const token = authHeader.replace('Bearer ', '');
-  const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    global: { headers: { Authorization: authHeader } },
+// Ações administrativas (set-token, token-status) usam o `requireRole` de
+// `_shared/auth.ts`. A cópia local que existia aqui lia o papel só de
+// `app_metadata.role`/`user_metadata.role`: como nenhuma conta tem esses campos,
+// todo admin real levava 403 (o botão "Atualizar Token" das telas de
+// configuração nunca funcionou) e, ao mesmo tempo, qualquer conta podia se
+// autopromover escrevendo `user_metadata.role`. O helper resolve por
+// `app_metadata.role` (gravável só com service_role) e por `public.user_roles`.
+
+// As telas que gravam a sessão UAPI (`/settings/uapi`, `/settings/lalamove`)
+// exigem MFA no front (`ProtectedRoute requireMFA`). Sem a mesma exigência
+// aqui, um access token em AAL1 (só o primeiro fator) já trocaria a credencial
+// compartilhada. Só bloqueia quem tem fator TOTP verificado: conta sem fator
+// não tem como elevar e continua passando — igual quando a consulta de fatores
+// falha, para não travar a rotação do token.
+async function requireMfaElevation(req: Request): Promise<{ error: Response | null }> {
+  const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+  const payload = token ? decodeJwtPayload(token) : null;
+  const userId = typeof payload?.sub === 'string' ? payload.sub : null;
+  if (!userId || payload?.aal !== 'aal1') return { error: null };
+
+  const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
   });
-  // `auth.getClaims()` só existe em supabase-js >= 2.7x; esta função importa
-  // 2.49.1, onde a chamada lança TypeError e o handler responde 500 em vez de
-  // 401/403 — `set-token` e `token-status` ficam inutilizáveis. `getUser` existe
-  // em toda a série 2.x e devolve os mesmos metadados.
-  const { data: userData, error: userError } = await anonClient.auth.getUser(token);
-  if (userError || !userData?.user) {
-    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  const { data, error } = await admin.auth.admin.mfa.listFactors({ userId });
+  if (error) {
+    logger.error('Falha ao consultar fatores MFA:', error);
+    return { error: null };
   }
-  const role = userData.user.app_metadata?.role ?? userData.user.user_metadata?.role;
-  if (role !== 'admin') {
-    return { error: new Response(JSON.stringify({ error: 'Forbidden: admin role required' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  const hasVerifiedFactor = (data?.factors ?? []).some(
+    (f: { status: string }) => f.status === 'verified',
+  );
+  if (!hasVerifiedFactor) return { error: null };
+
+  return {
+    error: new Response(
+      JSON.stringify({
+        error: 'mfa_required',
+        message: 'Confirme o segundo fator (MFA) antes de trocar a sessão UAPI.',
+      }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    ),
+  };
+}
+
+/** Lê o payload do JWT sem validar assinatura — o token já passou por `requireRole`. */
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  const part = token.split('.')[1];
+  if (!part) return null;
+  try {
+    const b64 = part.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = b64.padEnd(b64.length + ((4 - (b64.length % 4)) % 4), '=');
+    return JSON.parse(atob(padded)) as Record<string, unknown>;
+  } catch {
+    return null;
   }
-  return { error: null };
 }
 
 // Build UAPI body (application/x-www-form-urlencoded)
@@ -163,7 +194,12 @@ async function getActiveToken(supabase: any): Promise<{
         refresh_method: 'refresh_token',
         updated_at: new Date().toISOString(),
       })
-      .eq('is_active', true);
+      // Escopo pelo token lido, não só por `is_active`: se o dono gravar uma
+      // sessão nova (`set-token`) enquanto esta renovação está em voo, o update
+      // não pode cair na sessão nova — antes ele pegava "a linha ativa do
+      // momento" e sobrescrevia os tokens recém-colados com os da sessão antiga.
+      .eq('is_active', true)
+      .eq('access_token', s.access_token);
 
     return {
       accessToken: refreshResult.newAccessToken,
@@ -586,8 +622,11 @@ serve(async (req) => {
     // Special action: set initial token — requer role admin para evitar que
     // qualquer usuário autenticado sobrescreva a sessão UAPI ativa.
     if (action === 'set-token') {
-      const adminCheck = await requireAdmin(req);
+      const adminCheck = await requireRole(req, ['admin'], corsHeaders);
       if (adminCheck.error) return adminCheck.error;
+
+      const mfaCheck = await requireMfaElevation(req);
+      if (mfaCheck.error) return mfaCheck.error;
 
       if (!body.access_token || !body.refresh_token) {
         return new Response(
@@ -596,24 +635,24 @@ serve(async (req) => {
         );
       }
 
-      // Deactivate existing sessions
-      await supabase
+      // Insere a sessão nova ANTES de desativar as antigas: se o insert falhar, a
+      // sessão que estava funcionando continua ativa. Antes a desativação vinha
+      // primeiro e uma falha no insert deixava o painel sem sessão alguma.
+      const { data: inserted, error } = await supabase
         .from('lalamove_uapi_sessions')
-        .update({ is_active: false, updated_at: new Date().toISOString() })
-        .eq('is_active', true);
-
-      // Insert new session
-      const { error } = await supabase.from('lalamove_uapi_sessions').insert({
-        access_token: body.access_token,
-        refresh_token: body.refresh_token,
-        user_fid: body.user_fid || null,
-        ep_role: body.ep_role || 1,
-        city_id: body.city_id || parseInt(CITY_ID),
-        token_obtained_at: new Date().toISOString(),
-        token_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        refresh_method: 'manual',
-        is_active: true,
-      });
+        .insert({
+          access_token: body.access_token,
+          refresh_token: body.refresh_token,
+          user_fid: body.user_fid || null,
+          ep_role: body.ep_role || 1,
+          city_id: body.city_id || parseInt(CITY_ID),
+          token_obtained_at: new Date().toISOString(),
+          token_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          refresh_method: 'manual',
+          is_active: true,
+        })
+        .select('id')
+        .single();
 
       if (error) {
         return new Response(
@@ -621,6 +660,12 @@ serve(async (req) => {
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
+
+      await supabase
+        .from('lalamove_uapi_sessions')
+        .update({ is_active: false, updated_at: new Date().toISOString() })
+        .eq('is_active', true)
+        .neq('id', inserted.id);
 
       return new Response(
         JSON.stringify({ success: true, message: 'UAPI session token saved' }),
@@ -630,7 +675,7 @@ serve(async (req) => {
 
     // Special action: token status — protegido por admin para não expor metadados do token
     if (action === 'token-status') {
-      const adminCheck = await requireAdmin(req);
+      const adminCheck = await requireRole(req, ['admin'], corsHeaders);
       if (adminCheck.error) return adminCheck.error;
       const { data: session } = await supabase.rpc('get_active_uapi_token');
       if (!session || session.length === 0) {

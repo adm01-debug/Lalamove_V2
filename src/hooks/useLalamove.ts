@@ -113,7 +113,8 @@ export function useOrderCancel() {
 export function useUpdateUapiToken() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (token: string) => lalamove.updateUapiToken(token),
+    mutationFn: (params: { token: string; refreshToken: string }) =>
+      lalamove.updateUapiToken(params.token, params.refreshToken),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['llm'] }),
   });
 }
