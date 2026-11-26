@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `81000bb7ee` · branch `main` · 2026-11-26 11:50 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `70d6fadea8` · branch `main` · 2026-11-26 12:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -230,7 +230,7 @@ _nenhum item encontrado_
 | status | valor `completed` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/timeline-item.tsx` |
 | status | valor `in_progress` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/timeline-item.tsx` |
 | status | valor `all` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useAdvancedReports.ts`<br>`compara:src/hooks/useMessaging.ts`<br>`compara:src/pages/AdvancedReportsPage.tsx`<br>`escreve:src/hooks/useAdvancedReports.ts` |
-| status | valor `fulfilled` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDashboardStats.ts` |
+| status | valor `fulfilled` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDashboardStats.ts`<br>`compara:src/hooks/useLalamove.ts` |
 | status | valor `number` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/lib/geo-gateway.ts` |
 | status | valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/IncidentsPage.tsx` |
 | status | valor `PROCESSING` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/JobQueuePage.tsx` |

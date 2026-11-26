@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: status de conexão lê a sessão UAPI real em vez de listar cidades (#397)",
    "fix: le o payload cru da UAPI no saldo, perfil, extrato, veiculos e areas (#396)",
    "fix: botao Atualizar Token grava sessao UAPI e admin real deixa de levar 403 (#395)",
    "fix: exige admin ou manager para enviar notificacao de teste (#394)",
-   "infra: coletor de violações de CSP e header report-only (#390)",
-   "infra: hardening de banco - search_path, indices de FK, initplan de RLS, audit_log e PK de tracking_events (#392)"
+   "infra: coletor de violações de CSP e header report-only (#390)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

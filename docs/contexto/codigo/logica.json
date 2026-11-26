@@ -875,13 +875,13 @@
    "arquivo": "src/lib/uapi-proxy.ts",
    "camada": "lib",
    "exports": [
-    "ProxySession",
     "UAPIResponse",
+    "UAPISessionStatus",
     "UAPIUserData",
     "uapi"
    ],
    "export_default": null,
-   "linhas": 99,
+   "linhas": 100,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -890,7 +890,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
     "hooks"
    ],

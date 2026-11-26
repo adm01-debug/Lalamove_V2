@@ -1167,7 +1167,8 @@
   "src/hooks/useLalamove.ts": [
    "src/lib/lalamove-api.ts",
    "src/lib/lalamove-config.ts",
-   "src/lib/lalamoveUapiPayload.ts"
+   "src/lib/lalamoveUapiPayload.ts",
+   "src/lib/uapi-proxy.ts"
   ],
   "src/hooks/useLalamoveQuota.ts": [
    "src/integrations/supabase/client.ts"

@@ -1518,7 +1518,7 @@
     "useWalletBalance",
     "useWalletHistory"
    ],
-   "linhas": 199,
+   "linhas": 248,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1535,7 +1535,7 @@
     "src/pages/LalamoveSettingsPage.tsx",
     "src/pages/lalamove/LalamoveV3Explorer.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useLalamoveQuota.ts",
@@ -2510,7 +2510,7 @@
     "useUpdateToken",
     "useWalletBalance"
    ],
-   "linhas": 74,
+   "linhas": 78,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

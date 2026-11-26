@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "81000bb7ee0834133c0f4438848c35e3c91a1d07",
+  "commit": "70d6fadea837800dc3595008aa276bfbd8051cd1",
   "branch": "main",
-  "data_commit": "2026-11-26T08:49:22-03:00",
+  "data_commit": "2026-11-26T09:29:18-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "70d6fad",
+    "data": "2026-11-26",
+    "assunto": "fix: status de conexão lê a sessão UAPI real em vez de listar cidades (#397)"
+   },
    {
     "sha": "81000bb",
     "data": "2026-11-26",
@@ -126,18 +131,13 @@
     "sha": "1d31dac",
     "data": "2026-11-24",
     "assunto": "feat: alerta quando o snapshot da UAPI para de atualizar (#373)"
-   },
-   {
-    "sha": "e340ad4",
-    "data": "2026-11-24",
-    "assunto": "chore: reconcilia versoes de migration aplicadas direto no banco (#372)"
    }
   ],
-  "arquivos_mudados_7d": 546,
+  "arquivos_mudados_7d": 547,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 77
+    "mudancas": 78
    },
    {
     "pasta": "src/components/map",
@@ -231,7 +231,7 @@
    },
    {
     "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
@@ -294,8 +294,8 @@
     "mudancas": 8
    },
    {
-    "arquivo": "scripts/uapi-collector/collect.mjs",
-    "mudancas": 7
+    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+    "mudancas": 8
    }
   ],
   "autores_30d": [
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1155,
-  "arquivos_codigo": 733,
-  "linhas_codigo": 144634,
+  "arquivos_total": 1156,
+  "arquivos_codigo": 734,
+  "linhas_codigo": 144830,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 94,
   "migrations": 213,
   "cron_jobs": 24,
-  "testes": 193,
+  "testes": 194,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 114
@@ -527,8 +527,8 @@
    "linhas": 29928
   },
   "src/hooks": {
-   "arquivos": 116,
-   "linhas": 20174
+   "arquivos": 117,
+   "linhas": 20290
   },
   "src/i18n": {
    "arquivos": 1,
@@ -540,7 +540,7 @@
   },
   "src/lib": {
    "arquivos": 56,
-   "linhas": 5114
+   "linhas": 5115
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -548,7 +548,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21777
+   "linhas": 21786
   },
   "src/services": {
    "arquivos": 1,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 127,
-   "linhas": 30268
+   "linhas": 30338
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -614,7 +614,7 @@
   },
   {
    "arquivo": "supabase/functions/_shared/schemas.ts",
-   "linhas": 1032
+   "linhas": 1033
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
@@ -625,12 +625,12 @@
    "linhas": 1007
   },
   {
-   "arquivo": "src/pages/MapsSettingsPage.tsx",
-   "linhas": 994
+   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+   "linhas": 1001
   },
   {
-   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-   "linhas": 950
+   "arquivo": "src/pages/MapsSettingsPage.tsx",
+   "linhas": 994
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",

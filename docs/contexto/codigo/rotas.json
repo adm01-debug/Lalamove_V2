@@ -219,7 +219,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 102
+   "arquivos_puxados": 103
   },
   {
    "caminho": "/*",
@@ -964,7 +964,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 102
+   "arquivos_puxados": 103
   },
   {
    "caminho": "/delivery-metrics",
@@ -2830,7 +2830,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "caminho": "/settings/maps",
@@ -3814,7 +3814,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 286
+   "arquivos_puxados": 287
   }
  ],
  "menu": [

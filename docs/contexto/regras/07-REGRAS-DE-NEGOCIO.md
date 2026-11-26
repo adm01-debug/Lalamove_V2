@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `81000bb7ee` · branch `main` · 2026-11-26 11:50 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `70d6fadea8` · branch `main` · 2026-11-26 12:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -790,7 +790,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `expired` | compara | `src/hooks/useNotificationHistory.ts` |
 | `status` | `failed` | compara | `src/components/ui/timeline-item.tsx`<br>`src/hooks/useCacheViews.ts`<br>`src/hooks/useNotificationHistory.ts`<br>`src/pages/CacheMonitoringPage.tsx`<br>`src/pages/CacheStatusPage.tsx`<br>… +1 |
 | `status` | `falha` | compara | `supabase/functions/_shared/channels/sms.ts` |
-| `status` | `fulfilled` | compara | `src/hooks/useDashboardStats.ts` |
+| `status` | `fulfilled` | compara | `src/hooks/useDashboardStats.ts`<br>`src/hooks/useLalamove.ts` |
 | `status` | `geocoded` | compara | `supabase/functions/job-worker/index.ts` |
 | `status` | `healthy` | compara | `src/pages/SLODashboardPage.tsx` |
 | `status` | `in_progress` | compara | `src/components/ui/timeline-item.tsx` |
@@ -1085,7 +1085,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```
 - **lalamoveUapiV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
   ```ts
-  "action", [ // ── sessão (exigem role admin no handler, :500/:544) ── z.object({ action: z.literal("set-token"), access_token: z.string().min(1, "access_token é obrigatório"), refresh_token: z.string().min(1, "refresh_token é obrigatório"), // colunas: user_fid text, ep_role integer, city_id integer // (20260315165451_...sql:7-9); o handler usa `||` (:520-522) e CITY_ID é // string (:13), então "21001" e 123456 funcionam hoje. user_fid: z.union([z.string(), z.number()]).optional().nullable(), ep_role: z.coerce.number().int().optional(), city_id: z.coerce.number().int().optional(), }), z.object({ action: z.literal("token-status") }), z.object({ action: z.literal("refresh-token") }), // ── pedidos ── z.object({ action: z.literal("list-orders"), limit: z.number().optional(), last_id: uapiCurs …
+  "action", [ // ── sessão (exigem role admin no handler, :500/:544) ── z.object({ action: z.literal("set-token"), access_token: z.string().min(1, "access_token é obrigatório"), refresh_token: z.string().min(1, "refresh_token é obrigatório"), // colunas: user_fid text, ep_role integer, city_id integer // (20260315165451_...sql:7-9); o handler usa `||` (:520-522) e CITY_ID é // string (:13), então "21001" e 123456 funcionam hoje. user_fid: z.union([z.string(), z.number()]).optional().nullable(), ep_role: z.coerce.number().int().optional(), city_id: z.coerce.number().int().optional(), }), z.object({ action: z.literal("token-status") }), z.object({ action: z.literal("status") }), z.object({ action: z.literal("refresh-token") }), // ── pedidos ── z.object({ action: z.literal("list-orders"), limi …
   ```
 - **lalamoveApiAmount** (`supabase/functions/_shared/schemas.ts`, z.union):
   ```ts
@@ -1741,6 +1741,7 @@ _nenhum item encontrado_
 | 5 | `supabase/functions/job-worker/index.ts` |
 | 9 | `supabase/functions/job-worker/index.ts` |
 | 1 | `supabase/functions/lalamove-token-refresh/index.ts` |
+| 1 | `supabase/functions/lalamove-uapi/index.ts` |
 | 20 | `supabase/functions/route-analyzer/index.ts` |
 | 1 | `supabase/functions/send-notification/index.ts` |
 | 1 | `supabase/functions/test-notification/index.ts` |
@@ -2095,7 +2096,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1632 testes em 143 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1642 testes em 144 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2138,6 +2139,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/lalamoveTimeline.test.ts` | 14 | normalizeOrderStatus · mapeia aliases legados e UAPI · retorna null para valores inválidos · buildOrderTimeline … |
 | `supabase/functions/_shared/messaging/inbound.test.ts` | 14 | etapa 113: id da opcao tem prioridade sobre qualquer palavra · etapa 113: digito escolhe a opcao oferecida no envio · etapa 113: digito sem mapa de opcoes nao vira escolha · etapa 113: variacoes de chegada caem na mesma intencao … |
 | `supabase/functions/geo-gateway/error-monitor.test.ts` | 14 | shouldAlert: taxa abaixo do limite não dispara · shouldAlert: taxa exatamente no limite não dispara (é > 5%, não >=) · shouldAlert: taxa acima do limite dispara · shouldAlert: amostra pequena não dispara mesmo com 100% de erro … |
+| `supabase/functions/lalamove-gateway/route.test.ts` | 14 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getStatus ( · testConnection ( · uapi.getOrders ( … |
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 13 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
@@ -2145,7 +2147,6 @@ _nenhum item encontrado_
 | `supabase/functions/zapp-callback/security.test.ts` | 13 | parseSignatureHeader le t e v1 · parseSignatureHeader aceita espacos e ordem invertida · parseSignatureHeader rejeita header ausente ou malformado · timingSafeEqual compara conteudo e tamanho … |
 | `supabase/functions/job-worker/eta-cadence.test.ts` | 12 | nunca medido: nao pula (primeira medicao sempre acontece) · ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado · ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo · motorista andou mais de 300 m: mede mesmo com ETA alto … |
 | `supabase/functions/lalamove-api/geocode-fallback.test.ts` | 12 | geocodeAddress devolve coordenada e place_id do gateway · geocodeAddress marca revisao quando o endereco nao tem numero · geocodeAddress marca revisao com precisao baixa · geocodeAddress nao marca revisao com precisao exact e numero … |
-| `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
 | `supabase/functions/send-notification/static-map.test.ts` | 12 | só as aproximações levam imagem · markers na ordem coleta → entrega → motorista, com rota quando há 2+ pontos · rota de um ponto só não vira path (path exige 2) · sem nenhum ponto não gera request (Google exige center/markers/path) … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/components/orders/AddressAutocomplete.test.tsx` | 11 | AddressAutocomplete — estados de falha (etapa 40) · 429 mostra  · erro sem status (rede) tem mensagem distinta do 429 · sem resultado e sem falha sugere incluir número ou CEP … |
@@ -2183,6 +2184,7 @@ _nenhum item encontrado_
 | `supabase/functions/zapp-callback/inbound-exec.test.ts` | 9 | etapa 114: coleta carimba o pedido e grava evento de rastreio · etapa 114: carimbo nao sobrescreve o que ja aconteceu · etapa 114: problema vira incidente do motorista · etapa 114: sem posicao conhecida nao inventa evento de rastreio … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 8 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
 | `src/components/map/hooks/__tests__/useMapMarkers.test.ts` | 8 | useMapMarkers · cria um marker por veículo quando o mapa está vivo · não cria markers enquanto o loading do mapa é true · não toca em mapa destruído (regressão do appendChild no StrictMode) … |
+| `src/hooks/useLalamoveStatus.test.ts` | 8 | buildLalamoveStatus · marca os dois canais conectados e usa o e-mail como usuário · não inventa usuário quando a UAPI não manda e-mail · canal rejeitado aparece desconectado … |
 | `src/hooks/__tests__/useDeliveryMetrics.test.ts` | 8 | useDeliveryMetrics · deve calcular métricas de entrega corretamente · deve retornar zeros sem dados · deve propagar erro do supabase … |
 | `src/hooks/__tests__/useLoginLockout.test.ts` | 8 | useLoginLockout · deve mapear checkLockout corretamente · deve retornar fallback no erro de checkLockout · deve mapear recordFailedAttempt corretamente … |
 | `src/lib/phone.test.ts` | 8 | validateBrazilianPhone — casos válidos · aceita %s (nacional cru) · aceita 55 sem + como código do país · validateBrazilianPhone — rejeições … |
@@ -2585,6 +2587,7 @@ _nenhum item encontrado_
 | Anti-WAF headers required for UAPI | `supabase/functions/lalamove-uapi/index.ts` |
 | não pode cair na sessão nova — antes ele pegava "a linha ativa do | `supabase/functions/lalamove-uapi/index.ts` |
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |
+| UAPI nem consumir rate limit. Devolve apenas metadados — o token sai | `supabase/functions/lalamove-uapi/index.ts` |
 | HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |
 | Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores). | `supabase/functions/lalamove-webhook/index.ts` |
 | ── HMAC Validation (FAIL-CLOSED) ── | `supabase/functions/lalamove-webhook/security.ts` |
