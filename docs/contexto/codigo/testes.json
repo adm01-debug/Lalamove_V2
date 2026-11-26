@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 190,
+ "total": 191,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 47,
+  "edge (deno)": 48,
   "guard (node --test)": 34,
   "unit (vitest)": 91
  },
@@ -29,7 +29,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 49
+   "arquivos": 50
   },
   {
    "padrao": "guards em scripts/",
@@ -1691,6 +1691,15 @@
    "casos": 7
   },
   {
+   "arquivo": "supabase/functions/telemetry-csp-report/report.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 84,
+   "testa": [
+    "supabase/functions/telemetry-csp-report/report.ts"
+   ],
+   "casos": 6
+  },
+  {
    "arquivo": "supabase/functions/zapp-callback/inbound-exec.test.ts",
    "tipo": "edge (deno)",
    "linhas": 171,
@@ -1914,6 +1923,7 @@
   "supabase/functions/send-notification/sms-dispatch.ts": 1,
   "supabase/functions/send-notification/static-map.ts": 1,
   "supabase/functions/simulate-driver-movement/replay.ts": 1,
+  "supabase/functions/telemetry-csp-report/report.ts": 1,
   "supabase/functions/zapp-callback/inbound-exec.ts": 1,
   "supabase/functions/zapp-callback/ledger.ts": 2,
   "supabase/functions/zapp-callback/payload.ts": 2,

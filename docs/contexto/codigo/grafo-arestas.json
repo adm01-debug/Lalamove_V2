@@ -2596,6 +2596,9 @@
    "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/simulate-driver-movement/replay.ts"
   ],
+  "supabase/functions/telemetry-csp-report/index.ts": [
+   "supabase/functions/telemetry-csp-report/report.ts"
+  ],
   "supabase/functions/test-notification/index.ts": [
    "supabase/functions/_shared/channels/whatsapp-test.ts",
    "supabase/functions/_shared/contract.ts",

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae612232f1` · branch `main` · 2026-11-25 23:54 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `28be79bfb4` · branch `main` · 2026-11-26 00:54 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -695,6 +695,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `capacity_issue` | escreve | `src/hooks/usePredictiveAnalysis.ts` |
 | `type` | `chime` | escreve | `src/hooks/useSoundSettings.ts` |
 | `type` | `circle` | escreve | `src/components/map/OrderTrackingMap.tsx`<br>`src/components/reports/GeoHeatmap.tsx` |
+| `type` | `csp-violation` | compara | `supabase/functions/telemetry-csp-report/report.ts` |
 | `type` | `delivery` | compara, escreve | `src/components/ui/activity-timeline.tsx`<br>`src/components/ui/timeline-item.tsx`<br>`src/pages/DashboardRedesigned.tsx` |
 | `type` | `delivery_delay` | escreve | `src/hooks/usePredictiveAnalysis.ts` |
 | `type` | `driver` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/usePushNotifications.ts` |
@@ -1565,6 +1566,10 @@ _nenhum item encontrado_
 | `WEBHOOK_MAX_AGE_MS` | `5` | `supabase/functions/lalamove-webhook/index.ts` |
 | `SLOW_MS` | `3000` | `supabase/functions/mcp-query/index.ts` |
 | `VERY_SLOW_MS` | `8000` | `supabase/functions/mcp-query/index.ts` |
+| `RATE_LIMIT_MAX` | `120` | `supabase/functions/telemetry-csp-report/index.ts` |
+| `RATE_LIMIT_WINDOW_MS` | `60` | `supabase/functions/telemetry-csp-report/index.ts` |
+| `MAX_BODY_BYTES` | `8192` | `supabase/functions/telemetry-csp-report/report.ts` |
+| `MAX_REPORTS` | `5` | `supabase/functions/telemetry-csp-report/report.ts` |
 | `REPLY_COLUMNS` | `"id,status,order_id,driver_id,stop_id,event,metadata"` | `supabase/functions/zapp-callback/ledger.ts` |
 | `PREVIEW_MAX` | `280` | `supabase/functions/zapp-callback/payload.ts` |
 | `REPLAY_WINDOW_SECONDS` | `5` | `supabase/functions/zapp-callback/security.ts` |
@@ -2090,7 +2095,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1581 testes em 140 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1587 testes em 141 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2205,6 +2210,7 @@ _nenhum item encontrado_
 | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts` | 6 | [watchdog] coleta recente mantém o painel servido e sem alerta · [watchdog] fronteira de 120 min ainda é considerada saudável · [watchdog] 121 min já alerta: é o que evita carteira congelada em silêncio · [watchdog] snapshot vazio alerta mesmo sem data … |
 | `supabase/functions/lalamove-token-refresh/uapi-direct.test.ts` | 6 | [uapi-direct] URL pede refresh_token com cara de portal · [uapi-direct] corpo leva token e refresh_token em args · [uapi-direct] ret=0 devolve o novo par · [uapi-direct] sem refresh_token novo, mantem o atual … |
 | `supabase/functions/send-notification/sms-dispatch.test.ts` | 6 | buildSmsBody junta titulo, mensagem e pedido sem partes vazias · sem provedor configurado devolve erro explicito e nao envia · dispatchSms repassa o texto montado e a referencia do pedido · dispatchSms propaga a falha do provedor com o texto que tentou … |
+| `supabase/functions/telemetry-csp-report/report.test.ts` | 6 | formato legado: extrai diretiva, host bloqueado e caminho · Reporting API: aceita lista e ignora outros tipos de relatório · payload inválido não gera violação nem exceção · documents e blocked sem host são normalizados sem vazar URL completa … |
 | `src/components/auth/ProtectedRoute.test.tsx` | 5 | ProtectedRoute · não renderiza o filho enquanto o AAL está carregando (loadingAAL true) · renderiza o filho quando tudo carrega e não exige verificação MFA · redireciona para /mfa-verify quando requireMFA e needsMFAVerification … |
 | `src/components/map/__tests__/OrderTrackingMap.test.tsx` | 5 | OrderTrackingMap (etapa 58) · mostra aviso quando o token do Mapbox não está disponível · expõe a região com rótulo acessível quando há token · não quebra sem coordenadas nem rota … |
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
@@ -2594,6 +2600,12 @@ _nenhum item encontrado_
 | fazer quando o orçamento bloqueia — o alerta não pode morrer por causa da | `supabase/functions/send-notification/static-map.ts` |
 | imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode | `supabase/functions/send-notification/static-map.ts` |
 | sem `fixture` agora falha na validação, não no meio do laço. | `supabase/functions/simulate-driver-movement/index.ts` |
+| - limite por IP em memória (120/min) para não inundar o log; | `supabase/functions/telemetry-csp-report/index.ts` |
+| - o log leva apenas diretiva, disposição, host bloqueado e caminho. | `supabase/functions/telemetry-csp-report/index.ts` |
+| // Só os campos que interessam ao operador são mantidos. Documento vira apenas o | `supabase/functions/telemetry-csp-report/report.ts` |
+| * Somente o caminho do documento — nunca query string nem origin completo. */ | `supabase/functions/telemetry-csp-report/report.ts` |
+| * Extrai no máximo `limit` violações de um corpo de relatório (string JSON). */ | `supabase/functions/telemetry-csp-report/report.ts` |
+| * Limite por IP em memória do isolate. Não é um contador global (cada isolate tem | `supabase/functions/telemetry-csp-report/report.ts` |
 | de banco nao pode virar uma fila de retentativas identicas. | `supabase/functions/zapp-callback/index.ts` |
 | 200 de proposito: evento que nao sabemos tratar nao pode ser reenviado | `supabase/functions/zapp-callback/index.ts` |
 | para que os testes injetem um fake e exercitem a regra sem banco: e aqui que | `supabase/functions/zapp-callback/ledger.ts` |

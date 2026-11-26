@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae612232f1` · branch `main` · 2026-11-25 23:54 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `28be79bfb4` · branch `main` · 2026-11-26 00:54 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -330,6 +330,7 @@
 - `mcp-query`
 - `lalamove-webhook`
 - `llm-wh`
+- `telemetry-csp-report`
 
 ## Rotas protegidas no front
 

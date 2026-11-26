@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ae612232f1effc38e6381ecb6cb90b465e398aa6",
+  "commit": "28be79bfb4ab6dc8857cd33027c1e46e48891e1b",
   "branch": "main",
-  "data_commit": "2026-11-25T20:52:25-03:00",
+  "data_commit": "2026-11-25T21:48:42-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "28be79b",
+    "data": "2026-11-25",
+    "assunto": "infra: coletor de violações de CSP e header report-only (#390)"
+   },
    {
     "sha": "ae61223",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "086c06e",
     "data": "2026-11-24",
     "assunto": "feat: renovacao automatica do token UAPI pelo perfil do navegador (#369)"
-   },
-   {
-    "sha": "9d7a8c0",
-    "data": "2026-11-24",
-    "assunto": "feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)"
    }
   ],
-  "arquivos_mudados_7d": 536,
+  "arquivos_mudados_7d": 539,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -184,16 +184,16 @@
     "mudancas": 21
    },
    {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 18
+   },
+   {
     "pasta": "src/components/dashboard",
     "mudancas": 18
    },
    {
     "pasta": "src/lib/__tests__",
     "mudancas": 18
-   },
-   {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 17
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "package.json",
@@ -270,6 +270,10 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/config.toml",
+    "mudancas": 10
+   },
+   {
     "arquivo": "supabase/functions/external-companies/index.ts",
     "mudancas": 10
    },
@@ -280,10 +284,6 @@
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/config.toml",
-    "mudancas": 9
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1149,
-  "arquivos_codigo": 727,
-  "linhas_codigo": 143544,
+  "arquivos_total": 1152,
+  "arquivos_codigo": 730,
+  "linhas_codigo": 143785,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -320,11 +320,11 @@
   "modulos": 43,
   "componentes": 224,
   "hooks": 102,
-  "edge_functions": 28,
+  "edge_functions": 29,
   "tabelas": 94,
   "migrations": 213,
   "cron_jobs": 24,
-  "testes": 190,
+  "testes": 191,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 114
@@ -567,8 +567,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 124,
-   "linhas": 29956
+   "arquivos": 127,
+   "linhas": 30197
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -753,7 +753,8 @@
   "edges_sem_verify_jwt": [
    "lalamove-webhook",
    "llm-wh",
-   "mcp-query"
+   "mcp-query",
+   "telemetry-csp-report"
   ],
   "tabelas_sem_rls": [],
   "tabelas_usadas_sem_definicao": [

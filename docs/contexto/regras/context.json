@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ae612232f1effc38e6381ecb6cb90b465e398aa6",
+  "sha": "28be79bfb4ab6dc8857cd33027c1e46e48891e1b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-25 23:54 UTC",
-  "files_total": 1143,
-  "code_files": 960,
-  "code_lines": 166093
+  "generated_at": "2026-11-26 00:54 UTC",
+  "files_total": 1146,
+  "code_files": 963,
+  "code_lines": 166334
  },
  "version": "1.3.2",
- "facts_hash": "69592b2db47acf33",
+ "facts_hash": "189ea0796c1f17c2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 367,
+   ".ts": 370,
    ".tsx": 246,
    ".sql": 224,
    ".mjs": 110,
@@ -201,7 +201,8 @@
     "lalamove-uapi",
     "mcp-query",
     "lalamove-webhook",
-    "llm-wh"
+    "llm-wh",
+    "telemetry-csp-report"
    ],
    "auth": {}
   },
@@ -20037,6 +20038,23 @@
     "idempotency": false
    },
    {
+    "name": "telemetry-csp-report",
+    "file": "supabase/functions/telemetry-csp-report/index.ts",
+    "methods": [
+     "OPTIONS"
+    ],
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
+    "tables": [],
+    "env": [],
+    "external": [],
+    "invokes": [],
+    "doc": "============================================================================ telemetry-csp-report — coletor das violações de Content-Security-Policy. Chamado pelo navegador via `report-uri` do header `Content-Security-Policy-Report-Only` de `vercel.json`. É público por natureza: o navegador não anex …",
+    "errors": [],
+    "side_effects": [],
+    "webhook_events": [],
+    "idempotency": false
+   },
+   {
     "name": "test-notification",
     "file": "supabase/functions/test-notification/index.ts",
     "methods": [
@@ -23297,8 +23315,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 124,
-   "lines": 29956,
+   "files": 127,
+   "lines": 30197,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -29412,6 +29430,30 @@
     "text": "sem `fixture` agora falha na validação, não no meio do laço."
    },
    {
+    "file": "supabase/functions/telemetry-csp-report/index.ts",
+    "text": "- limite por IP em memória (120/min) para não inundar o log;"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/index.ts",
+    "text": "- o log leva apenas diretiva, disposição, host bloqueado e caminho."
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.ts",
+    "text": "// Só os campos que interessam ao operador são mantidos. Documento vira apenas o"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.ts",
+    "text": "* Somente o caminho do documento — nunca query string nem origin completo. */"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.ts",
+    "text": "* Extrai no máximo `limit` violações de um corpo de relatório (string JSON). */"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.ts",
+    "text": "* Limite por IP em memória do isolate. Não é um contador global (cada isolate tem"
+   },
+   {
     "file": "supabase/functions/zapp-callback/index.ts",
     "text": "de banco nao pode virar uma fila de retentativas identicas."
    },
@@ -33108,6 +33150,26 @@
     "file": "supabase/functions/mcp-query/index.ts",
     "name": "VERY_SLOW_MS",
     "value": "8000"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/index.ts",
+    "name": "RATE_LIMIT_MAX",
+    "value": "120"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/index.ts",
+    "name": "RATE_LIMIT_WINDOW_MS",
+    "value": "60"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.ts",
+    "name": "MAX_BODY_BYTES",
+    "value": "8192"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.ts",
+    "name": "MAX_REPORTS",
+    "value": "5"
    },
    {
     "file": "supabase/functions/zapp-callback/ledger.ts",
@@ -37326,6 +37388,12 @@
     "field": "role",
     "value": "admin",
     "kind": "filtra"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.ts",
+    "field": "type",
+    "value": "csp-violation",
+    "kind": "compara"
    },
    {
     "file": "supabase/functions/test-notification/index.ts",
@@ -44502,6 +44570,30 @@
     "name": "replay: heading sempre finito e entre 0 e 360"
    },
    {
+    "file": "supabase/functions/telemetry-csp-report/report.test.ts",
+    "name": "formato legado: extrai diretiva, host bloqueado e caminho"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.test.ts",
+    "name": "Reporting API: aceita lista e ignora outros tipos de relatório"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.test.ts",
+    "name": "payload inválido não gera violação nem exceção"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.test.ts",
+    "name": "documents e blocked sem host são normalizados sem vazar URL completa"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.test.ts",
+    "name": "limite de relatos por requisição respeita MAX_REPORTS"
+   },
+   {
+    "file": "supabase/functions/telemetry-csp-report/report.test.ts",
+    "name": "rate limiter bloqueia acima do teto e libera após a janela"
+   },
+   {
     "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
     "name": "etapa 114: coleta carimba o pedido e grava evento de rastreio"
    },
@@ -50488,6 +50580,9 @@
      "eta_refresh": [
       "compara:supabase/functions/job-worker/index.ts"
      ],
+     "csp-violation": [
+      "compara:supabase/functions/telemetry-csp-report/report.ts"
+     ],
      "TEST": [
       "escreve:supabase/functions/test-notification/index.ts"
      ]
@@ -52570,7 +52665,8 @@
    "lalamove-uapi",
    "mcp-query",
    "lalamove-webhook",
-   "llm-wh"
+   "llm-wh",
+   "telemetry-csp-report"
   ],
   "auth_config": {},
   "grants": [
@@ -79511,6 +79607,75 @@
     "return (Math.atan2(y, x) * 180) / Math.PI + 360 % 360;"
    ]
   },
+  "supabase/functions/telemetry-csp-report/index.ts": {
+   "path": "supabase/functions/telemetry-csp-report/index.ts",
+   "lines": 45,
+   "params": [
+    {
+     "name": "RATE_LIMIT_MAX",
+     "value": "120"
+    },
+    {
+     "name": "RATE_LIMIT_WINDOW_MS",
+     "value": "60"
+    }
+   ],
+   "rule_comments": [
+    "- limite por IP em memória (120/min) para não inundar o log;",
+    "- o log leva apenas diretiva, disposição, host bloqueado e caminho."
+   ],
+   "doc": "============================================================================ telemetry-csp-report — coletor das violações de Content-Security-Policy. Chamado pelo navegador via `report-uri` do header `Content-Security-Policy-Report-Only` de `vercel.json`. É público por natureza: o navegador não anex …"
+  },
+  "supabase/functions/telemetry-csp-report/report.test.ts": {
+   "path": "supabase/functions/telemetry-csp-report/report.test.ts",
+   "lines": 84,
+   "is_test": true,
+   "tests": [
+    "formato legado: extrai diretiva, host bloqueado e caminho",
+    "Reporting API: aceita lista e ignora outros tipos de relatório",
+    "payload inválido não gera violação nem exceção",
+    "documents e blocked sem host são normalizados sem vazar URL completa",
+    "limite de relatos por requisição respeita MAX_REPORTS",
+    "rate limiter bloqueia acima do teto e libera após a janela"
+   ]
+  },
+  "supabase/functions/telemetry-csp-report/report.ts": {
+   "path": "supabase/functions/telemetry-csp-report/report.ts",
+   "lines": 112,
+   "exports": [
+    "const MAX_BODY_BYTES",
+    "const MAX_REPORTS",
+    "interface CspSummary",
+    "function blockedOrigin",
+    "function documentPath",
+    "function summarize",
+    "function createRateLimiter"
+   ],
+   "params": [
+    {
+     "name": "MAX_BODY_BYTES",
+     "value": "8192"
+    },
+    {
+     "name": "MAX_REPORTS",
+     "value": "5"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "csp-violation",
+     "kind": "compara"
+    }
+   ],
+   "rule_comments": [
+    "// Só os campos que interessam ao operador são mantidos. Documento vira apenas o",
+    "* Somente o caminho do documento — nunca query string nem origin completo. */",
+    "* Extrai no máximo `limit` violações de um corpo de relatório (string JSON). */",
+    "* Limite por IP em memória do isolate. Não é um contador global (cada isolate tem"
+   ],
+   "doc": "Parser e sanitizador dos relatorios de CSP (Content-Security-Policy). O navegador envia dois formatos: - legado (header `report-uri`): { \"csp-report\": { \"document-uri\": ..., \"violated-directive\": ... } } - Reporting API (`report-to`): [ { \"type\": \"csp-violation\", \"body\": { ... } } ] Só os campos que …"
+  },
   "supabase/functions/test-notification/index.ts": {
    "path": "supabase/functions/test-notification/index.ts",
    "lines": 271,
@@ -81048,10 +81213,24 @@
   }
  },
  "git": {
-  "sha": "ae612232f1effc38e6381ecb6cb90b465e398aa6",
+  "sha": "28be79bfb4ab6dc8857cd33027c1e46e48891e1b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "28be79b",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "infra: coletor de violações de CSP e header report-only (#390)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "supabase/config.toml",
+     "supabase/functions/telemetry-csp-report/index.ts",
+     "supabase/functions/telemetry-csp-report/report.test.ts",
+     "supabase/functions/telemetry-csp-report/report.ts",
+     "vercel.json"
+    ]
+   },
    {
     "sha": "ae61223",
     "date": "2026-11-25",
@@ -81374,15 +81553,6 @@
      "src/lib/edge-error.ts",
      "src/lib/uapiErrors.ts"
     ]
-   },
-   {
-    "sha": "42b967e",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "chore: docs do gateway e do refresh uapi sem proxy inexistente (#363)",
-    "files": [
-     "docs/agentes/lalamove-api.md"
-    ]
    }
   ],
   "hot_files": [
@@ -81401,6 +81571,10 @@
    [
     "supabase/functions/lalamove-token-refresh/index.ts",
     3
+   ],
+   [
+    ".github/workflows/ci.yml",
+    2
    ],
    [
     "src/hooks/useExternalData.ts",
@@ -81431,6 +81605,26 @@
     2
    ],
    [
+    "supabase/config.toml",
+    1
+   ],
+   [
+    "supabase/functions/telemetry-csp-report/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/telemetry-csp-report/report.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/telemetry-csp-report/report.ts",
+    1
+   ],
+   [
+    "vercel.json",
+    1
+   ],
+   [
     "supabase/migrations/20261126180000_hardening_searchpath_indices_fk.sql",
     1
    ],
@@ -81440,30 +81634,6 @@
    ],
    [
     "supabase/migrations/20261126200000_rls_auth_initplan.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261126210000_tracking_events_pk.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261126230000_revoke_authenticated_manutencao.sql",
-    1
-   ],
-   [
-    "supabase/functions/seed-fix-rls/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/job-worker/eta-delay.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/job-worker/index.ts",
     1
    ]
   ]

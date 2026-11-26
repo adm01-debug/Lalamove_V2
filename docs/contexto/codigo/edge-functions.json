@@ -2,11 +2,12 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "pasta": "supabase/functions",
- "total": 28,
+ "total": 29,
  "verify_jwt_false": [
   "lalamove-webhook",
   "llm-wh",
-  "mcp-query"
+  "mcp-query",
+  "telemetry-csp-report"
  ],
  "shared": [
   "supabase/functions/_shared/auth.ts",
@@ -1194,6 +1195,32 @@
    "chamada_pelo_front": [
     "src/pages/LiveMapPage.tsx"
    ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 1
+  },
+  {
+   "nome": "telemetry-csp-report",
+   "servico": null,
+   "entrada": "supabase/functions/telemetry-csp-report/index.ts",
+   "arquivos": 2,
+   "linhas": 157,
+   "verify_jwt": false,
+   "metodos": [
+    "OPTIONS",
+    "POST"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": false,
+   "tabelas": [],
+   "rpcs": [],
+   "env": [],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,

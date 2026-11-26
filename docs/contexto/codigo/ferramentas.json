@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (613)",
+   "TypeScript (616)",
    "SQL (224)",
    "JavaScript (115)",
    "Markdown (114)",
@@ -896,6 +896,10 @@
     "arquivos": 1
    },
    {
+    "host": "api.invasor.example",
+    "arquivos": 1
+   },
+   {
     "host": "api.pwnedpasswords.com",
     "arquivos": 1
    },
@@ -913,6 +917,10 @@
    },
    {
     "host": "c.tile.openstreetmap.org",
+    "arquivos": 1
+   },
+   {
+    "host": "cdn.invasor.example",
     "arquivos": 1
    },
    {
@@ -949,6 +957,10 @@
    },
    {
     "host": "lovable.dev",
+    "arquivos": 1
+   },
+   {
+    "host": "painel.example",
     "arquivos": 1
    },
    {
@@ -1025,7 +1037,8 @@
   "webhooks_recebidos": [
    "lalamove-webhook",
    "llm-wh",
-   "mcp-query"
+   "mcp-query",
+   "telemetry-csp-report"
   ],
   "realtime": []
  },
