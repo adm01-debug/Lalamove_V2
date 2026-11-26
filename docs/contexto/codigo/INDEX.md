@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b1774dc0eede5274978dd2fc12bf83ede8ceb79a` (2026-11-26T14:25:17-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b0866385dfea10f3418aa94289e6cfec10330b77` (2026-11-26T16:48:12-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (624), SQL (224), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
+- linguagens: TypeScript (624), SQL (224), JavaScript (115), Markdown (115), JSON (31), Shell (11), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1160 |
+| arquivos_total | 1161 |
 | arquivos_codigo | 738 |
-| linhas_codigo | 145257 |
+| linhas_codigo | 145404 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -52,7 +52,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | testes | 196 |
 | workflows | 5 |
 | scripts | 109 |
-| docs_md | 114 |
+| docs_md | 115 |
 
 ## Onde ficam as coisas
 - telas: src/pages (55)
@@ -294,8 +294,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10118 nós · 21001 arestas · 738 comunidades · grafo do commit `b1774dc0`
-- comunidades maiores: cn (310), App.tsx (204), react (179), button.tsx (159), ref_https (115), snapshot.py (104), ref_node_path (103), AlertsPage.tsx (96), geo-gateway/index.ts (92), dependencies (81), gerar.mjs (76), register-migration.mjs (71)
+- 10133 nós · 21021 arestas · 708 comunidades · grafo do commit `b0866385`
+- comunidades maiores: cn (227), lucide-react (166), MessagingSettingsPage.tsx (137), ref_https (134), Header.tsx (110), AlertsPage.tsx (109), snapshot.py (106), @tanstack/react-query (101), react (99), job-worker/index.ts (92), client.ts (87), ref_node_path (87)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -305,15 +305,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/job-worker/index.ts (15)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
-- package.json (13)
 - supabase/functions/_shared/schemas.ts (13)
-- package-lock.json (12)
+- package.json (12)
 - supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
+- package-lock.json (11)
 - supabase/functions/check-driver-alerts/index.ts (11)
 - supabase/functions/geo-gateway/index.ts (11)
 - docs/pendencias/_ordem.md (10)
-- src/App.tsx (10)
+- scripts/uapi-collector/collect.mjs (10)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -397,6 +397,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-26 `b086638` feat: extrato completo (580 paginas) com varredura profunda diaria (#404)
 - 2026-11-26 `b1774dc` feat: coletor pagina extrato e cupons dinamicamente (#403)
 - 2026-11-26 `2725ebd` feat: alerta quando a sessao UAPI nao tem renovacao automatica (#402)
 - 2026-11-26 `6667c5b` fix: coletor UAPI passa a rodar o collect.mjs da main (#401)
@@ -411,7 +412,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `ae61223` infra: hardening de banco - search_path, indices de FK, initplan de RLS, audit_log e PK de tracking_events (#392)
 - 2026-11-25 `1a40403` fix: seed-fix-rls exige admin/manager e nao abre policies para anon (#393)
 - 2026-11-25 `70c35c5` feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)
-- 2026-11-25 `148b657` fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
