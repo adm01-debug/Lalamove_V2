@@ -10,6 +10,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { requireRole } from "../_shared/auth.ts";
+import { evaluateSessionHealth } from "./session-health.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -641,16 +642,19 @@ serve(async (req) => {
 
       const { data: sessions } = await supabase
         .from('lalamove_uapi_sessions')
-        .select('access_token, user_fid, city_id, refresh_method, token_obtained_at, token_expires_at, last_refreshed_at')
+        .select('access_token, refresh_token, user_fid, city_id, refresh_method, token_obtained_at, token_expires_at, last_refreshed_at')
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .limit(1);
 
       const session = sessions?.[0];
-      const expiresAt = session?.token_expires_at ? Date.parse(session.token_expires_at) : NaN;
-      const expired = Number.isFinite(expiresAt) && expiresAt <= Date.now();
       const token = typeof session?.access_token === 'string' ? session.access_token : '';
-      const active = !!session && !expired;
+      // Saúde da sessão = evidência recente de uso aceito, não `token_expires_at`
+      // (que é só a estimativa de 24 h da última renovação). O token continua
+      // aceito bem depois disso enquanto o perfil do navegador o mantiver.
+      const health = evaluateSessionHealth(session);
+      const active = !!session && health.recentlyVerified;
+      const autoRenewal = health.autoRenewal;
 
       return new Response(
         JSON.stringify({
@@ -664,6 +668,8 @@ serve(async (req) => {
             token_obtained_at: isAdmin ? (session?.token_obtained_at ?? null) : null,
             token_expires_at: isAdmin ? (session?.token_expires_at ?? null) : null,
             last_refreshed_at: isAdmin ? (session?.last_refreshed_at ?? null) : null,
+            last_verified_at: isAdmin ? health.lastVerifiedAt : null,
+            auto_renewal: autoRenewal,
           },
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },

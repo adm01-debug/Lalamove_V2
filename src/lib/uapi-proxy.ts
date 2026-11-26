@@ -49,7 +49,8 @@ export interface UAPIUserData {
 }
 
 /** Resposta da action `status` da edge `lalamove-uapi` (metadados da sessão). */
-export interface UAPISessionStatus {  ok: boolean;
+export interface UAPISessionStatus {
+  ok: boolean;
   session: {
     is_active: boolean;
     token_preview: string | null;
@@ -59,6 +60,10 @@ export interface UAPISessionStatus {  ok: boolean;
     token_obtained_at: string | null;
     token_expires_at: string | null;
     last_refreshed_at: string | null;
+    /** Última evidência de token aceito (heartbeat do coletor ou obtenção). */
+    last_verified_at: string | null;
+    /** Há `refresh_token` gravado — sem ele a renovação automática é impossível. */
+    auto_renewal: boolean;
   };
 }
 

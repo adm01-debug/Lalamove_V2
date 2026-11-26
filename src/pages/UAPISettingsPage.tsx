@@ -19,9 +19,6 @@ export default function UAPISettingsPage() {
   const [showNewToken, setShowNewToken] = useState(false);
 
   const isConnected = status?.ok !== false && status?.session?.is_active;
-  // A edge já avalia a expiração em `is_active`; não recalcular com Data.now()
-  // aqui (impuro no render e sujeito ao relógio do navegador).
-  const isExpired = status?.session?.is_active === false && !!status?.session?.token_expires_at;
 
   const handleUpdate = async () => {
     if (!newToken.trim()) return toast.error('Token de acesso não pode ser vazio');
@@ -126,12 +123,31 @@ export default function UAPISettingsPage() {
               </div>
               <div className="flex items-center gap-1">
                 <Clock className="h-3 w-3 text-muted-foreground" />
-                <span className="text-muted-foreground">Expira em:</span>{' '}
-                {isExpired
-                  ? <Badge variant="destructive">Expirado</Badge>
-                  : status.session.token_expires_at
+                <span className="text-muted-foreground">Verificado em:</span>{' '}
+                {status.session.is_active
+                  ? <Badge variant="secondary">Ativo</Badge>
+                  : <Badge variant="destructive">Sem verificação recente</Badge>}{' '}
+                <span className="text-xs text-muted-foreground">
+                  {status.session.last_verified_at
+                    ? new Date(status.session.last_verified_at).toLocaleString('pt-BR')
+                    : '—'}
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <RefreshCw className="h-3 w-3 text-muted-foreground" />
+                <span className="text-muted-foreground">Renovação automática:</span>{' '}
+                {status.session.auto_renewal
+                  ? <Badge variant="secondary">Habilitada</Badge>
+                  : <Badge variant="outline">Sem refresh token</Badge>}
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="h-3 w-3 text-muted-foreground" />
+                <span className="text-muted-foreground">Renovação prevista:</span>{' '}
+                <span className="text-xs text-muted-foreground">
+                  {status.session.token_expires_at
                     ? new Date(status.session.token_expires_at).toLocaleString('pt-BR')
                     : '—'}
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <RefreshCw className="h-3 w-3 text-muted-foreground" />
