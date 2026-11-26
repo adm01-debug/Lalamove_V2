@@ -63,7 +63,22 @@ const PROFILE_DIR =
 // Lista de pedidos: o painel avanca por cursor, entao cada pagina coletada vira
 // uma chave propria. Recibos sao buscados para os pedidos mais recentes.
 const ORDER_PAGES = Number(process.env.UAPI_ORDER_PAGES || 3);
-const RECEIPTS = Number(process.env.UAPI_RECEIPTS || 5);
+const RECEIPTS = Number(process.env.UAPI_RECEIPTS || 10);
+// Extrato e cupons paginam por `page_no`: cada pagina precisa da propria chave no
+// snapshot, senao o painel recebe erro do gateway ao avancar alem da ultima
+// coletada.
+const STATEMENT_PAGES = Number(process.env.UAPI_STATEMENT_PAGES || 3);
+const COUPON_PAGES = Number(process.env.UAPI_COUPON_PAGES || 3);
+
+const pagedTargets = (resource, method, buildArgs, pages) =>
+  Array.from({ length: Math.max(1, pages) }, (_, index) => {
+    const pageNo = index + 1;
+    return {
+      resource: pageNo > 1 ? `${resource}:p${pageNo}` : resource,
+      method,
+      args: (city) => buildArgs(city, pageNo),
+    };
+  });
 
 if (!SUPABASE_URL || !SERVICE_KEY) {
   console.error('ERRO: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY');
@@ -75,10 +90,18 @@ if (!SUPABASE_URL || !SERVICE_KEY) {
 // a chave primaria da tabela e o proprio nome do recurso.
 const TARGETS = [
   { resource: 'wallet_balance', method: 'wallet_balance', args: (city) => ({ city_id: city }) },
-  { resource: 'wallet_flow_list', method: 'wallet_flow_list', args: (city) => ({ city_id: city, trans_type: 1, page_no: 1, page_size: 20 }) },
-  { resource: 'wallet_flow_list:p2', method: 'wallet_flow_list', args: (city) => ({ city_id: city, trans_type: 1, page_no: 2, page_size: 20 }) },
-  { resource: 'coupon_list_web', method: 'coupon_list_web', args: (city) => ({ city_id: city, page_no: 1, page_size: 20 }) },
-  { resource: 'coupon_list_web:p2', method: 'coupon_list_web', args: (city) => ({ city_id: city, page_no: 2, page_size: 20 }) },
+  ...pagedTargets(
+    'wallet_flow_list',
+    'wallet_flow_list',
+    (city, page_no) => ({ city_id: city, trans_type: 1, page_no, page_size: 20 }),
+    STATEMENT_PAGES,
+  ),
+  ...pagedTargets(
+    'coupon_list_web',
+    'coupon_list_web',
+    (city, page_no) => ({ city_id: city, page_no, page_size: 20 }),
+    COUPON_PAGES,
+  ),
   { resource: 'get_fleet:1', method: 'get_fleet', args: () => ({ fleet_type_code: 1, page_no: 1, page_size: 50 }) },
   { resource: 'get_fleet:2', method: 'get_fleet', args: () => ({ fleet_type_code: 2, page_no: 1, page_size: 50 }) },
   { resource: 'get_user_info', method: 'get_user_info', args: () => ({}) },
