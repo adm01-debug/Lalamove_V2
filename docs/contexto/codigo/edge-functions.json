@@ -673,7 +673,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-gateway/index.ts",
    "arquivos": 2,
-   "linhas": 555,
+   "linhas": 574,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

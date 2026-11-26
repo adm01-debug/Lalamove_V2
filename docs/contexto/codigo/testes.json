@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 191,
+ "total": 193,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 48,
   "guard (node --test)": 34,
-  "unit (vitest)": 91
+  "unit (vitest)": 93
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 17
+   "arquivos": 19
   },
   {
    "padrao": "e2e/",
@@ -969,6 +969,15 @@
    "casos": 15
   },
   {
+   "arquivo": "src/hooks/useLalamoveUapi.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 84,
+   "testa": [
+    "src/hooks/useLalamoveUapi.ts"
+   ],
+   "casos": 7
+  },
+  {
    "arquivo": "src/hooks/useNotificationHistory.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 87,
@@ -1041,12 +1050,12 @@
   {
    "arquivo": "src/lib/__tests__/lalamoveReasons.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 97,
+   "linhas": 115,
    "testa": [
     "src/lib/lalamoveReasons.ts",
     "src/lib/uapiStatement.ts"
    ],
-   "casos": 11
+   "casos": 14
   },
   {
    "arquivo": "src/lib/__tests__/lalamoveTimeline.test.ts",
@@ -1145,6 +1154,15 @@
     "src/lib/geo-gateway.ts"
    ],
    "casos": 9
+  },
+  {
+   "arquivo": "src/lib/lalamoveUapiPayload.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 245,
+   "testa": [
+    "src/lib/lalamoveUapiPayload.ts"
+   ],
+   "casos": 23
   },
   {
    "arquivo": "src/lib/lalamoveValidation.test.ts",
@@ -1827,6 +1845,7 @@
   "src/hooks/useGeoAdmin.ts": 1,
   "src/hooks/useGeoSearch.ts": 1,
   "src/hooks/useIncidents.ts": 1,
+  "src/hooks/useLalamoveUapi.ts": 1,
   "src/hooks/useLoginLockout.ts": 1,
   "src/hooks/useMapProviderPolicy.ts": 1,
   "src/hooks/useMapSettings.ts": 2,
@@ -1856,6 +1875,7 @@
   "src/lib/lalamoveOrderEdit.ts": 2,
   "src/lib/lalamoveReasons.ts": 1,
   "src/lib/lalamoveTimeline.ts": 2,
+  "src/lib/lalamoveUapiPayload.ts": 1,
   "src/lib/lalamoveValidation.ts": 1,
   "src/lib/orderErrors.ts": 1,
   "src/lib/phone.ts": 1,
@@ -2018,7 +2038,6 @@
    "src/hooks/useJobQueue.ts",
    "src/hooks/useLalamove.ts",
    "src/hooks/useLalamoveQuota.ts",
-   "src/hooks/useLalamoveUapi.ts",
    "src/hooks/useMetrics.ts",
    "src/hooks/useMFA.ts",
    "src/hooks/useOfflineStorage.ts",

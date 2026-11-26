@@ -219,7 +219,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 101
+   "arquivos_puxados": 102
   },
   {
    "caminho": "/*",
@@ -964,7 +964,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 101
+   "arquivos_puxados": 102
   },
   {
    "caminho": "/delivery-metrics",
@@ -1570,7 +1570,7 @@
     "alert",
     "status"
    ],
-   "arquivos_puxados": 25
+   "arquivos_puxados": 26
   },
   {
    "caminho": "/lalamove-quota",
@@ -2125,7 +2125,7 @@
     "option",
     "status"
    ],
-   "arquivos_puxados": 77
+   "arquivos_puxados": 78
   },
   {
    "caminho": "/password-reset-approvals",
@@ -2777,6 +2777,7 @@
    "hooks": [
     "useCities",
     "useDriverLocation",
+    "useEffect",
     "useLalamoveStatus",
     "useLalamoveTest",
     "useLalamoveUser",
@@ -2826,8 +2827,10 @@
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 16
+   "papeis": [
+    "status"
+   ],
+   "arquivos_puxados": 19
   },
   {
    "caminho": "/settings/maps",
@@ -3001,6 +3004,7 @@
    "definida_em": "src/App.tsx",
    "redireciona": null,
    "hooks": [
+    "useEffect",
     "useMutation",
     "useQuery",
     "useQueryClient",
@@ -3028,8 +3032,10 @@
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 13
+   "papeis": [
+    "status"
+   ],
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/sla",
@@ -3808,7 +3814,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 285
+   "arquivos_puxados": 286
   }
  ],
  "menu": [

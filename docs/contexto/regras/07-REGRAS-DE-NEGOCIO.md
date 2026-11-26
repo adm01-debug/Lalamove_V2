@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `65e8adecf4` · branch `main` · 2026-11-26 11:01 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `81000bb7ee` · branch `main` · 2026-11-26 11:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1504,6 +1504,7 @@ _nenhum item encontrado_
 | `TIMEOUT` | `2000` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `RETRY_DELAY` | `250` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `MAX_PRIORITY_FEE_BRL` | `500` | `src/lib/lalamoveOrderEdit.ts` |
+| `UAPI_TIME_ZONE` | `'America/Sao_Paulo'` | `src/lib/lalamoveUapiPayload.ts` |
 | `RETRY_FLAG` | `'lazy-retry-flag'` | `src/lib/lazyWithRetry.ts` |
 | `BITRIX24_CONNECTED` | `"bitrix24_connected"` | `src/lib/postMessage.ts` |
 | `UAPI_SESSION_MISSING_MESSAGE` | `'Sessão UAPI não configurada.'` | `src/lib/uapiErrors.ts` |
@@ -2094,13 +2095,14 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1587 testes em 141 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1632 testes em 143 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
 | `scripts/db-audit/check-migration-drift.test.mjs` | 76 | aceita migration com nome e SQL equivalentes no ledger · aceita registro legado sem name/statements, sem inventar evidencia · fixa arquivo legado por hash sem chamar seus bytes de conteudo historico · name-and-file-pinned falha para arquivo/nome alterado ou SQL recuperado no ledger … |
 | `supabase/functions/_shared/contract.test.ts` | 60 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
+| `src/lib/lalamoveUapiPayload.test.ts` | 33 | uapiData · desembrulha o payload cru da UAPI · continua aceitando o envelope do proxy externo legado · devolve undefined quando a UAPI recusa a chamada … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
 | `src/components/map/__tests__/markerFactories.test.ts` | 24 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |
 | `src/lib/__tests__/lalamoveOrderEdit.test.ts` | 24 | normalizeOrderStatus · mapeia aliases legados para o enum canônico · devolve null para valores desconhecidos · isTerminalStatus … |
@@ -2124,6 +2126,7 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/phone.test.ts` | 17 | normaliza celular com máscara · normaliza celular já com DDI · normaliza celular cru e remove zero de discagem · normaliza telefone fixo de 10 dígitos … |
 | `scripts/db-audit/register-migration.test.mjs` | 16 | splitStatements respects dollar-quoted function bodies (does not split on internal semicolons) · splitStatements strips line comments but preserves them inside dollar-quoted bodies · buildInsertSql picks a dollar-quote tag that does not collide with the statement body · parseMigrationFile rejects a filename that does not match the version_name.sql convention … |
 | `src/lib/__tests__/lalamoveCatalogCities.test.ts` | 16 | matriz servico x cidade (conferida com a API real) · Curitiba oferece exatamente os 6 servicos que a API lista · Sao Paulo oferece os 14 servicos · LALAGOFOUR existe so em RIO e SAO (nao em BHZ/CWB) … |
+| `src/lib/__tests__/lalamoveReasons.test.ts` | 16 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/_shared/messaging/inbound-actions.test.ts` | 16 | etapa 114: confirmacao carimba o pedido e abre evento de rastreio · etapa 114: chegada carimba driver_arrived_at · etapa 114: problema abre incidente, nao confirmacao · etapa 114: atraso sem avaria e LATE_DELIVERY e severidade MEDIUM … |
 | `scripts/db-audit/check-grants-fresh.test.mjs` | 15 | aceita baselines identicas · ignora mudanca so em metadados (generated_at/note/how_to_regenerate) · falha quando um grant novo aparece no banco (anon_execute) · falha quando um grant e removido do banco (anon_table_select) … |
 | `scripts/db-audit/check-manifest-fresh.test.mjs` | 15 | aceita manifesto identico apesar da ordem e do generated_at · detecta objeto novo na secao  · detecta alteracao de default pelo hash · detecta constraint removida do banco … |
@@ -2137,7 +2140,6 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/error-monitor.test.ts` | 14 | shouldAlert: taxa abaixo do limite não dispara · shouldAlert: taxa exatamente no limite não dispara (é > 5%, não >=) · shouldAlert: taxa acima do limite dispara · shouldAlert: amostra pequena não dispara mesmo com 100% de erro … |
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
-| `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 13 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `supabase/functions/zapp-callback/ledger.test.ts` | 13 | status delivered atualiza a linha e grava delivered_at · status atrasado nao regride o ledger · status de mensagem desconhecida nao inventa linha · status failed grava failed_at e o codigo do erro … |
 | `supabase/functions/zapp-callback/security.test.ts` | 13 | parseSignatureHeader le t e v1 · parseSignatureHeader aceita espacos e ordem invertida · parseSignatureHeader rejeita header ausente ou malformado · timingSafeEqual compara conteudo e tamanho … |
@@ -2164,6 +2166,7 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/messaging/registry.test.ts` | 10 | etapa 88: tabela ausente devolve o catalogo do codigo · etapa 88: tabela vazia tambem cai no catalogo do codigo · etapa 88: rota do banco e lida e canal desconhecido e descartado · etapa 145: rota desligada continua vindo do banco com is_enabled falso … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
+| `src/hooks/useLalamoveUapi.test.ts` | 9 | extractOrderPage · lê data.order_base_info com valor, data e endereços reais · usa order_datetime_hts quando falta order_time e ignora item sem uuid · devolve o cursor opaco last_id, não o uuid do último item … |
 | `src/hooks/__tests__/useActiveAlerts.test.ts` | 9 | useActiveAlerts · deve buscar alertas ativos corretamente · deve mapear null order_id/driver_id para undefined · deve lidar com is_read null defaulting para false … |
 | `src/hooks/__tests__/useGeo.contract.test.ts` | 9 | etapa 33 — hooks do contrato do geo-gateway · useGeocode devolve GeoAddress[] cru com o lugar tipado · useGeocode 404 vira lista vazia e não dispara abaixo de 3 caracteres · useRoute envia origin/destination/waypoints como objetos … |
 | `src/hooks/__tests__/useGeo.test.ts` | 9 | useGeo · geocode converte GeoAddress[] em features no formato v5 (picker e autocomplete) · geocode 404 vira lista vazia (estado vazio da UI, não erro) · directions monta origin/destination/waypoints e preserva perfil explícito … |

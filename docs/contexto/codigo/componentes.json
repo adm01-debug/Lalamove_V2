@@ -640,7 +640,7 @@
     "UapiFleetPanel"
    ],
    "export_default": null,
-   "linhas": 139,
+   "linhas": 140,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useFleetMutation",
@@ -694,7 +694,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 4,
+   "usado_por": 6,
    "orfao": false
   },
   {
@@ -2938,7 +2938,7 @@
     "LalamoveSettingsPage"
    ],
    "export_default": "LalamoveSettingsPage",
-   "linhas": 506,
+   "linhas": 490,
    "dominio": "pages",
    "hooks_locais": [
     "useLalamoveStatus",
@@ -3719,7 +3719,7 @@
     "UAPISettingsPage"
    ],
    "export_default": "UAPISettingsPage",
-   "linhas": 192,
+   "linhas": 194,
    "dominio": "pages",
    "hooks_locais": [
     "useUAPIStatus",

@@ -1518,7 +1518,7 @@
     "useWalletBalance",
     "useWalletHistory"
    ],
-   "linhas": 198,
+   "linhas": 199,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1571,7 +1571,7 @@
     "useUapiOrderHistory",
     "useUapiWalletStatement"
    ],
-   "linhas": 351,
+   "linhas": 447,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1593,7 +1593,7 @@
     "src/components/orders/OrderDetailModal.tsx",
     "src/lib/uapiStatement.ts"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useLoginLockout.ts",
@@ -2510,7 +2510,7 @@
     "useUpdateToken",
     "useWalletBalance"
    ],
-   "linhas": 68,
+   "linhas": 74,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

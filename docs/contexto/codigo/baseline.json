@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "65e8adecf4970df607dc80b9b59fe6a43c8a791a",
+  "commit": "81000bb7ee0834133c0f4438848c35e3c91a1d07",
   "branch": "main",
-  "data_commit": "2026-11-26T08:00:56-03:00",
+  "data_commit": "2026-11-26T08:49:22-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "81000bb",
+    "data": "2026-11-26",
+    "assunto": "fix: le o payload cru da UAPI no saldo, perfil, extrato, veiculos e areas (#396)"
+   },
    {
     "sha": "65e8ade",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "e340ad4",
     "data": "2026-11-24",
     "assunto": "chore: reconcilia versoes de migration aplicadas direto no banco (#372)"
-   },
-   {
-    "sha": "b70d145",
-    "data": "2026-11-24",
-    "assunto": "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)"
    }
   ],
-  "arquivos_mudados_7d": 540,
+  "arquivos_mudados_7d": 546,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -184,15 +184,15 @@
     "mudancas": 21
    },
    {
+    "pasta": "src/lib/__tests__",
+    "mudancas": 19
+   },
+   {
     "pasta": ".github/workflows/ci.yml",
     "mudancas": 18
    },
    {
     "pasta": "src/components/dashboard",
-    "mudancas": 18
-   },
-   {
-    "pasta": "src/lib/__tests__",
     "mudancas": 18
    }
   ],
@@ -211,15 +211,15 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 16
-   },
-   {
-    "arquivo": "package-lock.json",
     "mudancas": 15
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 15
+   },
+   {
+    "arquivo": "package-lock.json",
+    "mudancas": 14
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1152,
-  "arquivos_codigo": 730,
-  "linhas_codigo": 143897,
+  "arquivos_total": 1155,
+  "arquivos_codigo": 733,
+  "linhas_codigo": 144634,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 94,
   "migrations": 213,
   "cron_jobs": 24,
-  "testes": 191,
+  "testes": 193,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 114
@@ -524,11 +524,11 @@
   },
   "src/components": {
    "arquivos": 167,
-   "linhas": 29927
+   "linhas": 29928
   },
   "src/hooks": {
-   "arquivos": 115,
-   "linhas": 19987
+   "arquivos": 116,
+   "linhas": 20174
   },
   "src/i18n": {
    "arquivos": 1,
@@ -539,8 +539,8 @@
    "linhas": 5379
   },
   "src/lib": {
-   "arquivos": 54,
-   "linhas": 4570
+   "arquivos": 56,
+   "linhas": 5114
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -548,7 +548,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21791
+   "linhas": 21777
   },
   "src/services": {
    "arquivos": 1,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 127,
-   "linhas": 30249
+   "linhas": 30268
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -691,7 +691,7 @@
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 5,
-  "arquivos_acima_500_linhas": 27
+  "arquivos_acima_500_linhas": 26
  },
  "todos": [
   {

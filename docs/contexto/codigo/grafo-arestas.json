@@ -1166,7 +1166,8 @@
   ],
   "src/hooks/useLalamove.ts": [
    "src/lib/lalamove-api.ts",
-   "src/lib/lalamove-config.ts"
+   "src/lib/lalamove-config.ts",
+   "src/lib/lalamoveUapiPayload.ts"
   ],
   "src/hooks/useLalamoveQuota.ts": [
    "src/integrations/supabase/client.ts"
@@ -1175,6 +1176,7 @@
    "src/integrations/supabase/client.ts",
    "src/lib/edge-error.ts",
    "src/lib/lalamove-config.ts",
+   "src/lib/lalamoveUapiPayload.ts",
    "src/lib/uapiErrors.ts"
   ],
   "src/hooks/useLoginLockout.ts": [
@@ -1340,6 +1342,7 @@
    "src/utils/logger.ts"
   ],
   "src/hooks/useUAPI.ts": [
+   "src/lib/lalamoveUapiPayload.ts",
    "src/lib/uapi-proxy.ts"
   ],
   "src/hooks/useUserDevices.ts": [
@@ -1374,7 +1377,8 @@
   ],
   "src/lib/lalamove-api.ts": [
    "src/integrations/supabase/client.ts",
-   "src/lib/edge-error.ts"
+   "src/lib/edge-error.ts",
+   "src/lib/lalamoveUapiPayload.ts"
   ],
   "src/lib/lalamoveCatalog.ts": [
    "src/types/lalamove.ts"
@@ -1727,6 +1731,7 @@
    "src/hooks/useLalamoveQuota.ts"
   ],
   "src/pages/LalamoveSettingsPage.tsx": [
+   "src/components/lalamove/UapiSnapshotBadge.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
@@ -2034,6 +2039,7 @@
    "src/hooks/useSystemHealth.ts"
   ],
   "src/pages/UAPISettingsPage.tsx": [
+   "src/components/lalamove/UapiSnapshotBadge.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
