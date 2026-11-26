@@ -24,8 +24,10 @@ function forbidden(requiredRoles: string[], extra: Record<string, string> = {}):
  * Verifica se o caller tem ao menos um dos roles informados.
  *
  * O role é resolvido em duas etapas, para não bloquear quem tem permissão:
- *  1. claims do JWT (`app_metadata.role`, com fallback em `user_metadata.role`)
- *     — mesmo padrão de lalamove-uapi/index.ts:87 e external-companies/index.ts:43;
+ *  1. claim do JWT `app_metadata.role` — só o `service_role` escreve ali; o
+ *     `user_metadata.role` é editável pelo próprio usuário
+ *     (`auth.updateUser({ data: { role: "admin" } })`) e por isso NÃO é aceito,
+ *     sob pena de autopromoção;
  *  2. fonte canônica `public.user_roles`, lida com `service_role` porque
  *     `public.has_role` teve o EXECUTE revogado de `authenticated` na migration
  *     20260715164406.
@@ -58,8 +60,7 @@ export async function requireRole(
   }
 
   const appMetadata = (user.app_metadata ?? {}) as Record<string, unknown>;
-  const userMetadata = (user.user_metadata ?? {}) as Record<string, unknown>;
-  const claimRole = (appMetadata.role ?? userMetadata.role) as string | undefined;
+  const claimRole = appMetadata.role as string | undefined;
   if (claimRole && roles.includes(claimRole)) {
     return { error: null };
   }
