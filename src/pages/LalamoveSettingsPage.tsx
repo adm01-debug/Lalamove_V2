@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Zap, CheckCircle2, XCircle, History, ChevronLeft, ChevronRight, Truck, MapPin, Eye, EyeOff } from 'lucide-react';
 import { LalamoveV3Explorer } from './lalamove/LalamoveV3Explorer';
+import { UapiSnapshotBadge } from '@/components/lalamove/UapiSnapshotBadge';
 import { QueryState } from '@/components/ui/query-state';
 
 interface Transaction {
@@ -21,22 +22,6 @@ interface Transaction {
   amount_fen?: number;
   amount?: number;
   balance_fen?: number;
-}
-
-interface Vehicle {
-  id?: string | number;
-  vehicle_type_id?: string | number;
-  name?: string;
-  vehicle_type_name?: string;
-  key?: string | number;
-}
-
-interface ServiceArea {
-  id?: string | number;
-  city_id?: string | number;
-  name?: string;
-  city_name?: string;
-  key?: string | number;
 }
 
 export default function LalamoveSettingsPage() {
@@ -108,7 +93,7 @@ export default function LalamoveSettingsPage() {
     }
   };
 
-  const transactions = walletHistory?.body?.data?.list || walletHistory?.data?.list || [];
+  const transactions = walletHistory?.items ?? [];
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-4xl">
@@ -177,6 +162,7 @@ export default function LalamoveSettingsPage() {
             <p className="text-2xl font-bold text-foreground">
               {wallet?.formatted ?? '—'}
             </p>
+            <UapiSnapshotBadge info={wallet?.freshness} className="mt-2" />
           </CardContent>
         </Card>
       </div>
@@ -389,33 +375,39 @@ export default function LalamoveSettingsPage() {
                 </div>
               ))}
 
-              {/* Pagination */}
-              <div className="flex items-center justify-between pt-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setWalletPage(p => Math.max(1, p - 1))}
-                  disabled={walletPage <= 1}
-                >
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  Anterior
-                </Button>
-                <span className="text-sm text-muted-foreground">Página {walletPage}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setWalletPage(p => p + 1)}
-                  disabled={transactions.length < 20}
-                >
-                  Próxima
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-6">
-              Nenhuma transação encontrada. Verifique se o token UAPI está ativo.
+              {walletPage > 1
+                ? `Nenhuma transação na página ${walletPage}.`
+                : 'Nenhuma transação encontrada. Verifique se o token UAPI está ativo.'}
             </p>
+          )}
+
+          {/* A navegação fica fora dos ramos de sucesso/vazio/erro: numa página
+              vazia ou com falha, sem ela o operador não volta à anterior. */}
+          {!historyLoading && (
+            <div className="flex items-center justify-between pt-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setWalletPage(p => Math.max(1, p - 1))}
+                disabled={walletPage <= 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Anterior
+              </Button>
+              <span className="text-sm text-muted-foreground">Página {walletPage}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setWalletPage(p => p + 1)}
+                disabled={transactions.length < 20}
+              >
+                Próxima
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -436,22 +428,19 @@ export default function LalamoveSettingsPage() {
             <div className="space-y-2">
               {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
             </div>
-          ) : vehiclesData?.body?.data ? (
+          ) : vehiclesData && vehiclesData.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {(Array.isArray(vehiclesData?.body?.data) ? (vehiclesData.body.data as Vehicle[]) : Object.entries(vehiclesData?.body?.data || {})).map((item, i) => {
-                const vehicle = Array.isArray(vehiclesData?.body?.data) ? (item as Vehicle) : { key: (item as [string, Vehicle])[0], ...(item as [string, Vehicle])[1] };
-                const name = vehicle.name || vehicle.vehicle_type_name || vehicle.key || `Veículo ${i + 1}`;
-                const id = vehicle.id || vehicle.vehicle_type_id || vehicle.key || i;
-                return (
-                  <div key={String(id)} className="flex items-center gap-3 p-2.5 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors">
-                    <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center text-sm">🚗</div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-foreground truncate">{name}</p>
-                      <p className="text-xs text-muted-foreground">ID: {id}</p>
-                    </div>
+              {vehiclesData.map((vehicle) => (
+                <div key={vehicle.id} className="flex items-center gap-3 p-2.5 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors">
+                  <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center text-sm">🚗</div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-foreground truncate">{vehicle.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {vehicle.description || `ID: ${vehicle.id}`}
+                    </p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-4">Nenhum veículo encontrado. Verifique se o token UAPI está ativo.</p>
@@ -475,22 +464,17 @@ export default function LalamoveSettingsPage() {
             <div className="space-y-2">
               {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
             </div>
-          ) : serviceAreasData?.body?.data ? (
+          ) : serviceAreasData && serviceAreasData.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {(Array.isArray(serviceAreasData?.body?.data) ? (serviceAreasData.body.data as ServiceArea[]) : Object.entries(serviceAreasData?.body?.data || {})).map((item, i) => {
-                const area = Array.isArray(serviceAreasData?.body?.data) ? (item as ServiceArea) : { key: (item as [string, ServiceArea])[0], ...(item as [string, ServiceArea])[1] };
-                const name = area.name || area.city_name || area.key || `Área ${i + 1}`;
-                const id = area.id || area.city_id || area.key || i;
-                return (
-                  <div key={String(id)} className="flex items-center gap-2 p-2 rounded-lg border border-border/50">
-                    <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{name}</p>
-                      <p className="text-xs text-muted-foreground">ID: {id}</p>
-                    </div>
+              {serviceAreasData.map((area) => (
+                <div key={area.id} className="flex items-center gap-2 p-2 rounded-lg border border-border/50">
+                  <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{area.name}</p>
+                    <p className="text-xs text-muted-foreground">ID: {area.id}</p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-4">Nenhuma área encontrada. Verifique se o token UAPI está ativo.</p>

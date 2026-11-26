@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { parseEdgeError } from '@/lib/edge-error';
+import type { LalamoveRawResponse, WalletFlow } from '@/lib/lalamoveUapiPayload';
 
 /**
  * Cliente Lalamove (proxy unificado v3 + UAPI).
@@ -8,12 +9,8 @@ import { parseEdgeError } from '@/lib/edge-error';
  * Edge Function autenticada `lalamove-gateway`, que injeta as credenciais.
  */
 
-export interface LalamoveApiResponse {
-  ok?: boolean;
-  body?: { data?: Record<string, unknown> };
-  formatted?: string;
+export interface LalamoveApiResponse extends LalamoveRawResponse {
   sp_summary?: unknown;
-  [key: string]: unknown;
 }
 
 export interface LalamoveStatusResponse {
@@ -30,8 +27,8 @@ export interface LalamoveStatusResponse {
 }
 
 export interface LalamoveWalletHistoryResponse extends LalamoveApiResponse {
-  body?: { data?: { list?: unknown[] } };
-  data?: { list?: unknown[] };
+  body?: { data?: WalletFlow };
+  data?: WalletFlow;
 }
 
 interface GatewayPayload {

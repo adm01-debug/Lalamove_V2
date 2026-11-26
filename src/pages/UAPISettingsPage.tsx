@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Eye, EyeOff } from 'lucide-react';
+import { UapiSnapshotBadge } from '@/components/lalamove/UapiSnapshotBadge';
 import { QueryState } from '@/components/ui/query-state';
 
 export default function UAPISettingsPage() {
@@ -74,6 +75,7 @@ export default function UAPISettingsPage() {
             <p className="text-2xl font-bold text-foreground">
               {wallet?.balanceFormatted ?? '—'}
             </p>
+            <UapiSnapshotBadge info={wallet?.freshness} className="mt-2" />
           </CardContent>
         </Card>
 
@@ -87,10 +89,10 @@ export default function UAPISettingsPage() {
           </CardHeader>
           <CardContent>
             <p className="font-medium text-foreground truncate">
-              {user?.body?.data?.nickname || user?.body?.data?.real_name || '—'}
+              {user?.nickname || user?.real_name || '—'}
             </p>
             <p className="text-xs text-muted-foreground truncate">
-              {user?.body?.data?.email || ''}
+              {user?.email || ''}
             </p>
           </CardContent>
         </Card>

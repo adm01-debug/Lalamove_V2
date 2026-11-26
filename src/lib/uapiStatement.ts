@@ -43,7 +43,12 @@ export function toAccountingRows(transactions: UapiWalletTransaction[]): Account
       descricao: tx.remark?.trim() || 'Movimentação Lalamove',
       natureza: amount < 0 ? 'DEBITO' : 'CREDITO',
       valor: fenToDecimal(Math.abs(amount)),
-      saldo: fenToDecimal(tx.balance_fen),
+      // `flow_item_arr` nem sempre traz `balance_fen`: gravar 0,00 inventaria um
+      // saldo após o lançamento, então o campo sai vazio. Zero explícito continua 0,00.
+      saldo:
+        typeof tx.balance_fen === 'number' && Number.isFinite(tx.balance_fen)
+          ? fenToDecimal(tx.balance_fen)
+          : '',
       identificador: tx.flow_id ?? tx.id ?? `linha-${index + 1}`,
     };
   });
@@ -58,15 +63,17 @@ export function summarizeAccountingRows(rows: AccountingRow[]): {
 } {
   let creditos = 0;
   let debitos = 0;
+  let saldoFinal = '';
   for (const row of rows) {
     const value = Number(row.valor);
     if (row.natureza === 'CREDITO') creditos += value;
     else debitos += value;
+    if (row.saldo !== '') saldoFinal = row.saldo;
   }
   return {
     creditos: creditos.toFixed(2),
     debitos: debitos.toFixed(2),
-    saldoFinal: rows.length ? rows[rows.length - 1].saldo : '0.00',
+    saldoFinal: rows.length ? saldoFinal : '0.00',
     lancamentos: rows.length,
   };
 }

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { lalamove, type QuoteParams, type LalamoveStatusResponse, type LalamoveApiResponse, type LalamoveWalletHistoryResponse } from '@/lib/lalamove-api';
+import { parseServiceAreas, parseSnapshotMeta, parseVehicles, parseWallet, parseWalletFlow, uapiData } from '@/lib/lalamoveUapiPayload';
 import { isLalamoveConfigured } from '@/lib/lalamove-config';
 
 // ── Status & Test ──
@@ -33,10 +34,7 @@ export function useWallet() {
     refetchIntervalInBackground: false,
     enabled: isLalamoveConfigured(),
     retry: false,
-    select: (d: LalamoveApiResponse) => ({
-      cents: (d.body?.data?.balance_fen as number) ?? 0,
-      formatted: d.formatted ?? 'R$ 0,00',
-    }),
+    select: (d: LalamoveApiResponse) => ({ ...parseWallet(d), freshness: parseSnapshotMeta(d) }),
   });
 }
 
@@ -47,7 +45,7 @@ export function useLalamoveUser() {
     staleTime: 5 * 60_000,
     enabled: isLalamoveConfigured(),
     retry: false,
-    select: (d: LalamoveApiResponse) => d.body?.data,
+    select: (d: LalamoveApiResponse) => uapiData<Record<string, unknown>>(d),
   });
 }
 
@@ -60,7 +58,7 @@ export function useCities() {
     staleTime: 24 * 60 * 60_000,
     enabled: isLalamoveConfigured(),
     retry: false,
-    select: (d: LalamoveApiResponse) => ({ all: d.body?.data, sp: d.sp_summary }),
+    select: (d: LalamoveApiResponse) => ({ all: uapiData<unknown[]>(d), sp: d.sp_summary }),
   });
 }
 
@@ -141,12 +139,13 @@ export function useRefreshUapiToken() {
 // ── Wallet History ──
 
 export function useWalletHistory(page = 1) {
-  return useQuery<LalamoveWalletHistoryResponse>({
+  return useQuery({
     queryKey: ['llm', 'wallet-history', page],
     queryFn: () => lalamove.walletHistory(String(page)) as Promise<LalamoveWalletHistoryResponse>,
     staleTime: 60_000,
     enabled: isLalamoveConfigured(),
     retry: false,
+    select: (d: LalamoveWalletHistoryResponse) => parseWalletFlow(d),
   });
 }
 
@@ -159,6 +158,7 @@ export function useVehicles() {
     staleTime: 24 * 60 * 60_000, // 24h
     enabled: isLalamoveConfigured(),
     retry: false,
+    select: (d: LalamoveApiResponse) => parseVehicles(d),
   });
 }
 
@@ -171,6 +171,7 @@ export function useServiceAreas() {
     staleTime: 24 * 60 * 60_000,
     enabled: isLalamoveConfigured(),
     retry: false,
+    select: (d: LalamoveApiResponse) => parseServiceAreas(d),
   });
 }
 

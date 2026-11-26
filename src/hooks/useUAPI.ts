@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { uapi } from '@/lib/uapi-proxy';
+import { uapi, type UAPIResponse, type UAPIUserData } from '@/lib/uapi-proxy';
+import { parseSnapshotMeta, parseWallet, uapiData } from '@/lib/lalamoveUapiPayload';
 
 export function useUAPIStatus() {
   return useQuery({
@@ -23,6 +24,7 @@ export function useUAPIUser() {
     queryKey: ['uapi', 'user'],
     queryFn: () => uapi.getUserInfo(),
     staleTime: 5 * 60_000,
+    select: (data: UAPIResponse<UAPIUserData>) => uapiData<UAPIUserData>(data),
   });
 }
 
@@ -32,11 +34,15 @@ export function useWalletBalance() {
     queryFn: () => uapi.getWalletBalance(),
     refetchInterval: 30_000,
     refetchIntervalInBackground: false,
-    select: (data) => ({
-      balanceCents: data.body?.data?.balance_fen ?? 0,
-      balanceFormatted: data.formatted ?? 'R$ 0,00',
-      raw: data,
-    }),
+    select: (data: UAPIResponse<UAPIUserData>) => {
+      const wallet = parseWallet(data);
+      return {
+        balanceCents: wallet.cents,
+        balanceFormatted: wallet.formatted,
+        freshness: parseSnapshotMeta(data),
+        raw: data,
+      };
+    },
   });
 }
 
