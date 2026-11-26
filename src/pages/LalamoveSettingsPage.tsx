@@ -47,6 +47,7 @@ export default function LalamoveSettingsPage() {
   const updateV3 = useUpdateV3Keys();
   const refreshToken = useRefreshUapiToken();
   const [newToken, setNewToken] = useState('');
+  const [newRefreshToken, setNewRefreshToken] = useState('');
   const [v3Key, setV3Key] = useState('');
   const [v3Secret, setV3Secret] = useState('');
   const [showNewToken, setShowNewToken] = useState(false);
@@ -62,14 +63,16 @@ export default function LalamoveSettingsPage() {
   const uapiOk = status?.uapi?.ok;
 
   const handleUpdateToken = async () => {
-    if (!newToken.trim()) return toast.error('Token não pode ser vazio');
+    if (!newToken.trim()) return toast.error('Access token não pode ser vazio');
+    if (!newRefreshToken.trim()) return toast.error('Refresh token não pode ser vazio');
     try {
-      const result = await updateToken.mutateAsync(newToken);
+      const result = await updateToken.mutateAsync({ token: newToken.trim(), refreshToken: newRefreshToken.trim() });
       if (result.ok) {
-        toast.success('Token atualizado e verificado com sucesso!');
+        toast.success(result.message || 'Sessão UAPI atualizada com sucesso!');
         setNewToken('');
+        setNewRefreshToken('');
       } else {
-        toast.error('Token inválido ou expirado.');
+        toast.error(result.message || 'Token inválido ou expirado.');
       }
     } catch {
       toast.error('Erro ao atualizar token');
@@ -249,12 +252,12 @@ export default function LalamoveSettingsPage() {
 
           <div className="border-t border-border pt-4 space-y-3">
             <p className="text-sm text-muted-foreground">
-              Ou cole um novo token (ação <code className="text-xs bg-muted px-1.5 py-0.5 rounded">set-token</code>, requer perfil admin):
+              Ou cole o par access token + refresh token (ação <code className="text-xs bg-muted px-1.5 py-0.5 rounded">set-token</code>, requer perfil admin). A sessão anterior é desativada.
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
                 <Input
-                  placeholder="Cole o novo token aqui..."
+                  placeholder="Cole o novo access token aqui..."
                   type={showNewToken ? 'text' : 'password'}
                   autoComplete="off"
                   value={newToken}
@@ -270,7 +273,18 @@ export default function LalamoveSettingsPage() {
                   {showNewToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              <Button onClick={handleUpdateToken} disabled={updateToken.isPending || !newToken.trim()}>
+              <Input
+                placeholder="Cole o novo refresh token aqui..."
+                type="password"
+                autoComplete="off"
+                value={newRefreshToken}
+                onChange={(e) => setNewRefreshToken(e.target.value)}
+                className="font-mono text-sm flex-1"
+              />
+              <Button
+                onClick={handleUpdateToken}
+                disabled={updateToken.isPending || !newToken.trim() || !newRefreshToken.trim()}
+              >
                 {updateToken.isPending ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Atualizar'}
               </Button>
             </div>

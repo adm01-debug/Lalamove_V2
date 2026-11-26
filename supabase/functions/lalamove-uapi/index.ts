@@ -9,6 +9,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { requireRole } from "../_shared/auth.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -26,7 +27,6 @@ const APP_REVISION = '53700';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 
 // Anti-WAF headers required for UAPI
 const UAPI_HEADERS: HeadersInit = {
@@ -69,31 +69,13 @@ function buildUapiUrl(method: string, su?: string): string {
   return `${UAPI_BASE_URL}?${params.toString()}`;
 }
 
-// Verifica se o caller tem role admin via JWT claims (app_metadata.role).
-// Retorna { error: Response } se não autorizado, { error: null } se OK.
-async function requireAdmin(req: Request): Promise<{ error: Response | null }> {
-  const authHeader = req.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
-  }
-  const token = authHeader.replace('Bearer ', '');
-  const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    global: { headers: { Authorization: authHeader } },
-  });
-  // `auth.getClaims()` só existe em supabase-js >= 2.7x; esta função importa
-  // 2.49.1, onde a chamada lança TypeError e o handler responde 500 em vez de
-  // 401/403 — `set-token` e `token-status` ficam inutilizáveis. `getUser` existe
-  // em toda a série 2.x e devolve os mesmos metadados.
-  const { data: userData, error: userError } = await anonClient.auth.getUser(token);
-  if (userError || !userData?.user) {
-    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
-  }
-  const role = userData.user.app_metadata?.role ?? userData.user.user_metadata?.role;
-  if (role !== 'admin') {
-    return { error: new Response(JSON.stringify({ error: 'Forbidden: admin role required' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
-  }
-  return { error: null };
-}
+// Ações administrativas (set-token, token-status) usam o `requireRole` de
+// `_shared/auth.ts`. A cópia local que existia aqui lia o papel só de
+// `app_metadata.role`/`user_metadata.role`: como nenhuma conta tem esses campos,
+// todo admin real levava 403 (o botão "Atualizar Token" das telas de
+// configuração nunca funcionou) e, ao mesmo tempo, qualquer conta podia se
+// autopromover escrevendo `user_metadata.role`. O helper resolve por
+// `app_metadata.role` (gravável só com service_role) e por `public.user_roles`.
 
 // Build UAPI body (application/x-www-form-urlencoded)
 function buildUapiBody(token: string, args: Record<string, unknown> = {}): string {
@@ -586,7 +568,7 @@ serve(async (req) => {
     // Special action: set initial token — requer role admin para evitar que
     // qualquer usuário autenticado sobrescreva a sessão UAPI ativa.
     if (action === 'set-token') {
-      const adminCheck = await requireAdmin(req);
+      const adminCheck = await requireRole(req, ['admin'], corsHeaders);
       if (adminCheck.error) return adminCheck.error;
 
       if (!body.access_token || !body.refresh_token) {
@@ -630,7 +612,7 @@ serve(async (req) => {
 
     // Special action: token status — protegido por admin para não expor metadados do token
     if (action === 'token-status') {
-      const adminCheck = await requireAdmin(req);
+      const adminCheck = await requireRole(req, ['admin'], corsHeaders);
       if (adminCheck.error) return adminCheck.error;
       const { data: session } = await supabase.rpc('get_active_uapi_token');
       if (!session || session.length === 0) {

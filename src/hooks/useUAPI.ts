@@ -50,8 +50,8 @@ export function useUAPIOrders(page = 1, size = 10) {
 export function useUpdateToken() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (params: { token: string; xSignJs?: string; xFingerprint?: string }) =>
-      uapi.updateToken(params.token, params.xSignJs, params.xFingerprint),
+    mutationFn: (params: { token: string; refreshToken: string }) =>
+      uapi.updateToken(params.token, params.refreshToken),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['uapi'] });
     },

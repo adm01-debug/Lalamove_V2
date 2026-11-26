@@ -1,4 +1,4 @@
-import { callLalamoveGateway } from '@/lib/lalamove-api';
+import { callLalamoveGateway, setUapiSessionToken } from '@/lib/lalamove-api';
 
 /**
  * Cliente do proxy UAPI.
@@ -77,10 +77,6 @@ export const uapi = {
   getServiceAreas: () => proxyFetch('service_areas'),
   call: <T = unknown>(method: string, args?: unknown, extraParams?: Record<string, string>) =>
     proxyPost<T>(method, args, extraParams),
-  updateToken: (token: string, xSignJs?: string, xFingerprint?: string) => {
-    const params: Record<string, string> = { token };
-    if (xSignJs) params.x_sign_js = xSignJs;
-    if (xFingerprint) params.x_fingerprint = xFingerprint;
-    return proxyFetch('update_token', params);
-  },
+  updateToken: (accessToken: string, refreshToken: string) =>
+    setUapiSessionToken(accessToken, refreshToken),
 };
