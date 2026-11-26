@@ -233,13 +233,26 @@ describe('parseSnapshotMeta', () => {
       data: {},
       _meta: { servedFromSnapshot: true, snapshotCollectedAt: '2026-11-26T10:56:00Z' },
     });
-    expect(meta).toEqual({ servedFromSnapshot: true, snapshotCollectedAt: '2026-11-26T10:56:00Z' });
+    expect(meta).toEqual({
+      servedFromSnapshot: true,
+      snapshotCollectedAt: '2026-11-26T10:56:00Z',
+      endOfHistory: false,
+    });
   });
 
   it('trata resposta ao vivo como não-snapshot', () => {
     expect(parseSnapshotMeta({ ret: 0, data: {} })).toEqual({
       servedFromSnapshot: false,
       snapshotCollectedAt: null,
+      endOfHistory: false,
+    });
+  });
+
+  it('reconhece a página depois do fim do histórico', () => {
+    expect(parseSnapshotMeta({ ret: 0, data: {}, _meta: { endOfHistory: true } })).toEqual({
+      servedFromSnapshot: false,
+      snapshotCollectedAt: null,
+      endOfHistory: true,
     });
   });
 });

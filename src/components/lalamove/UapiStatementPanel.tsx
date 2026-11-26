@@ -56,7 +56,11 @@ export function UapiStatementPanel() {
         )}
 
         {!isLoading && !isError && rows.length === 0 && (
-          <p className="text-sm text-muted-foreground">Sem movimentações nesta página.</p>
+          <p className="text-sm text-muted-foreground">
+            {data?.freshness?.endOfHistory
+              ? 'Fim do histórico — esta é a última página com movimentações.'
+              : 'Sem movimentações nesta página.'}
+          </p>
         )}
 
         {rows.length > 0 && (

@@ -11,6 +11,12 @@ import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { requireRole } from "../_shared/auth.ts";
 import { evaluateSessionHealth } from "./session-health.ts";
+import {
+  EMPTY_STATEMENT_PAGE,
+  isBeyondHistory,
+  statementItems,
+  STATEMENT_PAGE_SIZE,
+} from "./statement-history.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -325,6 +331,32 @@ async function loadSnapshot(
   }
   if (!data) return null;
   return { payload: data.payload, collectedAt: data.collected_at as string };
+}
+
+// Fim do histórico do extrato: a página seguinte à última não existe e o gateway
+// responde erro. A última página vem incompleta, então o tamanho da página
+// anterior guardada no snapshot prova o fim e o painel recebe lista vazia em vez
+// de falha. Sem prova (página anterior ausente ou vencida) o erro real segue.
+async function beyondStatementEnd(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  page: number,
+  pageSize: number,
+): Promise<boolean> {
+  if (page <= 1) return false;
+  const resource = page === 2 ? 'wallet_flow_list' : `wallet_flow_list:p${page - 1}`;
+  const { data, error } = await supabase
+    .from('lalamove_uapi_snapshot')
+    .select('payload')
+    .eq('resource', resource)
+    .gt('expires_at', new Date().toISOString())
+    .maybeSingle();
+
+  if (error) {
+    logger.error(`Snapshot ${resource} indisponível:`, error);
+    return false;
+  }
+  return isBeyondHistory(statementItems(data?.payload), pageSize);
 }
 
 // ========== UAPI Actions ==========
@@ -973,6 +1005,7 @@ serve(async (req) => {
     // chave propria (pagina, cursor ou pedido do recibo); pedido sem coleta
     // correspondente continua recebendo o erro real do gateway.
     let snapshotCollectedAt: string | null = null;
+    let endOfHistory = false;
     if (result.ret !== 0 && action) {
       const resource = SNAPSHOT_ACTIONS[action]?.(body);
       if (resource) {
@@ -980,6 +1013,16 @@ serve(async (req) => {
         if (snapshot) {
           result = snapshot.payload as { ret: number; data?: unknown; msg?: string };
           snapshotCollectedAt = snapshot.collectedAt;
+        } else if (
+          action === 'wallet-transactions' &&
+          (await beyondStatementEnd(
+            supabase,
+            Number(body.page_no ?? 1),
+            Number(body.page_size) || STATEMENT_PAGE_SIZE,
+          ))
+        ) {
+          result = EMPTY_STATEMENT_PAGE as { ret: number; data?: unknown; msg?: string };
+          endOfHistory = true;
         }
       }
     }
@@ -991,6 +1034,7 @@ serve(async (req) => {
           tokenRefreshed: wasRefreshed,
           servedFromSnapshot: snapshotCollectedAt !== null,
           ...(snapshotCollectedAt && { snapshotCollectedAt }),
+          ...(endOfHistory && { endOfHistory: true }),
         },
       }),
       { status: result.ret === 0 ? 200 : 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

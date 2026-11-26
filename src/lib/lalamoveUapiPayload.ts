@@ -18,6 +18,8 @@ export interface LalamoveRawResponse {
     tokenRefreshed?: boolean;
     servedFromSnapshot?: boolean;
     snapshotCollectedAt?: string;
+    /** A edge provou que a página pedida está depois do fim do histórico. */
+    endOfHistory?: boolean;
   };
   /** @deprecated envelope do proxy externo legado (não configurado em produção). */
   body?: { data?: unknown };
@@ -54,6 +56,8 @@ export function parseWallet(res: LalamoveRawResponse | null | undefined): Wallet
 export interface UapiSnapshotMeta {
   servedFromSnapshot?: boolean;
   snapshotCollectedAt?: string | null;
+  /** A edge provou que a página pedida está depois da última do histórico. */
+  endOfHistory?: boolean;
 }
 
 /** `_meta` da edge `lalamove-uapi`: diz se o dado veio da cópia do robô e de quando. */
@@ -62,6 +66,7 @@ export function parseSnapshotMeta(res: LalamoveRawResponse | null | undefined): 
   return {
     servedFromSnapshot: meta?.servedFromSnapshot === true,
     snapshotCollectedAt: meta?.snapshotCollectedAt ?? null,
+    endOfHistory: meta?.endOfHistory === true,
   };
 }
 
