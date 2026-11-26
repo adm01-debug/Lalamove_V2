@@ -756,8 +756,8 @@
    "nome": "lalamove-uapi",
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-uapi/index.ts",
-   "arquivos": 1,
-   "linhas": 1001,
+   "arquivos": 2,
+   "linhas": 1044,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -797,7 +797,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 0
+   "testes": 1
   },
   {
    "nome": "lalamove-webhook",

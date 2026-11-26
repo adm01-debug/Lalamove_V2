@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 194,
+ "total": 195,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 48,
+  "edge (deno)": 49,
   "guard (node --test)": 34,
   "unit (vitest)": 94
  },
@@ -29,7 +29,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 50
+   "arquivos": 51
   },
   {
    "padrao": "guards em scripts/",
@@ -1652,6 +1652,15 @@
    "casos": 6
   },
   {
+   "arquivo": "supabase/functions/lalamove-uapi/session-health.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 48,
+   "testa": [
+    "supabase/functions/lalamove-uapi/session-health.ts"
+   ],
+   "casos": 6
+  },
+  {
    "arquivo": "supabase/functions/lalamove-webhook/security.test.ts",
    "tipo": "edge (deno)",
    "linhas": 204,
@@ -1945,6 +1954,7 @@
   "supabase/functions/lalamove-gateway/route.ts": 1,
   "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts": 1,
   "supabase/functions/lalamove-token-refresh/uapi-direct.ts": 1,
+  "supabase/functions/lalamove-uapi/session-health.ts": 1,
   "supabase/functions/lalamove-webhook/normalize.ts": 1,
   "supabase/functions/lalamove-webhook/security.ts": 1,
   "supabase/functions/send-notification/message-id.ts": 1,
@@ -2083,7 +2093,6 @@
    "evaluate-driver",
    "external-companies",
    "get-mapbox-token",
-   "lalamove-uapi",
    "llm-wh",
    "mcp-query",
    "new-device-alert",

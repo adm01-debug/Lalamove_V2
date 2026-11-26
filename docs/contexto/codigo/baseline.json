@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "70d6fadea837800dc3595008aa276bfbd8051cd1",
+  "commit": "369bb4477948788206372d5f8fd50b0ff67e574a",
   "branch": "main",
-  "data_commit": "2026-11-26T09:29:18-03:00",
+  "data_commit": "2026-11-26T10:05:46-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "369bb44",
+    "data": "2026-11-26",
+    "assunto": "fix: status da sessão UAPI deixa de usar token_expires_at como verdade (#398)"
+   },
    {
     "sha": "70d6fad",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "3ce0ba6",
     "data": "2026-11-25",
     "assunto": "fix: renovacao do token UAPI pelo coletor via refresh_token (#374)"
-   },
-   {
-    "sha": "1d31dac",
-    "data": "2026-11-24",
-    "assunto": "feat: alerta quando o snapshot da UAPI para de atualizar (#373)"
    }
   ],
-  "arquivos_mudados_7d": 547,
+  "arquivos_mudados_7d": 1186,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -270,10 +270,6 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/config.toml",
-    "mudancas": 10
-   },
-   {
     "arquivo": "supabase/functions/external-companies/index.ts",
     "mudancas": 10
    },
@@ -286,15 +282,19 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/config.toml",
+    "mudancas": 9
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+    "mudancas": 9
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 8
    },
    {
     "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
     "mudancas": 8
    }
   ],
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1156,
-  "arquivos_codigo": 734,
-  "linhas_codigo": 144830,
+  "arquivos_total": 1158,
+  "arquivos_codigo": 736,
+  "linhas_codigo": 144942,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 94,
   "migrations": 213,
   "cron_jobs": 24,
-  "testes": 194,
+  "testes": 195,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 114
@@ -540,7 +540,7 @@
   },
   "src/lib": {
    "arquivos": 56,
-   "linhas": 5115
+   "linhas": 5120
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -548,7 +548,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21786
+   "linhas": 21802
   },
   "src/services": {
    "arquivos": 1,
@@ -567,8 +567,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 127,
-   "linhas": 30338
+   "arquivos": 129,
+   "linhas": 30429
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -626,7 +626,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-   "linhas": 1001
+   "linhas": 1007
   },
   {
    "arquivo": "src/pages/MapsSettingsPage.tsx",

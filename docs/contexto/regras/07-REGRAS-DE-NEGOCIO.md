@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `70d6fadea8` · branch `main` · 2026-11-26 12:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `369bb44779` · branch `main` · 2026-11-26 13:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1561,6 +1561,7 @@ _nenhum item encontrado_
 | `HLANG` | `'pt_BR'` | `supabase/functions/lalamove-uapi/index.ts` |
 | `APP_VERSION` | `'5.37.0'` | `supabase/functions/lalamove-uapi/index.ts` |
 | `APP_REVISION` | `'53700'` | `supabase/functions/lalamove-uapi/index.ts` |
+| `VERIFICATION_WINDOW_MS` | `2` | `supabase/functions/lalamove-uapi/session-health.ts` |
 | `RATE_LIMIT_WINDOW_MS` | `60000` | `supabase/functions/lalamove-webhook/index.ts` |
 | `RATE_LIMIT_MAX_REQUESTS` | `100` | `supabase/functions/lalamove-webhook/index.ts` |
 | `RATE_LIMIT_BLOCK_DURATION_MS` | `300000` | `supabase/functions/lalamove-webhook/index.ts` |
@@ -1647,6 +1648,7 @@ _nenhum item encontrado_
 | `export const REVOKE_AFTER_MS = 10 * 60 * 1000;` | `supabase/functions/geo-admin/rotation.ts` |
 | `patch.token_expires_at = new Date(Date.now() + EXPIRY_HOURS * 60 * 60 * 1000).toISOString();` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `token_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),` | `supabase/functions/lalamove-uapi/index.ts` |
+| `export const VERIFICATION_WINDOW_MS = 2 * 60 * 60 * 1000;` | `supabase/functions/lalamove-uapi/session-health.ts` |
 | `const WEBHOOK_MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes` | `supabase/functions/lalamove-webhook/index.ts` |
 | `expires_at TIMESTAMP WITH TIME ZONE DEFAULT (now() + interval '24 hours'),` | `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql` |
 | `IF v_lockout_duration > interval '15 minutes' THEN` | `supabase/migrations/20251231132341_0338fc6c-b0df-47d7-8654-d5a5f4795c13.sql` |
@@ -2096,7 +2098,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1642 testes em 144 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1648 testes em 145 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2213,6 +2215,7 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |
 | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts` | 6 | [watchdog] coleta recente mantém o painel servido e sem alerta · [watchdog] fronteira de 120 min ainda é considerada saudável · [watchdog] 121 min já alerta: é o que evita carteira congelada em silêncio · [watchdog] snapshot vazio alerta mesmo sem data … |
 | `supabase/functions/lalamove-token-refresh/uapi-direct.test.ts` | 6 | [uapi-direct] URL pede refresh_token com cara de portal · [uapi-direct] corpo leva token e refresh_token em args · [uapi-direct] ret=0 devolve o novo par · [uapi-direct] sem refresh_token novo, mantem o atual … |
+| `supabase/functions/lalamove-uapi/session-health.test.ts` | 6 | token expirado mas verificado agora continua ativo · sem verificação recente fica inativo · sem last_refreshed_at cai para token_obtained_at · sessão vazia não é ativa nem renovável … |
 | `supabase/functions/send-notification/sms-dispatch.test.ts` | 6 | buildSmsBody junta titulo, mensagem e pedido sem partes vazias · sem provedor configurado devolve erro explicito e nao envia · dispatchSms repassa o texto montado e a referencia do pedido · dispatchSms propaga a falha do provedor com o texto que tentou … |
 | `supabase/functions/telemetry-csp-report/report.test.ts` | 6 | formato legado: extrai diretiva, host bloqueado e caminho · Reporting API: aceita lista e ignora outros tipos de relatório · payload inválido não gera violação nem exceção · documents e blocked sem host são normalizados sem vazar URL completa … |
 | `src/components/auth/ProtectedRoute.test.tsx` | 5 | ProtectedRoute · não renderiza o filho enquanto o AAL está carregando (loadingAAL true) · renderiza o filho quando tudo carrega e não exige verificação MFA · redireciona para /mfa-verify quando requireMFA e needsMFAVerification … |
@@ -2588,6 +2591,7 @@ _nenhum item encontrado_
 | não pode cair na sessão nova — antes ele pegava "a linha ativa do | `supabase/functions/lalamove-uapi/index.ts` |
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |
 | UAPI nem consumir rate limit. Devolve apenas metadados — o token sai | `supabase/functions/lalamove-uapi/index.ts` |
+| * `token_expires_at` é apenas a estimativa de 24 h da última renovação e NÃO | `supabase/functions/lalamove-uapi/session-health.ts` |
 | HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |
 | Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores). | `supabase/functions/lalamove-webhook/index.ts` |
 | ── HMAC Validation (FAIL-CLOSED) ── | `supabase/functions/lalamove-webhook/security.ts` |
