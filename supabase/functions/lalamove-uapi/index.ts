@@ -19,7 +19,6 @@ import {
 } from "./statement-history.ts";
 import {
   buildStatementPage,
-  isBeyondItemCount,
   statementPageRange,
   type StatementItem,
 } from "./statement-items.ts";
@@ -365,38 +364,34 @@ async function beyondStatementEnd(
   return isBeyondHistory(statementItems(data?.payload), pageSize);
 }
 
-// Página do extrato montada pela identidade do lançamento já coletado. Como a
-// chave não depende da posição, a página não repete nem pula lançamento na
-// fronteira entre a janela recente e o histórico congelado. Sem coleta na
-// tabela (ex.: antes do primeiro ciclo do coletor novo) devolve null e a edge
-// segue pelo snapshot, como antes.
+// Página do extrato montada pela identidade do lançamento já coletado: a chave
+// não depende da posição, então a página não repete nem pula lançamento na
+// fronteira entre a janela recente e o histórico congelado. Devolve null — e a
+// edge segue pelo snapshot — quando a faixa pedida ainda não está coberta pela
+// coleta. Página incompleta também devolve null: página curta é a única prova de
+// fim do histórico, então ela continua vindo do snapshot.
 async function statementPageFromItems(
   // deno-lint-ignore no-explicit-any
   supabase: any,
   page: number,
   pageSize: number,
-): Promise<{ payload: unknown; endOfHistory: boolean } | null> {
+): Promise<unknown | null> {
   const { from, to } = statementPageRange(page, pageSize);
-  const { data, error, count } = await supabase
+  const { data, error } = await supabase
     .from('lalamove_uapi_statement_item')
-    .select('payload', { count: 'exact' })
+    .select('payload')
     .order('occurred_at_local', { ascending: false })
     .order('item_key', { ascending: false })
     .range(from, to);
 
+  // PGRST103 = faixa pedida depois do último lançamento coletado; é o fluxo
+  // esperado da última página e não é falha.
   if (error) {
-    logger.error('Lançamentos do extrato indisponíveis:', error);
+    if (error.code !== 'PGRST103') logger.error('Lançamentos do extrato indisponíveis:', error);
     return null;
   }
-  const total = typeof count === 'number' ? count : data?.length ?? 0;
-  if (!total) return null;
-  if (isBeyondItemCount(from, total)) {
-    return { payload: EMPTY_STATEMENT_PAGE, endOfHistory: true };
-  }
-  return {
-    payload: buildStatementPage((data ?? []).map((row: { payload: StatementItem }) => row.payload)),
-    endOfHistory: false,
-  };
+  if (!data || data.length < pageSize) return null;
+  return buildStatementPage((data as { payload: StatementItem }[]).map((row) => row.payload));
 }
 
 // ========== UAPI Actions ==========
@@ -1050,15 +1045,19 @@ serve(async (req) => {
     if (result.ret !== 0 && action) {
       const resource = SNAPSHOT_ACTIONS[action]?.(body);
       if (action === 'wallet-transactions') {
-        const itemPage = await statementPageFromItems(
-          supabase,
-          Number(body.page_no ?? 1),
-          Number(body.page_size) || STATEMENT_PAGE_SIZE,
-        );
-        if (itemPage) {
-          result = itemPage.payload as { ret: number; data?: unknown; msg?: string };
-          endOfHistory = itemPage.endOfHistory;
-          servedFromItems = true;
+        // A tabela de lançamentos não tem TTL próprio: só serve com a janela
+        // recente fresca, senão o operador exportaria extrato vencido sem aviso.
+        const recent = await loadSnapshot(supabase, 'wallet_flow_list');
+        if (recent) {
+          const itemsPage = await statementPageFromItems(
+            supabase,
+            Number(body.page_no ?? 1),
+            Number(body.page_size) || STATEMENT_PAGE_SIZE,
+          );
+          if (itemsPage) {
+            result = itemsPage as { ret: number; data?: unknown; msg?: string };
+            servedFromItems = true;
+          }
         }
       }
       if (resource && !servedFromItems) {

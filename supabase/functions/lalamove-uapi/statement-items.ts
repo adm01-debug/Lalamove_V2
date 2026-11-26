@@ -8,7 +8,7 @@
  * a janela recente e o histórico congelado.
  */
 
-import { EMPTY_STATEMENT_PAGE, STATEMENT_PAGE_SIZE } from './statement-history.ts';
+import { STATEMENT_PAGE_SIZE } from './statement-history.ts';
 
 export type StatementItem = Record<string, unknown>;
 
@@ -20,11 +20,6 @@ export function statementPageRange(page: number, pageSize: number = STATEMENT_PA
   return { from, to: from + safeSize - 1 };
 }
 
-/** `true` quando a página pedida começa depois do último lançamento coletado. */
-export function isBeyondItemCount(from: number, total: number): boolean {
-  return total > 0 && from >= total;
-}
-
 /** Resposta no mesmo formato da UAPI, que é o que o painel consome. */
 export function buildStatementPage(items: StatementItem[]): {
   ret: number;
@@ -33,5 +28,3 @@ export function buildStatementPage(items: StatementItem[]): {
 } {
   return { ret: 0, msg: 'Sucesso', data: { flow_item_arr: items } };
 }
-
-export { EMPTY_STATEMENT_PAGE };

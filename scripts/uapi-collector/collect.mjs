@@ -271,12 +271,15 @@ function occurredAtLocal(dateTime) {
 
 async function saveStatementItems(items, city) {
   const lastSeenAt = new Date().toISOString();
-  const rows = [];
+  // O upsert nao aceita a mesma chave duas vezes no mesmo lote; dois lancamentos
+  // identicos no mesmo segundo (mesmo valor, sem pedido nem recarga) colapsam
+  // numa linha so em vez de derrubar a pagina inteira.
+  const rows = new Map();
   for (const item of items) {
     const itemKey = statementItemKey(item, city);
     const occurredAt = occurredAtLocal(item?.date_time);
     if (!itemKey || !occurredAt) continue;
-    rows.push({
+    rows.set(itemKey, {
       item_key: itemKey,
       city_id: Number(city) || null,
       occurred_at_local: occurredAt,
@@ -284,11 +287,11 @@ async function saveStatementItems(items, city) {
       last_seen_at: lastSeenAt,
     });
   }
-  if (!rows.length) return;
+  if (!rows.size) return;
   await sbFetch('/rest/v1/lalamove_uapi_statement_item?on_conflict=item_key', {
     method: 'POST',
     headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
-    body: JSON.stringify(rows),
+    body: JSON.stringify([...rows.values()]),
   });
 }
 
