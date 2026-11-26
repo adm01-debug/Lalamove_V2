@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a27ce9e7ae` · branch `main` · 2026-11-26 14:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2725ebd491` · branch `main` · 2026-11-26 17:21 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2099,7 +2099,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1654 testes em 145 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1658 testes em 146 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2236,6 +2236,7 @@ _nenhum item encontrado_
 | `src/pages/NotificationHistoryPage.geo.test.tsx` | 4 | NotificationHistoryPage — avisos geo pendentes (etapa 73) · mostra evento deferred com rótulo em PT-BR, distância e ETA · mostra no_recipient e failed como casos que exigem ação · não renderiza o card quando não há evento pendente |
 | `src/pages/alert-configurations/AlertConfigCard.test.tsx` | 4 | AlertConfigCard — eventos geo (etapa 72) · mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru · renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto · preserva variável desconhecida no preview em vez de apagar |
 | `supabase/functions/job-worker/geo-freshness.test.ts` | 4 | posicao dentro da janela nao bloqueia rota/ETA · posicao velha e barrada com o motivo e a idade · tracking orfao (GPS de meses atras) nunca recalcula · sem data de atualizacao tambem bloqueia |
+| `supabase/functions/lalamove-token-refresh/session-renewal.test.ts` | 4 | refresh_token no tamanho mínimo é utilizável · refresh_token abaixo do mínimo não é utilizável · refresh_token vazio, nulo ou ausente não é utilizável · espaços nas pontas não contam como tamanho |
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
 | `src/components/map/__tests__/mapLoadBilling.test.tsx` | 3 | GoogleMapsCanvas — contagem de map load (etapa 80) · cobra o load no provedor google, não no mapbox · não cobra load quando o mapa não chega a ser instanciado |
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |

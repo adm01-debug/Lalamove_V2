@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a27ce9e7ae261cf614a5fdfc684bf2b9a112bcfa",
+  "commit": "2725ebd491e053181e58edf464e57e6e70acf760",
   "branch": "main",
-  "data_commit": "2026-11-26T10:22:14-03:00",
+  "data_commit": "2026-11-26T14:17:56-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2725ebd",
+    "data": "2026-11-26",
+    "assunto": "feat: alerta quando a sessao UAPI nao tem renovacao automatica (#402)"
+   },
+   {
+    "sha": "6667c5b",
+    "data": "2026-11-26",
+    "assunto": "fix: coletor UAPI passa a rodar o collect.mjs da main (#401)"
+   },
    {
     "sha": "a27ce9e",
     "data": "2026-11-26",
@@ -121,19 +131,9 @@
     "sha": "29a49ed",
     "data": "2026-11-25",
     "assunto": "fix: fecha leitura anonima das views de metrica (#379)"
-   },
-   {
-    "sha": "1ded470",
-    "data": "2026-11-25",
-    "assunto": "chore: least privilege nas funcoes internas de manutencao (#378)"
-   },
-   {
-    "sha": "6736c92",
-    "data": "2026-11-25",
-    "assunto": "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)"
    }
   ],
-  "arquivos_mudados_7d": 1185,
+  "arquivos_mudados_7d": 1187,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -207,18 +207,14 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 17
-   },
-   {
-    "arquivo": "package.json",
-    "mudancas": 15
+    "mudancas": 16
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 15
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "package.json",
     "mudancas": 14
    },
    {
@@ -227,6 +223,10 @@
    },
    {
     "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "package-lock.json",
     "mudancas": 13
    },
    {
@@ -278,12 +278,12 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
-    "mudancas": 9
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 10
    },
    {
     "arquivo": "supabase/functions/lalamove-uapi/index.ts",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1158,
-  "arquivos_codigo": 736,
-  "linhas_codigo": 145153,
+  "arquivos_total": 1160,
+  "arquivos_codigo": 738,
+  "linhas_codigo": 145226,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 94,
   "migrations": 213,
   "cron_jobs": 24,
-  "testes": 195,
+  "testes": 196,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 114
@@ -567,8 +567,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 129,
-   "linhas": 30617
+   "arquivos": 131,
+   "linhas": 30690
   },
   "tailwind.config.ts": {
    "arquivos": 1,

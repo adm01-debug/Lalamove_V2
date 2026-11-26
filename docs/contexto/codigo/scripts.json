@@ -1287,7 +1287,7 @@
    "arquivo": "scripts/uapi-collector/run.sh",
    "pasta": "scripts/uapi-collector",
    "descricao": "Executa o coletor UAPI do Lalamove com as variaveis de ambiente necessarias. O arquivo de ambiente fica FORA do repositorio (contem a service key do",
-   "linhas": 24,
+   "linhas": 66,
    "env": [],
    "npm_scripts": [],
    "workflows": [],

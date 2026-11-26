@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 195,
+ "total": 196,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 49,
+  "edge (deno)": 50,
   "guard (node --test)": 34,
   "unit (vitest)": 94
  },
@@ -29,7 +29,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 51
+   "arquivos": 52
   },
   {
    "padrao": "guards em scripts/",
@@ -1634,6 +1634,15 @@
    "casos": 16
   },
   {
+   "arquivo": "supabase/functions/lalamove-token-refresh/session-renewal.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 29,
+   "testa": [
+    "supabase/functions/lalamove-token-refresh/session-renewal.ts"
+   ],
+   "casos": 4
+  },
+  {
    "arquivo": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
    "tipo": "edge (deno)",
    "linhas": 141,
@@ -1952,6 +1961,7 @@
   "supabase/functions/lalamove-api/coordinates.ts": 1,
   "supabase/functions/lalamove-api/geocode-fallback.ts": 1,
   "supabase/functions/lalamove-gateway/route.ts": 1,
+  "supabase/functions/lalamove-token-refresh/session-renewal.ts": 1,
   "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts": 1,
   "supabase/functions/lalamove-token-refresh/uapi-direct.ts": 1,
   "supabase/functions/lalamove-uapi/session-health.ts": 1,

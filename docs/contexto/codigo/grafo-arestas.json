@@ -2519,6 +2519,7 @@
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts",
+   "supabase/functions/lalamove-token-refresh/session-renewal.ts",
    "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts",
    "supabase/functions/lalamove-token-refresh/uapi-direct.ts"
   ],

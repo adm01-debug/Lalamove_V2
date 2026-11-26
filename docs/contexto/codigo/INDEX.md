@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a27ce9e7ae261cf614a5fdfc684bf2b9a112bcfa` (2026-11-26T10:22:14-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `2725ebd491e053181e58edf464e57e6e70acf760` (2026-11-26T14:17:56-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (622), SQL (224), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
+- linguagens: TypeScript (624), SQL (224), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1158 |
-| arquivos_codigo | 736 |
-| linhas_codigo | 145153 |
+| arquivos_total | 1160 |
+| arquivos_codigo | 738 |
+| linhas_codigo | 145226 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 94 |
 | migrations | 213 |
 | cron_jobs | 24 |
-| testes | 195 |
+| testes | 196 |
 | workflows | 5 |
 | scripts | 109 |
 | docs_md | 114 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (132), src/pages (88), src/hooks (3)
 - hooks: src/hooks (86), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (32), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (61), supabase/functions/<edge> (51), guards em scripts/ (47)
+- testes: co-localizado (__tests__) (61), supabase/functions/<edge> (52), guards em scripts/ (47)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -79,7 +79,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 37 | 7 | 8 |
 | components/ui | 0 | 0 | 63 | 8 | 0 | 0 |
-| functions | 0 | 0 | 78 | 0 | 6 | 46 |
+| functions | 0 | 0 | 79 | 0 | 6 | 46 |
 | hooks | 0 | 0 | 87 | 232 | 15 | 54 |
 | lib | 0 | 0 | 32 | 8 | 3 | 0 |
 | pages | 49 | 56 | 57 | 211 | 14 | 54 |
@@ -294,19 +294,19 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10110 nós · 20985 arestas · 719 comunidades · grafo do commit `a27ce9e7`
-- comunidades maiores: ref_https (122), button.tsx (119), client.ts (113), snapshot.py (104), cn (102), ref_node_path (101), card.tsx (98), geo-gateway/index.ts (96), react (86), DriversPage.tsx (84), dependencies (81), EvaluationsPage.tsx (76)
+- 10118 nós · 21001 arestas · 715 comunidades · grafo do commit `2725ebd4`
+- comunidades maiores: cn (241), card.tsx (145), client.ts (137), badge.tsx (126), ref_https (124), react (119), ref_node_path (107), snapshot.py (104), geo-gateway/index.ts (98), send-notification/index.ts (92), lucide-react (87), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (40)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- .github/workflows/ci.yml (17)
-- package.json (15)
+- .github/workflows/ci.yml (16)
 - supabase/functions/job-worker/index.ts (15)
-- package-lock.json (14)
+- package.json (14)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
+- package-lock.json (13)
 - supabase/functions/_shared/schemas.ts (13)
 - supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
@@ -397,6 +397,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-26 `2725ebd` feat: alerta quando a sessao UAPI nao tem renovacao automatica (#402)
+- 2026-11-26 `6667c5b` fix: coletor UAPI passa a rodar o collect.mjs da main (#401)
 - 2026-11-26 `a27ce9e` feat: coletor cobre 3 páginas de extrato/cupons e 10 recibos (#400)
 - 2026-11-26 `380d9da` feat: watchdog da UAPI nomeia o recurso que congelou (#399)
 - 2026-11-26 `369bb44` fix: status da sessão UAPI deixa de usar token_expires_at como verdade (#398)
@@ -410,8 +412,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `70c35c5` feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)
 - 2026-11-25 `148b657` fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)
 - 2026-11-25 `0bd75b9` fix: religa alertas que nasceram desligados e morriam em silencio (#387)
-- 2026-11-25 `962d1b5` fix: limita "hoje" do dashboard ao fuso de São Paulo (#388)
-- 2026-11-25 `3d6697c` feat: painel lista as filiais dos fornecedores (#386)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
