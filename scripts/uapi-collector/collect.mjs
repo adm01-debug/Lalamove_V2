@@ -66,19 +66,12 @@ const ORDER_PAGES = Number(process.env.UAPI_ORDER_PAGES || 3);
 const RECEIPTS = Number(process.env.UAPI_RECEIPTS || 10);
 // Extrato e cupons paginam por `page_no`: cada pagina precisa da propria chave no
 // snapshot, senao o painel recebe erro do gateway ao avancar alem da ultima
-// coletada.
-const STATEMENT_PAGES = Number(process.env.UAPI_STATEMENT_PAGES || 3);
-const COUPON_PAGES = Number(process.env.UAPI_COUPON_PAGES || 3);
-
-const pagedTargets = (resource, method, buildArgs, pages) =>
-  Array.from({ length: Math.max(1, pages) }, (_, index) => {
-    const pageNo = index + 1;
-    return {
-      resource: pageNo > 1 ? `${resource}:p${pageNo}` : resource,
-      method,
-      args: (city) => buildArgs(city, pageNo),
-    };
-  });
+// coletada. O numero de paginas nao vem do gateway (`total` e sentinela), entao
+// a paginacao e dinamica — ver `PAGED_SOURCES` — e estes sao apenas os tetos.
+// Cada pagina custa ~1,5 s: 30 paginas de extrato = 600 lancamentos (~2 meses).
+const PAGE_SIZE = 20;
+const MAX_STATEMENT_PAGES = Number(process.env.UAPI_STATEMENT_MAX_PAGES || 30);
+const MAX_COUPON_PAGES = Number(process.env.UAPI_COUPON_MAX_PAGES || 5);
 
 if (!SUPABASE_URL || !SERVICE_KEY) {
   console.error('ERRO: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY');
@@ -90,18 +83,6 @@ if (!SUPABASE_URL || !SERVICE_KEY) {
 // a chave primaria da tabela e o proprio nome do recurso.
 const TARGETS = [
   { resource: 'wallet_balance', method: 'wallet_balance', args: (city) => ({ city_id: city }) },
-  ...pagedTargets(
-    'wallet_flow_list',
-    'wallet_flow_list',
-    (city, page_no) => ({ city_id: city, trans_type: 1, page_no, page_size: 20 }),
-    STATEMENT_PAGES,
-  ),
-  ...pagedTargets(
-    'coupon_list_web',
-    'coupon_list_web',
-    (city, page_no) => ({ city_id: city, page_no, page_size: 20 }),
-    COUPON_PAGES,
-  ),
   { resource: 'get_fleet:1', method: 'get_fleet', args: () => ({ fleet_type_code: 1, page_no: 1, page_size: 50 }) },
   { resource: 'get_fleet:2', method: 'get_fleet', args: () => ({ fleet_type_code: 2, page_no: 1, page_size: 50 }) },
   { resource: 'get_user_info', method: 'get_user_info', args: () => ({}) },
@@ -118,6 +99,30 @@ const TARGETS = [
     }),
   },
   { resource: 'get_laster_order', method: 'get_laster_order', args: () => ({}) },
+];
+
+// Extrato e cupons: o numero de paginas e descoberto na coleta. O gateway
+// devolve `total: 99999` (sentinela) tanto no extrato quanto nos cupons, entao a
+// unica regra confiavel e parar quando a pagina vier incompleta — menos itens que
+// o `page_size` pedido — ou quando a pagina falhar. Antes disso o coletor
+// gravava sempre 3 paginas e o historico mais antigo ficava sem snapshot.
+const PAGED_SOURCES = [
+  {
+    resource: 'wallet_flow_list',
+    method: 'wallet_flow_list',
+    args: (city, pageNo) => ({ city_id: city, trans_type: 1, page_no: pageNo, page_size: PAGE_SIZE }),
+    items: (payload) => payload?.data?.flow_item_arr,
+    maxPages: MAX_STATEMENT_PAGES,
+    capEnv: 'UAPI_STATEMENT_MAX_PAGES',
+  },
+  {
+    resource: 'coupon_list_web',
+    method: 'coupon_list_web',
+    args: (city, pageNo) => ({ city_id: city, page_no: pageNo, page_size: PAGE_SIZE }),
+    items: (payload) => payload?.data?.list,
+    maxPages: MAX_COUPON_PAGES,
+    capEnv: 'UAPI_COUPON_MAX_PAGES',
+  },
 ];
 
 async function loadChromium() {
@@ -524,6 +529,32 @@ async function main() {
 
     for (const target of TARGETS) {
       await collectResource(target.resource, target.method, target.args(city), activeToken);
+    }
+
+    // Paginacao dinamica do extrato e dos cupons (ver PAGED_SOURCES).
+    for (const source of PAGED_SOURCES) {
+      for (let pageNo = 1; pageNo <= source.maxPages; pageNo++) {
+        const key = pageNo > 1 ? `${source.resource}:p${pageNo}` : source.resource;
+        const payload = await collectResource(
+          key,
+          source.method,
+          source.args(city, pageNo),
+          activeToken,
+        );
+        // Falha encerra a paginacao deste recurso: insistir nas paginas seguintes
+        // so repete o mesmo erro e polui a lista de falhas.
+        if (!payload) break;
+        const items = source.items(payload);
+        if (!Array.isArray(items) || items.length < PAGE_SIZE) break;
+        // O gateway nao informa o fim do historico: se a ultima pagina coletada
+        // veio cheia, ainda existe historico mais antigo sem snapshot.
+        if (pageNo === source.maxPages) {
+          console.log(
+            `aviso: ${source.resource} atingiu o teto de ${source.maxPages} paginas; ` +
+              `historico mais antigo continua sem snapshot (ajuste ${source.capEnv})`,
+          );
+        }
+      }
     }
 
     // Pedidos: primeira pagina, paginas seguintes pelo cursor devolvido, e os
