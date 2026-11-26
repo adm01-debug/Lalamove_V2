@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b0866385df` · branch `main` · 2026-11-26 20:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `86c8ed98a4` · branch `main` · 2026-11-26 21:24 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1563,6 +1563,7 @@ _nenhum item encontrado_
 | `APP_VERSION` | `'5.37.0'` | `supabase/functions/lalamove-uapi/index.ts` |
 | `APP_REVISION` | `'53700'` | `supabase/functions/lalamove-uapi/index.ts` |
 | `VERIFICATION_WINDOW_MS` | `2` | `supabase/functions/lalamove-uapi/session-health.ts` |
+| `STATEMENT_PAGE_SIZE` | `20` | `supabase/functions/lalamove-uapi/statement-history.ts` |
 | `RATE_LIMIT_WINDOW_MS` | `60000` | `supabase/functions/lalamove-webhook/index.ts` |
 | `RATE_LIMIT_MAX_REQUESTS` | `100` | `supabase/functions/lalamove-webhook/index.ts` |
 | `RATE_LIMIT_BLOCK_DURATION_MS` | `300000` | `supabase/functions/lalamove-webhook/index.ts` |
@@ -2099,14 +2100,14 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1658 testes em 146 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1664 testes em 147 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
 | `scripts/db-audit/check-migration-drift.test.mjs` | 76 | aceita migration com nome e SQL equivalentes no ledger · aceita registro legado sem name/statements, sem inventar evidencia · fixa arquivo legado por hash sem chamar seus bytes de conteudo historico · name-and-file-pinned falha para arquivo/nome alterado ou SQL recuperado no ledger … |
 | `supabase/functions/_shared/contract.test.ts` | 60 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
-| `src/lib/lalamoveUapiPayload.test.ts` | 33 | uapiData · desembrulha o payload cru da UAPI · continua aceitando o envelope do proxy externo legado · devolve undefined quando a UAPI recusa a chamada … |
+| `src/lib/lalamoveUapiPayload.test.ts` | 34 | uapiData · desembrulha o payload cru da UAPI · continua aceitando o envelope do proxy externo legado · devolve undefined quando a UAPI recusa a chamada … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
 | `src/components/map/__tests__/markerFactories.test.ts` | 24 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |
 | `src/lib/__tests__/lalamoveOrderEdit.test.ts` | 24 | normalizeOrderStatus · mapeia aliases legados para o enum canônico · devolve null para valores desconhecidos · isTerminalStatus … |
@@ -2227,6 +2228,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `supabase/functions/_shared/channels/whatsapp-test.test.ts` | 5 | teste whatsapp: usa Zapp quando ZAPP_API_URL/KEY existem · teste whatsapp: cai no Evolution quando so ele tem secrets · teste whatsapp: sem secrets devolve null e mensagem de configuracao · teste whatsapp: 401 do Evolution vira provider_rejected/give_up … |
 | `supabase/functions/job-worker/notification-bridge.test.ts` | 5 | M4: chegada na coleta avisa o motorista · M4: sem motorista nao ha aviso · M4: sem pedido nao ha aviso · M4: evento que fala com o contato da coleta nao vira aviso ao motorista … |
+| `supabase/functions/lalamove-uapi/statement-history.test.ts` | 5 | pagina anterior incompleta prova o fim do historico · pagina anterior cheia nao prova nada · sem pagina anterior no snapshot nao ha prova · pagina vazia mantem o formato da UAPI … |
 | `src/hooks/useNotificationHistory.test.ts` | 4 | historico de notificacoes lendo o ledger (etapa 138) · mapeia a linha de notification_messages para a timeline · linha sem telefone, alerta ou tentativa continua renderizavel · soma ledger e legado no mesmo criterio dos cards |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |

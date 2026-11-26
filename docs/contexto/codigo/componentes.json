@@ -703,7 +703,7 @@
     "UapiStatementPanel"
    ],
    "export_default": null,
-   "linhas": 151,
+   "linhas": 155,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useUapiWalletStatement"

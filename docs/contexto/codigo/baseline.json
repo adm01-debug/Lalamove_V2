@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "b0866385dfea10f3418aa94289e6cfec10330b77",
+  "commit": "86c8ed98a49490dc353103d20c97b5663cf9a8c9",
   "branch": "main",
-  "data_commit": "2026-11-26T16:48:12-03:00",
+  "data_commit": "2026-11-26T18:20:15-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "86c8ed9",
+    "data": "2026-11-26",
+    "assunto": "feat: fim do extrato devolve lista vazia em vez de erro do gateway (#414)"
+   },
    {
     "sha": "b086638",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "870d6e6",
     "data": "2026-11-25",
     "assunto": "fix: filial na busca de endereco mostra o fornecedor dono (#382)"
-   },
-   {
-    "sha": "63359d6",
-    "data": "2026-11-25",
-    "assunto": "fix: external-companies usa o helper de auth compartilhado (#381)"
    }
   ],
-  "arquivos_mudados_7d": 1188,
+  "arquivos_mudados_7d": 1190,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -184,15 +184,15 @@
     "mudancas": 21
    },
    {
+    "pasta": "src/components/lalamove",
+    "mudancas": 19
+   },
+   {
     "pasta": "src/lib/__tests__",
     "mudancas": 19
    },
    {
     "pasta": "src/components/dashboard",
-    "mudancas": 18
-   },
-   {
-    "pasta": "src/components/lalamove",
     "mudancas": 18
    }
   ],
@@ -226,10 +226,6 @@
     "mudancas": 13
    },
    {
-    "arquivo": "package.json",
-    "mudancas": 12
-   },
-   {
     "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 12
    },
@@ -238,7 +234,7 @@
     "mudancas": 11
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "package.json",
     "mudancas": 11
    },
    {
@@ -251,6 +247,10 @@
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "package-lock.json",
     "mudancas": 10
    },
    {
@@ -286,12 +286,12 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-    "mudancas": 9
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 10
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,18 +301,18 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 293
+    "commits": 294
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 7
+    "commits": 6
    }
   ]
  },
  "contagens": {
-  "arquivos_total": 1161,
-  "arquivos_codigo": 738,
-  "linhas_codigo": 145404,
+  "arquivos_total": 1163,
+  "arquivos_codigo": 740,
+  "linhas_codigo": 145551,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 94,
   "migrations": 213,
   "cron_jobs": 24,
-  "testes": 196,
+  "testes": 197,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 115
@@ -524,11 +524,11 @@
   },
   "src/components": {
    "arquivos": 167,
-   "linhas": 29928
+   "linhas": 29932
   },
   "src/hooks": {
    "arquivos": 117,
-   "linhas": 20290
+   "linhas": 20293
   },
   "src/i18n": {
    "arquivos": 1,
@@ -540,7 +540,7 @@
   },
   "src/lib": {
    "arquivos": 56,
-   "linhas": 5120
+   "linhas": 5138
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -567,8 +567,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 131,
-   "linhas": 30690
+   "arquivos": 133,
+   "linhas": 30812
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -613,6 +613,10 @@
    "linhas": 1079
   },
   {
+   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+   "linhas": 1051
+  },
+  {
    "arquivo": "supabase/functions/_shared/schemas.ts",
    "linhas": 1033
   },
@@ -622,10 +626,6 @@
   },
   {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",
-   "linhas": 1007
-  },
-  {
-   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
    "linhas": 1007
   },
   {
@@ -686,7 +686,7 @@
   }
  ],
  "qualidade": {
-  "any": 150,
+  "any": 151,
   "console_log": 432,
   "ts_ignore": 0,
   "eslint_disable": 1,

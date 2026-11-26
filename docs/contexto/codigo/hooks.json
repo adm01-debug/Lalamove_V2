@@ -1571,7 +1571,7 @@
     "useUapiOrderHistory",
     "useUapiWalletStatement"
    ],
-   "linhas": 447,
+   "linhas": 450,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
