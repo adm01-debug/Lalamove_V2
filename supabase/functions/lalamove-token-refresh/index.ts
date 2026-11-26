@@ -10,6 +10,7 @@ import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { buildUapiRefreshRequest, parseUapiRefreshResponse } from "./uapi-direct.ts";
 import { evaluateResourceFreshness, evaluateSnapshotHealth } from "./snapshot-watchdog.ts";
+import { hasUsableRefreshToken } from "./session-renewal.ts";
 
 /**
  * Etapa 24 — Auto-refresh do token UAPI com fallback.
@@ -32,6 +33,14 @@ const TIMEOUT_MS = 25_000;
 // 2 h sem coleta ainda deixa 4 h de margem antes de o painel passar a receber
 // o erro cru do gateway.
 const SNAPSHOT_STALE_MINUTES = 120;
+
+// O proxy externo nunca existiu em produção; a checagem é a mesma nos dois
+// pontos que decidem se dá para renovar sem o navegador.
+function proxyConfigured(): boolean {
+  return Boolean(
+    Deno.env.get('LALAMOVE_UNIFIED_PROXY_URL') && Deno.env.get('LALAMOVE_UNIFIED_PROXY_KEY'),
+  );
+}
 
 interface ActiveToken {
   access_token: string;
@@ -248,6 +257,27 @@ Deno.serve(async (req) => {
 
     const referenceAt = session.last_refreshed_at ?? session.token_obtained_at;
     const ageHours = (Date.now() - new Date(referenceAt).getTime()) / 3_600_000;
+    const hasRefreshToken = hasUsableRefreshToken(session.refresh_token);
+
+    // ── 1b. Sessão sem renovação automática ────────────────────────────────
+    // O coletor toca `last_refreshed_at` a cada ciclo, então a idade acima fica
+    // baixa e o early-return da etapa 3 esconderia este aviso para sempre. Sem
+    // refresh_token (e sem proxy) não existe renovação possível: quando o
+    // perfil do navegador expirar, a coleta para e carteira/extrato/cupons/
+    // frota congelam até alguém fazer login manual.
+    if (!proxyConfigured() && !hasRefreshToken) {
+      await raiseAlert(
+        admin,
+        'WARNING',
+        'Sessão UAPI sem renovação automática',
+        'A sessão UAPI ativa não tem refresh_token utilizável. A renovação depende do perfil do navegador do coletor: se ele expirar, carteira, extrato, cupons e frota param e só um login manual recupera.',
+        {
+          session_id: session.id,
+          refresh_token_length: (session.refresh_token ?? '').trim().length,
+          last_refreshed_at: session.last_refreshed_at,
+        },
+      );
+    }
 
     // ── 2. Janela perdida → alerta imediato ────────────────────────────────
     if (ageHours >= EXPIRY_HOURS) {
@@ -293,10 +323,9 @@ Deno.serve(async (req) => {
     // (scripts/uapi-collector/collect.mjs), que chama `_m=refresh_token` dentro
     // da página; este worker só vigia. Sem refresh_token, tentar aqui é falha
     // certa — melhor registrar e deixar o watchdog do snapshot falar.
+    const useProxy = proxyConfigured();
     const baseUrl = Deno.env.get('LALAMOVE_UNIFIED_PROXY_URL');
     const proxyKey = Deno.env.get('LALAMOVE_UNIFIED_PROXY_KEY');
-    const useProxy = Boolean(baseUrl && proxyKey);
-    const hasRefreshToken = (session.refresh_token ?? '').trim().length >= 16;
 
     if (!useProxy && !hasRefreshToken) {
       console.log('sem refresh_token e sem proxy: renovação depende do coletor');
