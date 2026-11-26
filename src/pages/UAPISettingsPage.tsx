@@ -19,6 +19,9 @@ export default function UAPISettingsPage() {
   const [showNewToken, setShowNewToken] = useState(false);
 
   const isConnected = status?.ok !== false && status?.session?.is_active;
+  // A edge já avalia a expiração em `is_active`; não recalcular com Data.now()
+  // aqui (impuro no render e sujeito ao relógio do navegador).
+  const isExpired = status?.session?.is_active === false && !!status?.session?.token_expires_at;
 
   const handleUpdate = async () => {
     if (!newToken.trim()) return toast.error('Token de acesso não pode ser vazio');
@@ -111,18 +114,24 @@ export default function UAPISettingsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <span className="text-muted-foreground">Token:</span>{' '}
-                <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{status.session.tokenPreview}</code>
+                <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                  {status.session.token_preview || '—'}
+                </code>
               </div>
               <div>
-                <span className="text-muted-foreground">Device ID:</span>{' '}
-                <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{status.session.device_id}</code>
+                <span className="text-muted-foreground">ID do usuário:</span>{' '}
+                <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                  {status.session.user_fid || '—'}
+                </code>
               </div>
               <div className="flex items-center gap-1">
                 <Clock className="h-3 w-3 text-muted-foreground" />
-                <span className="text-muted-foreground">Último uso:</span>{' '}
-                {status.session.last_used_at
-                  ? new Date(status.session.last_used_at).toLocaleString('pt-BR')
-                  : '—'}
+                <span className="text-muted-foreground">Expira em:</span>{' '}
+                {isExpired
+                  ? <Badge variant="destructive">Expirado</Badge>
+                  : status.session.token_expires_at
+                    ? new Date(status.session.token_expires_at).toLocaleString('pt-BR')
+                    : '—'}
               </div>
               <div className="flex items-center gap-1">
                 <RefreshCw className="h-3 w-3 text-muted-foreground" />

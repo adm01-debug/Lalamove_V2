@@ -69,6 +69,10 @@ export function routeAction(target: GatewayTarget, action: string): RouteResult 
   switch (action) {
     // ── saúde ────────────────────────────────────────────────────────────
     case 'status':
+      // O painel lê `{ ok, session }` daqui. Antes ia para `cities`, que devolve
+      // a lista de cidades e nenhum status — daí os cards de conexão mostrarem
+      // "Erro"/"Desconectado" com a API respondendo.
+      return { fn: 'lalamove-uapi', action: 'status' };
     case 'test':
       return { fn: 'lalamove-api', action: 'cities' };
 

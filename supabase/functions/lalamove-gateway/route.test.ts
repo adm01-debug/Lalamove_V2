@@ -21,6 +21,20 @@ Deno.test('nenhuma ação do cliente cai em 400 por ser desconhecida', () => {
   }
 });
 
+Deno.test('uapi.getStatus ("status") vai para lalamove-uapi status, não para cities', () => {
+  const r = routeAction('unified', 'status');
+  if (isUnsupported(r) || r === null) throw new Error('status deveria rotear');
+  assertEquals(r.fn, 'lalamove-uapi');
+  assertEquals(r.action, 'status');
+});
+
+Deno.test('testConnection ("test") continua usando cities do lalamove-api', () => {
+  const r = routeAction('unified', 'test');
+  if (isUnsupported(r) || r === null) throw new Error('test deveria rotear');
+  assertEquals(r.fn, 'lalamove-api');
+  assertEquals(r.action, 'cities');
+});
+
 Deno.test('uapi.getOrders ("orders") vai para lalamove-uapi list-orders', () => {
   const r = routeAction('unified', 'orders');
   if (isUnsupported(r) || r === null) throw new Error('orders deveria rotear');

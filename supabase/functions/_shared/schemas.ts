@@ -662,6 +662,7 @@ const lalamoveUapiV1 = z.discriminatedUnion("action", [
     city_id: z.coerce.number().int().optional(),
   }),
   z.object({ action: z.literal("token-status") }),
+  z.object({ action: z.literal("status") }),
   z.object({ action: z.literal("refresh-token") }),
   // ── pedidos ──
   z.object({

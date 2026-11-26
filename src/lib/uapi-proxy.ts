@@ -36,7 +36,7 @@ export interface UAPIResponse<T = unknown> {
   formatted?: string;
   tokenPreview: string;
   sessionId: string;
-  session?: ProxySession;
+  session?: UAPISessionStatus['session'];
   [key: string]: unknown;
 }
 
@@ -48,17 +48,18 @@ export interface UAPIUserData {
   [key: string]: unknown;
 }
 
-export interface ProxySession {
-  id: string;
-  tokenPreview: string;
-  device_id: string;
-  username: string;
-  base_url: string;
-  city_id: string;
-  is_active: boolean;
-  last_used_at: string;
-  last_refreshed_at: string | null;
-  created_at: string;
+/** Resposta da action `status` da edge `lalamove-uapi` (metadados da sessão). */
+export interface UAPISessionStatus {  ok: boolean;
+  session: {
+    is_active: boolean;
+    token_preview: string | null;
+    user_fid: string | null;
+    city_id: number | null;
+    refresh_method: string | null;
+    token_obtained_at: string | null;
+    token_expires_at: string | null;
+    last_refreshed_at: string | null;
+  };
 }
 
 function proxyFetch<T = unknown>(
@@ -83,7 +84,7 @@ function proxyPost<T = unknown>(
 }
 
 export const uapi = {
-  getStatus: () => proxyFetch<ProxySession>('status'),
+  getStatus: () => callLalamoveGateway<UAPISessionStatus>({ target: 'uapi', action: 'status', method: 'GET' }),
   testConnection: () => proxyFetch('test'),
   getUserInfo: () => proxyFetch<UAPIUserData>('user'),
   getWalletBalance: () => proxyFetch<UAPIUserData>('wallet'),

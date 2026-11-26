@@ -619,6 +619,44 @@ serve(async (req) => {
       contract.data as Record<string, unknown>,
     );
 
+    // Status da sessão: alimenta os cards de conexão do painel sem chamar a
+    // UAPI nem consumir rate limit. Devolve apenas metadados — o token sai
+    // mascarado e nunca completo.
+    if (action === 'status') {
+      const roleCheck = await requireRole(req, ['admin', 'manager', 'operator', 'viewer'], corsHeaders);
+      if (roleCheck.error) return roleCheck.error;
+
+      const { data: sessions } = await supabase
+        .from('lalamove_uapi_sessions')
+        .select('access_token, user_fid, city_id, refresh_method, token_obtained_at, token_expires_at, last_refreshed_at')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      const session = sessions?.[0];
+      const expiresAt = session?.token_expires_at ? Date.parse(session.token_expires_at) : NaN;
+      const expired = Number.isFinite(expiresAt) && expiresAt <= Date.now();
+      const token = typeof session?.access_token === 'string' ? session.access_token : '';
+      const active = !!session && !expired;
+
+      return new Response(
+        JSON.stringify({
+          ok: active,
+          session: {
+            is_active: active,
+            token_preview: token ? `${token.slice(0, 6)}…${token.slice(-4)}` : null,
+            user_fid: session?.user_fid ?? null,
+            city_id: session?.city_id ?? null,
+            refresh_method: session?.refresh_method ?? null,
+            token_obtained_at: session?.token_obtained_at ?? null,
+            token_expires_at: session?.token_expires_at ?? null,
+            last_refreshed_at: session?.last_refreshed_at ?? null,
+          },
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
+    }
+
     // Special action: set initial token — requer role admin para evitar que
     // qualquer usuário autenticado sobrescreva a sessão UAPI ativa.
     if (action === 'set-token') {

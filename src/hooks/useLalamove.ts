@@ -1,14 +1,43 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { lalamove, type QuoteParams, type LalamoveStatusResponse, type LalamoveApiResponse, type LalamoveWalletHistoryResponse } from '@/lib/lalamove-api';
-import { parseServiceAreas, parseSnapshotMeta, parseVehicles, parseWallet, parseWalletFlow, uapiData } from '@/lib/lalamoveUapiPayload';
+import { parseServiceAreas, parseSnapshotMeta, parseVehicles, parseWallet, parseWalletFlow, uapiData, type LalamoveRawResponse } from '@/lib/lalamoveUapiPayload';
 import { isLalamoveConfigured } from '@/lib/lalamove-config';
 
 // ── Status & Test ──
 
+/**
+ * Monta o status que as telas leem a partir das chamadas reais de cada canal.
+ *
+ * O gateway atende `status` com a mesma chamada de `cities` e nunca devolveu o
+ * objeto `{v3, uapi}` esperado aqui, então os cards mostravam "Erro"/"Token
+ * Expirado" mesmo com a API respondendo. v3 lista cidades; a UAPI responde o
+ * usuário logado e só responde com sessão válida.
+ */
+export function buildLalamoveStatus(
+  v3: PromiseSettledResult<unknown>,
+  uapi: PromiseSettledResult<unknown>,
+): LalamoveStatusResponse {
+  const user =
+    uapi.status === 'fulfilled'
+      ? uapiData<{ email?: string }>(uapi.value as LalamoveRawResponse)
+      : undefined;
+  const username = typeof user?.email === 'string' && user.email ? user.email : undefined;
+  return {
+    v3: { ok: v3.status === 'fulfilled' && v3.value != null },
+    uapi: {
+      ok: uapi.status === 'fulfilled' && uapi.value != null,
+      ...(username ? { username } : {}),
+    },
+  };
+}
+
 export function useLalamoveStatus() {
   return useQuery<LalamoveStatusResponse>({
     queryKey: ['llm', 'status'],
-    queryFn: () => lalamove.status() as Promise<LalamoveStatusResponse>,
+    queryFn: async () => {
+      const [v3, uapi] = await Promise.allSettled([lalamove.cities(), lalamove.user()]);
+      return buildLalamoveStatus(v3, uapi);
+    },
     refetchInterval: 60_000,
     refetchIntervalInBackground: false,
     enabled: isLalamoveConfigured(),
