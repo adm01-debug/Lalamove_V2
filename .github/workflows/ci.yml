@@ -123,6 +123,10 @@ jobs:
             supabase/functions/_shared/template.test.ts \
             supabase/functions/lalamove-webhook/security.test.ts \
             supabase/functions/lalamove-gateway/route.test.ts
+      # Coletor de CSP: parser, sanitizacao e rate limit sem rede. Se quebrar, o
+      # report-uri do vercel.json aponta para uma funcao que nao responde.
+      - name: Run CSP report collector tests
+        run: deno test supabase/functions/telemetry-csp-report/
       # geo-gateway concentra cache, orcamento e rate guard: sem estes testes no CI
       # uma regressao de custo so aparece na fatura do Mapbox.
       - name: Run geo-gateway tests (resolver, metering, polyline, provider)
