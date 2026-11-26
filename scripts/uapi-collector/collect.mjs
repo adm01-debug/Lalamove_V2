@@ -36,6 +36,13 @@
  *   UAPI_CITY_ID            cidade das consultas (default: city_id da sessao ativa, senao 21007)
  *   UAPI_DEVICE_ID          device_id enviado na query (default: UUID novo)
  *   SNAPSHOT_TTL_HOURS      validade do snapshot (default 6)
+ *   UAPI_STATEMENT_MAX_PAGES    teto de paginas do extrato na varredura profunda (default 700)
+ *   UAPI_STATEMENT_RECENT_PAGES paginas recentes do extrato coletadas em todo ciclo (default 30)
+ *   UAPI_STATEMENT_SWEEP_HOURS  intervalo minimo entre varreduras profundas (default 24)
+ *   UAPI_STATEMENT_DEEP_TTL_HOURS validade das paginas antigas do extrato (default 168)
+ *   UAPI_SWEEP_STATE        arquivo com o resultado da ultima varredura profunda
+ *                           (default: ~/.local/share/lalamove-uapi-collector/last-sweep.json)
+ *   UAPI_COUPON_MAX_PAGES       teto de paginas de cupons (default 5)
  *   CHROMIUM_PATH           executavel do Chromium (default: playwright resolve sozinho)
  *   PLAYWRIGHT_ROOT         diretorio que contem node_modules/playwright, se o script
  *                           rodar fora da raiz do projeto
@@ -47,6 +54,7 @@
  */
 
 import { randomUUID } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { homedir } from 'node:os';
 import path from 'node:path';
@@ -60,6 +68,9 @@ const LOGIN_WAIT_MS = Number(process.env.UAPI_LOGIN_WAIT_MS || 15 * 60_000);
 const PROFILE_DIR =
   process.env.UAPI_PROFILE_DIR ||
   path.join(homedir(), '.local/share/lalamove-uapi-collector/profile');
+const SWEEP_STATE_PATH =
+  process.env.UAPI_SWEEP_STATE ||
+  path.join(homedir(), '.local/share/lalamove-uapi-collector/last-sweep.json');
 // Lista de pedidos: o painel avanca por cursor, entao cada pagina coletada vira
 // uma chave propria. Recibos sao buscados para os pedidos mais recentes.
 const ORDER_PAGES = Number(process.env.UAPI_ORDER_PAGES || 3);
@@ -68,9 +79,18 @@ const RECEIPTS = Number(process.env.UAPI_RECEIPTS || 10);
 // snapshot, senao o painel recebe erro do gateway ao avancar alem da ultima
 // coletada. O numero de paginas nao vem do gateway (`total` e sentinela), entao
 // a paginacao e dinamica — ver `PAGED_SOURCES` — e estes sao apenas os tetos.
-// Cada pagina custa ~1,5 s: 30 paginas de extrato = 600 lancamentos (~2 meses).
+// Cada pagina custa ~0,4 s: as 580 paginas do extrato (de 10/09/2024 ate hoje)
+// saem em ~4 min, por isso so a janela recente entra em todo ciclo e o historico
+// antigo entra na varredura profunda (ver `deepSweepDue`).
 const PAGE_SIZE = 20;
-const MAX_STATEMENT_PAGES = Number(process.env.UAPI_STATEMENT_MAX_PAGES || 30);
+const MAX_STATEMENT_PAGES = Number(process.env.UAPI_STATEMENT_MAX_PAGES || 700);
+const RECENT_STATEMENT_PAGES = Number(process.env.UAPI_STATEMENT_RECENT_PAGES || 30);
+const STATEMENT_SWEEP_HOURS = Number(process.env.UAPI_STATEMENT_SWEEP_HOURS || 24);
+// Lancamento antigo nao muda: as paginas profundas ficam validas por uma semana
+// em vez das 6 h da janela recente. A edge `lalamove-uapi` descarta o snapshot
+// vencido (`expires_at > now`), entao TTL curto aqui e o que fazia o painel
+// voltar a dar erro ao avancar para o historico.
+const STATEMENT_DEEP_TTL_HOURS = Number(process.env.UAPI_STATEMENT_DEEP_TTL_HOURS || 168);
 const MAX_COUPON_PAGES = Number(process.env.UAPI_COUPON_MAX_PAGES || 5);
 
 if (!SUPABASE_URL || !SERVICE_KEY) {
@@ -106,6 +126,9 @@ const TARGETS = [
 // unica regra confiavel e parar quando a pagina vier incompleta — menos itens que
 // o `page_size` pedido — ou quando a pagina falhar. Antes disso o coletor
 // gravava sempre 3 paginas e o historico mais antigo ficava sem snapshot.
+// `recentPages` divide a coleta em duas: ate esse numero entra em todo ciclo
+// (movimento novo aparece em 30 min); acima dele e historico imutavel e so entra
+// na varredura profunda.
 const PAGED_SOURCES = [
   {
     resource: 'wallet_flow_list',
@@ -113,6 +136,7 @@ const PAGED_SOURCES = [
     args: (city, pageNo) => ({ city_id: city, trans_type: 1, page_no: pageNo, page_size: PAGE_SIZE }),
     items: (payload) => payload?.data?.flow_item_arr,
     maxPages: MAX_STATEMENT_PAGES,
+    recentPages: RECENT_STATEMENT_PAGES,
     capEnv: 'UAPI_STATEMENT_MAX_PAGES',
   },
   {
@@ -124,6 +148,76 @@ const PAGED_SOURCES = [
     capEnv: 'UAPI_COUPON_MAX_PAGES',
   },
 ];
+
+/** Numero da pagina a partir da chave do snapshot (`recurso:pN`; pagina 1 e a chave sem sufixo). */
+function pageNumber(resource) {
+  return Number(/:p(\d+)$/.exec(resource)?.[1] ?? 1);
+}
+
+/**
+ * Resultado da ultima varredura profunda. O snapshot sozinho nao diz ate onde a
+ * varredura foi: se ela parou no teto de paginas ou numa falha, as paginas que
+ * ficaram de fora so voltariam no intervalo da varredura seguinte.
+ */
+function readSweepState() {
+  try {
+    return JSON.parse(readFileSync(SWEEP_STATE_PATH, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function writeSweepState(state) {
+  try {
+    writeFileSync(SWEEP_STATE_PATH, JSON.stringify(state, null, 2));
+  } catch (err) {
+    console.error(`aviso: nao gravou o estado da varredura (${String(err).slice(0, 120)})`);
+  }
+}
+
+/**
+ * A varredura profunda so roda quando o historico antigo do snapshot pode estar
+ * fora do ar: paginas ausentes, vencidas, mais velhas que
+ * `UAPI_STATEMENT_SWEEP_HOURS`, varredura anterior interrompida por falha ou
+ * teto de paginas diferente do que a ultima varredura usou. Repassar centenas
+ * de paginas a cada ciclo de 30 min nao muda nada — lancamento antigo nao muda —
+ * e multiplica por 20 as chamadas ao gateway, que responde bloqueando o que
+ * considera trafego suspeito.
+ */
+async function deepSweepDue(source, state) {
+  if (!source.recentPages || source.recentPages >= source.maxPages) return true;
+  // Teto diferente do da ultima varredura: pode existir historico que ela nao
+  // tentou alcancar (teto aumentado depois dela).
+  if (!state || state.cap !== source.maxPages) return true;
+  // Varredura que parou numa falha deixou paginas de fora e nao volta sozinha.
+  if (state.ended === 'failure') return true;
+  try {
+    const rows =
+      (await sbFetch(
+        `/rest/v1/lalamove_uapi_snapshot?select=resource,collected_at,expires_at&resource=like.${source.resource}:*&limit=2000`,
+      )) ?? [];
+    const deep = rows.filter((row) => pageNumber(row.resource) > source.recentPages);
+    if (!deep.length) return true;
+    const now = Date.now();
+    // Pagina ja vencida tambem dispara: as primeiras varreduras depois de o TTL
+    // profundo existir encontram o historico gravado com o TTL curto.
+    if (deep.some((row) => Date.parse(row.expires_at) <= now)) return true;
+    // Buraco dentro do trecho que a varredura disse ter coberto.
+    const present = new Set(deep.map((row) => pageNumber(row.resource)));
+    for (let pageNo = source.recentPages + 1; pageNo <= (state.deepestPage ?? 0); pageNo++) {
+      if (!present.has(pageNo)) return true;
+    }
+    const oldest = Math.min(...deep.map((row) => Date.parse(row.collected_at)));
+    return now - oldest > STATEMENT_SWEEP_HOURS * 3600_000;
+  } catch (err) {
+    // Sem a consulta nao da para saber se a varredura venceu; varrer e o lado
+    // seguro: e disso que o painel depende para mostrar o historico.
+    console.error(
+      `aviso: varredura profunda forcada em ${source.resource} (${String(err).slice(0, 120)})`,
+    );
+    return true;
+  }
+}
 
 async function loadChromium() {
   try {
@@ -485,7 +579,7 @@ async function main() {
       }
     }
 
-    const collectResource = async (resource, method, args, token) => {
+    const collectResource = async (resource, method, args, token, ttlHours = TTL_HOURS) => {
       const url = buildUrl(method, args, { token, deviceId, su });
       let payload;
       try {
@@ -517,7 +611,7 @@ async function main() {
             payload,
             city_id: city,
             collected_at: now.toISOString(),
-            expires_at: new Date(now.getTime() + TTL_HOURS * 3600_000).toISOString(),
+            expires_at: new Date(now.getTime() + ttlHours * 3600_000).toISOString(),
             updated_at: now.toISOString(),
             collected_by: 'browser-collector',
           },
@@ -533,25 +627,78 @@ async function main() {
 
     // Paginacao dinamica do extrato e dos cupons (ver PAGED_SOURCES).
     for (const source of PAGED_SOURCES) {
-      for (let pageNo = 1; pageNo <= source.maxPages; pageNo++) {
+      // Historico antigo so entra na varredura profunda; o teto efetivo deste
+      // ciclo e a janela recente quando a varredura nao venceu.
+      const sweepState = readSweepState();
+      const deepSweep = await deepSweepDue(source, sweepState);
+      const cap = deepSweep ? source.maxPages : source.recentPages;
+      let lastPage = 0;
+      let oldest = '';
+      // 'end' = o gateway terminou o historico; 'failure' = parou num erro;
+      // 'cap' = parou no teto de paginas (pode existir historico mais antigo).
+      let ended = 'cap';
+      for (let pageNo = 1; pageNo <= cap; pageNo++) {
         const key = pageNo > 1 ? `${source.resource}:p${pageNo}` : source.resource;
         const payload = await collectResource(
           key,
           source.method,
           source.args(city, pageNo),
           activeToken,
+          pageNo > source.recentPages ? STATEMENT_DEEP_TTL_HOURS : TTL_HOURS,
         );
         // Falha encerra a paginacao deste recurso: insistir nas paginas seguintes
         // so repete o mesmo erro e polui a lista de falhas.
-        if (!payload) break;
+        if (!payload) {
+          ended = 'failure';
+          break;
+        }
         const items = source.items(payload);
-        if (!Array.isArray(items) || items.length < PAGE_SIZE) break;
+        // Lista vazia e lista curta significam o mesmo aqui: fim do historico.
+        if (!Array.isArray(items) || !items.length) {
+          ended = 'end';
+          break;
+        }
+        lastPage = pageNo;
+        oldest = items[items.length - 1]?.date_time ?? oldest;
+        if (items.length < PAGE_SIZE) {
+          ended = 'end';
+          break;
+        }
         // O gateway nao informa o fim do historico: se a ultima pagina coletada
         // veio cheia, ainda existe historico mais antigo sem snapshot.
         if (pageNo === source.maxPages) {
           console.log(
             `aviso: ${source.resource} atingiu o teto de ${source.maxPages} paginas; ` +
               `historico mais antigo continua sem snapshot (ajuste ${source.capEnv})`,
+          );
+        }
+      }
+      if (!source.recentPages) {
+        if (lastPage) {
+          console.log(`${source.resource}: ${lastPage} pagina(s) ate ${oldest || 'sem data'}`);
+        }
+      } else if (deepSweep) {
+        writeSweepState({
+          cap: source.maxPages,
+          deepestPage: lastPage,
+          oldestDate: oldest || null,
+          ended,
+          sweptAt: new Date().toISOString(),
+        });
+        console.log(
+          `${source.resource}: varredura profunda coletou ${lastPage} pagina(s) ` +
+            `ate ${oldest || 'sem data'} (${ended})`,
+        );
+      } else {
+        // O log do ciclo diz o que foi coletado agora; a cobertura do historico
+        // e outra coisa e vem do estado da ultima varredura.
+        console.log(
+          `${source.resource}: ciclo coletou ${lastPage} pagina(s) ate ${oldest || 'sem data'}`,
+        );
+        if (sweepState?.deepestPage) {
+          console.log(
+            `${source.resource}: cobertura de ${sweepState.deepestPage} pagina(s) ate ` +
+              `${sweepState.oldestDate ?? 'sem data'} (varredura de ${sweepState.sweptAt})`,
           );
         }
       }
