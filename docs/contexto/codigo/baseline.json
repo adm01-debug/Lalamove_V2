@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "380d9da48d9cb2e171345d5a283ba81689543172",
+  "commit": "a27ce9e7ae261cf614a5fdfc684bf2b9a112bcfa",
   "branch": "main",
-  "data_commit": "2026-11-26T10:13:13-03:00",
+  "data_commit": "2026-11-26T10:22:14-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a27ce9e",
+    "data": "2026-11-26",
+    "assunto": "feat: coletor cobre 3 páginas de extrato/cupons e 10 recibos (#400)"
+   },
    {
     "sha": "380d9da",
     "data": "2026-11-26",
@@ -126,11 +131,6 @@
     "sha": "6736c92",
     "data": "2026-11-25",
     "assunto": "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)"
-   },
-   {
-    "sha": "18c1aff",
-    "data": "2026-11-25",
-    "assunto": "fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)"
    }
   ],
   "arquivos_mudados_7d": 1185,
@@ -188,11 +188,11 @@
     "mudancas": 19
    },
    {
-    "pasta": ".github/workflows/ci.yml",
+    "pasta": "src/components/dashboard",
     "mudancas": 18
    },
    {
-    "pasta": "src/components/dashboard",
+    "pasta": "src/components/lalamove",
     "mudancas": 18
    }
   ],
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 18
+    "mudancas": 17
    },
    {
     "arquivo": "package.json",
@@ -290,11 +290,11 @@
     "mudancas": 9
    },
    {
-    "arquivo": "supabase/config.toml",
+    "arquivo": "scripts/uapi-collector/collect.mjs",
     "mudancas": 8
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "arquivo": "supabase/config.toml",
     "mudancas": 8
    }
   ],
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1158,
   "arquivos_codigo": 736,
-  "linhas_codigo": 145130,
+  "linhas_codigo": 145153,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -504,7 +504,7 @@
   },
   "scripts/uapi-collector": {
    "arquivos": 1,
-   "linhas": 563
+   "linhas": 586
   },
   "scripts/ui-audit": {
    "arquivos": 6,
@@ -658,7 +658,7 @@
   },
   {
    "arquivo": "scripts/uapi-collector/collect.mjs",
-   "linhas": 563
+   "linhas": 586
   },
   {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",

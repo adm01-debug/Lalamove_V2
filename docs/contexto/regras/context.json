@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "380d9da48d9cb2e171345d5a283ba81689543172",
+  "sha": "a27ce9e7ae261cf614a5fdfc684bf2b9a112bcfa",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-26 13:18 UTC",
+  "generated_at": "2026-11-26 14:17 UTC",
   "files_total": 1152,
   "code_files": 969,
-  "code_lines": 167679
+  "code_lines": 167702
  },
  "version": "1.3.2",
- "facts_hash": "b2a746f9aa01c487",
+ "facts_hash": "1d38727a0b0193f3",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22236,7 +22236,7 @@
   {
    "module": "scripts",
    "files": 147,
-   "lines": 33392,
+   "lines": 33415,
    "tables": [
     "a",
     "active_tracking",
@@ -25423,6 +25423,9 @@
    "UAPI_CITY_ID": [
     "scripts/uapi-collector/collect.mjs"
    ],
+   "UAPI_COUPON_PAGES": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
    "UAPI_DEVICE_ID": [
     "scripts/uapi-collector/collect.mjs"
    ],
@@ -25436,6 +25439,9 @@
     "scripts/uapi-collector/collect.mjs"
    ],
    "UAPI_RECEIPTS": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
+   "UAPI_STATEMENT_PAGES": [
     "scripts/uapi-collector/collect.mjs"
    ],
    "VERCEL_AUTOMATION_BYPASS_SECRET": [
@@ -61624,7 +61630,7 @@
   },
   "scripts/uapi-collector/collect.mjs": {
    "path": "scripts/uapi-collector/collect.mjs",
-   "lines": 563,
+   "lines": 586,
    "env": [
     "CHROMIUM_PATH",
     "PLAYWRIGHT_ROOT",
@@ -61632,11 +61638,13 @@
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL",
     "UAPI_CITY_ID",
+    "UAPI_COUPON_PAGES",
     "UAPI_DEVICE_ID",
     "UAPI_LOGIN_WAIT_MS",
     "UAPI_ORDER_PAGES",
     "UAPI_PROFILE_DIR",
-    "UAPI_RECEIPTS"
+    "UAPI_RECEIPTS",
+    "UAPI_STATEMENT_PAGES"
    ],
    "errors": [
     "${pathname} -> ${res.status} ${text.slice(0, 300)}",
@@ -81778,10 +81786,19 @@
   }
  },
  "git": {
-  "sha": "380d9da48d9cb2e171345d5a283ba81689543172",
+  "sha": "a27ce9e7ae261cf614a5fdfc684bf2b9a112bcfa",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a27ce9e",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat: coletor cobre 3 páginas de extrato/cupons e 10 recibos (#400)",
+    "files": [
+     "scripts/uapi-collector/collect.mjs"
+    ]
+   },
    {
     "sha": "380d9da",
     "date": "2026-11-26",
@@ -82121,21 +82138,16 @@
      "src/hooks/useLalamove.ts",
      "src/hooks/useSLAMetrics.ts"
     ]
-   },
-   {
-    "sha": "484eb15",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: coleta agendada nao falha quando o perfil esta em uso (#370)",
-    "files": [
-     "scripts/uapi-collector/collect.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-companies/index.ts",
     7
+   ],
+   [
+    "scripts/uapi-collector/collect.mjs",
+    4
    ],
    [
     "supabase/functions/lalamove-token-refresh/index.ts",
@@ -82155,10 +82167,6 @@
    ],
    [
     "src/hooks/useLalamove.ts",
-    4
-   ],
-   [
-    "scripts/uapi-collector/collect.mjs",
     4
    ],
    [

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `380d9da48d9cb2e171345d5a283ba81689543172` (2026-11-26T10:13:13-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a27ce9e7ae261cf614a5fdfc684bf2b9a112bcfa` (2026-11-26T10:22:14-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1158 |
 | arquivos_codigo | 736 |
-| linhas_codigo | 145130 |
+| linhas_codigo | 145153 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -294,14 +294,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10107 nós · 20982 arestas · 706 comunidades · grafo do commit `380d9da4`
-- comunidades maiores: cn (248), MessagingSettingsPage.tsx (171), lucide-react (154), badge.tsx (117), ref_https (114), client.ts (109), DashboardRedesigned.tsx (91), ref_node_path (87), send-notification/index.ts (83), dependencies (81), gerar.mjs (76), types/index.ts (75)
+- 10110 nós · 20985 arestas · 719 comunidades · grafo do commit `a27ce9e7`
+- comunidades maiores: ref_https (122), button.tsx (119), client.ts (113), snapshot.py (104), cn (102), ref_node_path (101), card.tsx (98), geo-gateway/index.ts (96), react (86), DriversPage.tsx (84), dependencies (81), EvaluationsPage.tsx (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (40)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- .github/workflows/ci.yml (18)
+- .github/workflows/ci.yml (17)
 - package.json (15)
 - supabase/functions/job-worker/index.ts (15)
 - package-lock.json (14)
@@ -397,6 +397,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-26 `a27ce9e` feat: coletor cobre 3 páginas de extrato/cupons e 10 recibos (#400)
 - 2026-11-26 `380d9da` feat: watchdog da UAPI nomeia o recurso que congelou (#399)
 - 2026-11-26 `369bb44` fix: status da sessão UAPI deixa de usar token_expires_at como verdade (#398)
 - 2026-11-26 `70d6fad` fix: status de conexão lê a sessão UAPI real em vez de listar cidades (#397)
@@ -411,7 +412,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `0bd75b9` fix: religa alertas que nasceram desligados e morriam em silencio (#387)
 - 2026-11-25 `962d1b5` fix: limita "hoje" do dashboard ao fuso de São Paulo (#388)
 - 2026-11-25 `3d6697c` feat: painel lista as filiais dos fornecedores (#386)
-- 2026-11-25 `9a49234` chore: CI executa os testes do lalamove-token-refresh (#376)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
