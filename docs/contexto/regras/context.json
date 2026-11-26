@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d771fb658f2f7fef54b24d97f4bc4ca9d15c8666",
+  "sha": "f81f8ee369c3eaa2c5159dabbc2a4b6bcda51697",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-26 21:47 UTC",
-  "files_total": 1157,
-  "code_files": 973,
-  "code_lines": 168100
+  "generated_at": "2026-11-26 23:06 UTC",
+  "files_total": 1158,
+  "code_files": 974,
+  "code_lines": 168175
  },
  "version": "1.3.2",
- "facts_hash": "ec415eccdf54a732",
+ "facts_hash": "9374192f36486cf7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -188,7 +188,7 @@
   "package_manager": "npm",
   "languages": {
    ".ts": 380,
-   ".tsx": 246,
+   ".tsx": 247,
    ".sql": 224,
    ".mjs": 110,
    ".py": 8,
@@ -20913,7 +20913,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 168,
+  "components_count": 169,
   "hooks": [
    {
     "name": "useOrders",
@@ -22488,8 +22488,8 @@
   },
   {
    "module": "src/components",
-   "files": 167,
-   "lines": 29932,
+   "files": 168,
+   "lines": 30007,
    "tables": [
     "active_tracking",
     "lalamove_orders",
@@ -40295,6 +40295,26 @@
    {
     "file": "src/components/orders/OrderGeoEvents.test.tsx",
     "name": "reenvio chama send-notification com skip_dedup e geo_event_id"
+   },
+   {
+    "file": "src/components/ui/__tests__/button-aschild.test.tsx",
+    "name": "Button asChild"
+   },
+   {
+    "file": "src/components/ui/__tests__/button-aschild.test.tsx",
+    "name": "mantém as classes do filho junto das do Button"
+   },
+   {
+    "file": "src/components/ui/__tests__/button-aschild.test.tsx",
+    "name": "executa o handler do Button e o do filho"
+   },
+   {
+    "file": "src/components/ui/__tests__/button-aschild.test.tsx",
+    "name": "entrega o ref no elemento renderizado, não no Slot"
+   },
+   {
+    "file": "src/components/ui/__tests__/button-aschild.test.tsx",
+    "name": "preserva o aria-describedby que o filho já tinha"
    },
    {
     "file": "src/hooks/useGeoSearch.test.tsx",
@@ -65714,6 +65734,21 @@
     "useOptimisticList"
    ]
   },
+  "src/components/ui/__tests__/button-aschild.test.tsx": {
+   "path": "src/components/ui/__tests__/button-aschild.test.tsx",
+   "lines": 75,
+   "is_test": true,
+   "navigates": [
+    "/destino"
+   ],
+   "tests": [
+    "Button asChild",
+    "mantém as classes do filho junto das do Button",
+    "executa o handler do Button e o do filho",
+    "entrega o ref no elemento renderizado, não no Slot",
+    "preserva o aria-describedby que o filho já tinha"
+   ]
+  },
   "src/components/webhooks/WebhookSecurityPanel.tsx": {
    "path": "src/components/webhooks/WebhookSecurityPanel.tsx",
    "lines": 211,
@@ -81914,10 +81949,21 @@
   }
  },
  "git": {
-  "sha": "d771fb658f2f7fef54b24d97f4bc4ca9d15c8666",
+  "sha": "f81f8ee369c3eaa2c5159dabbc2a4b6bcda51697",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "f81f8ee",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "chore: atualiza @radix-ui/react-slot para 1.5.0 (#417)",
+    "files": [
+     "package-lock.json",
+     "package.json",
+     "src/components/ui/__tests__/button-aschild.test.tsx"
+    ]
+   },
    {
     "sha": "d771fb6",
     "date": "2026-11-26",
@@ -82246,15 +82292,6 @@
     "files": [
      "supabase/migrations/20261126160000_revoke_anon_metric_views.sql"
     ]
-   },
-   {
-    "sha": "1ded470",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "chore: least privilege nas funcoes internas de manutencao (#378)",
-    "files": [
-     "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -82285,6 +82322,14 @@
    [
     "src/hooks/useUAPI.ts",
     3
+   ],
+   [
+    "package-lock.json",
+    2
+   ],
+   [
+    "package.json",
+    2
    ],
    [
     "src/hooks/useLalamoveUapi.ts",
@@ -82327,15 +82372,7 @@
     2
    ],
    [
-    "package-lock.json",
-    1
-   ],
-   [
-    "package.json",
-    1
-   ],
-   [
-    "src/components/lalamove/UapiStatementPanel.tsx",
+    "src/components/ui/__tests__/button-aschild.test.tsx",
     1
    ]
   ]

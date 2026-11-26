@@ -21,7 +21,7 @@
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (61)",
+   "co-localizado (__tests__) (62)",
    "supabase/functions/<edge> (53)",
    "guards em scripts/ (47)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "chore: atualiza @radix-ui/react-slot para 1.5.0 (#417)",
    "chore: aplica os 6 bumps seguros do Dependabot (#415)",
    "feat: fim do extrato devolve lista vazia em vez de erro do gateway (#414)",
    "feat: extrato completo (580 paginas) com varredura profunda diaria (#404)",
-   "feat: coletor pagina extrato e cupons dinamicamente (#403)",
-   "feat: alerta quando a sessao UAPI nao tem renovacao automatica (#402)"
+   "feat: coletor pagina extrato e cupons dinamicamente (#403)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

@@ -1267,7 +1267,7 @@
   {
    "modulo": "components/ui",
    "arquivos": 63,
-   "testes": 0,
+   "testes": 1,
    "linhas": 8064,
    "itens_menu": [],
    "telas": [],

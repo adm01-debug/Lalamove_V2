@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d771fb658f2f7fef54b24d97f4bc4ca9d15c8666",
+  "commit": "f81f8ee369c3eaa2c5159dabbc2a4b6bcda51697",
   "branch": "main",
-  "data_commit": "2026-11-26T18:39:05-03:00",
+  "data_commit": "2026-11-26T20:01:48-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "f81f8ee",
+    "data": "2026-11-26",
+    "assunto": "chore: atualiza @radix-ui/react-slot para 1.5.0 (#417)"
+   },
    {
     "sha": "d771fb6",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "a3a43e6",
     "data": "2026-11-25",
     "assunto": "fix: painel deixa de receber a credencial da API do fornecedor (#384)"
-   },
-   {
-    "sha": "c1a0a10",
-    "data": "2026-11-25",
-    "assunto": "fix: busca de endereco acha sem acento e com termos fora de ordem (#383)"
    }
   ],
-  "arquivos_mudados_7d": 1190,
+  "arquivos_mudados_7d": 1191,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/ui",
-    "mudancas": 64
+    "mudancas": 65
    },
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,18 +301,18 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 295
+    "commits": 296
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 5
+    "commits": 4
    }
   ]
  },
  "contagens": {
-  "arquivos_total": 1163,
-  "arquivos_codigo": 740,
-  "linhas_codigo": 145551,
+  "arquivos_total": 1164,
+  "arquivos_codigo": 741,
+  "linhas_codigo": 145626,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 94,
   "migrations": 213,
   "cron_jobs": 24,
-  "testes": 197,
+  "testes": 198,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 115
@@ -523,8 +523,8 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 167,
-   "linhas": 29932
+   "arquivos": 168,
+   "linhas": 30007
   },
   "src/hooks": {
    "arquivos": 117,
