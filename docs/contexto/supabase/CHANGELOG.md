@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 00:35 UTC
+
+- **functions** alterado (6): `public.check_login_lockout_v2(p_email text, p_ip_address inet)`, `public.has_role(_user_id uuid, _role app_role)`, `public.is_phone_opted_out(p_phone text)`, `public.messaging_month_cost_cents(p_month date)`, `public.record_failed_login_v2(p_email text, p_ip_address inet, p_user_agent text)`, `public.refresh_cache_view(p_view_name text, p_triggered_by text)`
+
 ## 2026-11-25 22:16 UTC
 
 - **constraints** adicionado (11): `public.tracking_events.tracking_events_pkey`, `public.tracking_events_default.tracking_events_default_pkey`, `public.tracking_events_y2026m05.tracking_events_y2026m05_pkey`, `public.tracking_events_y2026m06.tracking_events_y2026m06_pkey`, `public.tracking_events_y2026m07.tracking_events_y2026m07_pkey`, `public.tracking_events_y2026m08.tracking_events_y2026m08_pkey`, `public.tracking_events_y2026m09.tracking_events_y2026m09_pkey`, `public.tracking_events_y2026m10.tracking_events_y2026m10_pkey`, `public.tracking_events_y2026m11.tracking_events_y2026m11_pkey`, `public.tracking_events_y2026m12.tracking_events_y2026m12_pkey`, `public.tracking_events_y2027m01.tracking_events_y2027m01_pkey`

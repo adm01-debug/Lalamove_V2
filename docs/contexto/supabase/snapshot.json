@@ -20151,9 +20151,13 @@
             {
               "file": "src/hooks/useLoginLockout.ts",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -21538,7 +21542,7 @@
               "hits": 6
             }
           ],
-          "code_total_files": 54,
+          "code_total_files": 55,
           "cron": [],
           "db": [
             "public.acknowledge_alert",
@@ -21835,9 +21839,13 @@
             {
               "file": "supabase/functions/send-notification/index.ts",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -22183,9 +22191,13 @@
             {
               "file": "supabase/functions/_shared/messaging/notify-driver.ts",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -22611,9 +22623,13 @@
             {
               "file": "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -22697,9 +22713,13 @@
             {
               "file": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 5,
+          "code_total_files": 6,
           "cron": [
             "26:refresh-cache-views"
           ],
