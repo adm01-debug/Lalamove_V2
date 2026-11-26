@@ -76,7 +76,8 @@ function FleetList({ kind, search }: FleetListProps) {
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-foreground">{driver.name || driver.driver_fid}</p>
               <p className="truncate text-xs text-muted-foreground">
-                {driver.plate_number || '—'} · {driver.vehicle_type || '—'}
+                {driver.vehicle_type || '—'}
+                {typeof driver.rating === 'number' ? ` · nota ${driver.rating.toFixed(2)}` : ''}
               </p>
             </div>
             <Button

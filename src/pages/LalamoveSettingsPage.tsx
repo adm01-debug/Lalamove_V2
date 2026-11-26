@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Zap, CheckCircle2, XCircle, History, ChevronLeft, ChevronRight, Truck, MapPin, Eye, EyeOff } from 'lucide-react';
 import { LalamoveV3Explorer } from './lalamove/LalamoveV3Explorer';
+import { UapiSnapshotBadge } from '@/components/lalamove/UapiSnapshotBadge';
 import { QueryState } from '@/components/ui/query-state';
 
 interface Transaction {
@@ -161,6 +162,7 @@ export default function LalamoveSettingsPage() {
             <p className="text-2xl font-bold text-foreground">
               {wallet?.formatted ?? '—'}
             </p>
+            <UapiSnapshotBadge info={wallet?.freshness} className="mt-2" />
           </CardContent>
         </Card>
       </div>

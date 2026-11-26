@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
+  epochFromUapiDateTime,
   formatBRLFromFen,
   parseServiceAreas,
+  parseSnapshotMeta,
   parseVehicles,
   parseWallet,
   parseWalletFlow,
@@ -151,5 +153,62 @@ describe('formatBRLFromFen', () => {
   it('converte centavos em reais', () => {
     expect(plain(formatBRLFromFen(0))).toBe('R$ 0,00');
     expect(plain(formatBRLFromFen(123456))).toBe('R$ 1.234,56');
+  });
+});
+
+describe('compatibilidade com o proxy legado', () => {
+  it('lê o extrato também de data.list', () => {
+    const flow = parseWalletFlow({
+      ok: true,
+      body: { data: { list: [{ name: 'Pedidos', amount: -5092, date_time: '2026-04-01 16:05:27' }] } },
+    });
+    expect(flow.items).toHaveLength(1);
+    expect(flow.items[0].amount_fen).toBe(-5092);
+  });
+
+  it('lê veículos e áreas quando data é a coleção direta', () => {
+    const legacy = {
+      ok: true,
+      body: {
+        data: [{ name: 'São Paulo', city_id: 21001, vehicle_item: [{ name: 'Moto', vehicle_desc: 'Motoca' }] }],
+      },
+    };
+    expect(parseServiceAreas(legacy)).toEqual([{ id: '21001', name: 'São Paulo' }]);
+    expect(parseVehicles(legacy)).toEqual([{ id: 'Moto', name: 'Moto', description: 'Motoca' }]);
+  });
+});
+
+describe('epochFromUapiDateTime', () => {
+  it('converte o texto da UAPI (hora local) em epoch de segundos', () => {
+    const epoch = epochFromUapiDateTime('2026-04-01 16:05:27');
+    expect(epoch).toBe(Math.floor(new Date(2026, 3, 1, 16, 5, 27).getTime() / 1000));
+  });
+
+  it('aceita o formato curto "YY-MM-DD HH:mm" dos pedidos', () => {
+    expect(epochFromUapiDateTime('01-04-01 16:05')).toBe(Math.floor(new Date(2001, 3, 1, 16, 5, 0).getTime() / 1000));
+  });
+
+  it('devolve undefined sem data válida', () => {
+    expect(epochFromUapiDateTime('')).toBeUndefined();
+    expect(epochFromUapiDateTime(null)).toBeUndefined();
+    expect(epochFromUapiDateTime('sem data')).toBeUndefined();
+  });
+});
+
+describe('parseSnapshotMeta', () => {
+  it('reporta quando o dado veio da cópia do robô', () => {
+    const meta = parseSnapshotMeta({
+      ret: 0,
+      data: {},
+      _meta: { servedFromSnapshot: true, snapshotCollectedAt: '2026-11-26T10:56:00Z' },
+    });
+    expect(meta).toEqual({ servedFromSnapshot: true, snapshotCollectedAt: '2026-11-26T10:56:00Z' });
+  });
+
+  it('trata resposta ao vivo como não-snapshot', () => {
+    expect(parseSnapshotMeta({ ret: 0, data: {} })).toEqual({
+      servedFromSnapshot: false,
+      snapshotCollectedAt: null,
+    });
   });
 });

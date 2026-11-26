@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { lalamove, type QuoteParams, type LalamoveStatusResponse, type LalamoveApiResponse, type LalamoveWalletHistoryResponse } from '@/lib/lalamove-api';
-import { parseServiceAreas, parseVehicles, parseWallet, parseWalletFlow, uapiData } from '@/lib/lalamoveUapiPayload';
+import { parseServiceAreas, parseSnapshotMeta, parseVehicles, parseWallet, parseWalletFlow, uapiData } from '@/lib/lalamoveUapiPayload';
 import { isLalamoveConfigured } from '@/lib/lalamove-config';
 
 // ── Status & Test ──
@@ -34,7 +34,7 @@ export function useWallet() {
     refetchIntervalInBackground: false,
     enabled: isLalamoveConfigured(),
     retry: false,
-    select: (d: LalamoveApiResponse) => parseWallet(d),
+    select: (d: LalamoveApiResponse) => ({ ...parseWallet(d), freshness: parseSnapshotMeta(d) }),
   });
 }
 

@@ -271,6 +271,8 @@ Deno.serve(async (req) => {
     // (é o caso da produção), a ação é atendida pelas edges locais.
     let url: URL;
     let forwardHeaders: Record<string, string> = {};
+    /** Corpo enviado à edge local; o proxy externo recebe tudo por query. */
+    let localBody: Record<string, unknown> | undefined;
 
     if (baseUrl && proxyKey) {
       url = new URL(baseUrl);
@@ -301,9 +303,26 @@ Deno.serve(async (req) => {
       }
       // a edge de destino exige JWT: repassamos o do chamador, já validado acima
       forwardHeaders = { Authorization: authHeader };
+
+      // A edge lê `action` da query e o resto do payload do JSON. A paginação
+      // chega como `page`/`size` na query (contrato do cliente), mas a UAPI
+      // pagina por `page_no`/`page_size` no corpo — sem esta tradução a edge
+      // assume a página 1 e "Próxima" devolve a mesma lista de novo.
+      const page = Number((payload.params ?? {}).page);
+      const size = Number((payload.params ?? {}).size);
+      if (Number.isFinite(page) || Number.isFinite(size)) {
+        localBody = {
+          ...(Number.isFinite(page) && page > 0 ? { page_no: page } : {}),
+          ...(Number.isFinite(size) && size > 0 ? { page_size: size } : {}),
+        };
+      }
     }
 
-    const method = payload.method === 'POST' || payload.body !== undefined ? 'POST' : 'GET';
+    const requestBody =
+      localBody !== undefined
+        ? { ...(payload.body as Record<string, unknown> | undefined), ...localBody }
+        : payload.body;
+    const method = payload.method === 'POST' || requestBody !== undefined ? 'POST' : 'GET';
 
     // ── 4. Chamada com deadline ────────────────────────────────────────────
     const controller = new AbortController();
@@ -319,7 +338,7 @@ Deno.serve(async (req) => {
           'x-request-id': requestId,
           ...forwardHeaders,
         },
-        body: method === 'POST' ? JSON.stringify(payload.body ?? {}) : undefined,
+        body: method === 'POST' ? JSON.stringify(requestBody ?? {}) : undefined,
         signal: controller.signal,
       });
     } catch (err) {
