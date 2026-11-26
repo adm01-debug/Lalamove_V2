@@ -2,30 +2,46 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { lalamove, type QuoteParams, type LalamoveStatusResponse, type LalamoveApiResponse, type LalamoveWalletHistoryResponse } from '@/lib/lalamove-api';
 import { parseServiceAreas, parseSnapshotMeta, parseVehicles, parseWallet, parseWalletFlow, uapiData, type LalamoveRawResponse } from '@/lib/lalamoveUapiPayload';
 import { isLalamoveConfigured } from '@/lib/lalamove-config';
+import { uapi } from '@/lib/uapi-proxy';
 
 // ── Status & Test ──
 
 /**
  * Monta o status que as telas leem a partir das chamadas reais de cada canal.
  *
- * O gateway atende `status` com a mesma chamada de `cities` e nunca devolveu o
- * objeto `{v3, uapi}` esperado aqui, então os cards mostravam "Erro"/"Token
- * Expirado" mesmo com a API respondendo. v3 lista cidades; a UAPI responde o
- * usuário logado e só responde com sessão válida.
+ * v3 lista cidades; a UAPI responde o usuário logado. O estado da sessão vem da
+ * action `status` (lê `lalamove_uapi_sessions` e avalia a expiração), porque o
+ * perfil pode ser servido de snapshot antigo e não prova token válido. Antes o
+ * gateway mandava `status` para `cities`, que nunca devolveu o objeto
+ * `{v3, uapi}` esperado aqui — daí os cards mostrarem "Erro"/"Token Expirado"
+ * com a API respondendo.
  */
 export function buildLalamoveStatus(
   v3: PromiseSettledResult<unknown>,
   uapi: PromiseSettledResult<unknown>,
+  session?: PromiseSettledResult<{ ok?: boolean; session?: { is_active?: boolean } }>,
 ): LalamoveStatusResponse {
   const user =
     uapi.status === 'fulfilled'
       ? uapiData<{ email?: string }>(uapi.value as LalamoveRawResponse)
       : undefined;
   const username = typeof user?.email === 'string' && user.email ? user.email : undefined;
+  // O perfil pode vir do snapshot do robô (`_meta.servedFromSnapshot`), que é
+  // cópia antiga: servir cópia não prova que o token ainda vale. Quem responde
+  // pelo estado cadastrado é a action `status`, que avalia a expiração.
+  // Sem ela (chamadas antigas/testes), snapshot deixa de contar como conectado.
+  const fromSnapshot =
+    uapi.status === 'fulfilled' &&
+    (uapi.value as { _meta?: { servedFromSnapshot?: boolean } } | null)?._meta
+      ?.servedFromSnapshot === true;
+  const sessionOk = session?.status === 'fulfilled'
+    ? session.value?.session?.is_active === true
+    : undefined;
+  const uapiOk = sessionOk ?? (uapi.status === 'fulfilled' && uapi.value != null && !fromSnapshot);
   return {
     v3: { ok: v3.status === 'fulfilled' && v3.value != null },
     uapi: {
-      ok: uapi.status === 'fulfilled' && uapi.value != null,
+      ok: uapiOk,
       ...(username ? { username } : {}),
     },
   };
@@ -35,8 +51,12 @@ export function useLalamoveStatus() {
   return useQuery<LalamoveStatusResponse>({
     queryKey: ['llm', 'status'],
     queryFn: async () => {
-      const [v3, uapi] = await Promise.allSettled([lalamove.cities(), lalamove.user()]);
-      return buildLalamoveStatus(v3, uapi);
+      const [v3Res, uapiRes, sessionRes] = await Promise.allSettled([
+        lalamove.cities(),
+        lalamove.user(),
+        uapi.getStatus(),
+      ]);
+      return buildLalamoveStatus(v3Res, uapiRes, sessionRes);
     },
     refetchInterval: 60_000,
     refetchIntervalInBackground: false,

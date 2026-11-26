@@ -623,8 +623,21 @@ serve(async (req) => {
     // UAPI nem consumir rate limit. Devolve apenas metadados — o token sai
     // mascarado e nunca completo.
     if (action === 'status') {
-      const roleCheck = await requireRole(req, ['admin', 'manager', 'operator', 'viewer'], corsHeaders);
-      if (roleCheck.error) return roleCheck.error;
+      // Qualquer perfil autenticado pode saber SE existe sessão ativa (o card do
+      // painel é para a operação toda). Os metadados da credencial — token
+      // mascarado, user_fid, cidade, datas — só para admin, que é quem acessa
+      // /settings/uapi e o `token-status`. Antes a resposta completa vazava para
+      // viewer/operator.
+      const adminCheck = await requireRole(req, ['admin'], corsHeaders);
+      const isAdmin = !adminCheck.error;
+      if (!isAdmin) {
+        const anyRoleCheck = await requireRole(
+          req,
+          ['admin', 'manager', 'operator', 'viewer'],
+          corsHeaders,
+        );
+        if (anyRoleCheck.error) return anyRoleCheck.error;
+      }
 
       const { data: sessions } = await supabase
         .from('lalamove_uapi_sessions')
@@ -644,13 +657,13 @@ serve(async (req) => {
           ok: active,
           session: {
             is_active: active,
-            token_preview: token ? `${token.slice(0, 6)}…${token.slice(-4)}` : null,
-            user_fid: session?.user_fid ?? null,
-            city_id: session?.city_id ?? null,
-            refresh_method: session?.refresh_method ?? null,
-            token_obtained_at: session?.token_obtained_at ?? null,
-            token_expires_at: session?.token_expires_at ?? null,
-            last_refreshed_at: session?.last_refreshed_at ?? null,
+            token_preview: isAdmin && token ? `${token.slice(0, 6)}…${token.slice(-4)}` : null,
+            user_fid: isAdmin ? (session?.user_fid ?? null) : null,
+            city_id: isAdmin ? (session?.city_id ?? null) : null,
+            refresh_method: isAdmin ? (session?.refresh_method ?? null) : null,
+            token_obtained_at: isAdmin ? (session?.token_obtained_at ?? null) : null,
+            token_expires_at: isAdmin ? (session?.token_expires_at ?? null) : null,
+            last_refreshed_at: isAdmin ? (session?.last_refreshed_at ?? null) : null,
           },
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },

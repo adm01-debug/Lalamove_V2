@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildLalamoveStatus } from '@/hooks/useLalamove';
 
-const ok = (value: unknown): PromiseSettledResult<unknown> => ({ status: 'fulfilled', value });
+const ok = <T>(value: T): PromiseSettledResult<T> => ({ status: 'fulfilled', value });
 const fail: PromiseSettledResult<unknown> = { status: 'rejected', reason: new Error('401') };
 
 describe('buildLalamoveStatus', () => {
@@ -31,5 +31,32 @@ describe('buildLalamoveStatus', () => {
     const status = buildLalamoveStatus(ok(null), ok(undefined));
     expect(status.v3?.ok).toBe(false);
     expect(status.uapi?.ok).toBe(false);
+  });
+
+  it('sessão cadastrada inativa vence o perfil que respondeu', () => {
+    const status = buildLalamoveStatus(
+      ok({ cities: [] }),
+      ok({ ret: 0, data: { email: 'op@empresa.com' } }),
+      ok({ ok: false, session: { is_active: false } }),
+    );
+    expect(status.uapi?.ok).toBe(false);
+    expect(status.uapi?.username).toBe('op@empresa.com');
+  });
+
+  it('perfil servido do snapshot não conta como sessão viva', () => {
+    const status = buildLalamoveStatus(
+      ok({ cities: [] }),
+      ok({ ret: 0, data: { email: 'op@empresa.com' }, _meta: { servedFromSnapshot: true } }),
+    );
+    expect(status.uapi?.ok).toBe(false);
+  });
+
+  it('sessão ativa mantém conectado mesmo com perfil vindo do snapshot', () => {
+    const status = buildLalamoveStatus(
+      ok({ cities: [] }),
+      ok({ ret: 0, data: {}, _meta: { servedFromSnapshot: true } }),
+      ok({ ok: true, session: { is_active: true } }),
+    );
+    expect(status.uapi?.ok).toBe(true);
   });
 });
