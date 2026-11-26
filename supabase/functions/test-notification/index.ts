@@ -8,6 +8,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { whatsAppTestSender, WHATSAPP_TEST_MISSING_CONFIG } from "../_shared/channels/whatsapp-test.ts";
+import { requireRole } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -42,6 +43,11 @@ serve(async (req) => {
     if (!validation.ok) {
       return errorResponse(validation, corsHeaders);
     }
+
+    // Autorização antes de qualquer efeito colateral (o teste de I/O em CI chama
+    // com a anon key esperando 422, por isso a validação de contrato vem antes).
+    const auth = await requireRole(req, ["admin", "manager"], corsHeaders);
+    if (auth.error) return auth.error;
 
     const { channel, alertType, recipients, webhookUrl } = validation.data as TestRequest;
 
