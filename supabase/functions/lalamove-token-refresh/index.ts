@@ -9,7 +9,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { buildUapiRefreshRequest, parseUapiRefreshResponse } from "./uapi-direct.ts";
-import { evaluateSnapshotHealth } from "./snapshot-watchdog.ts";
+import { evaluateResourceFreshness, evaluateSnapshotHealth } from "./snapshot-watchdog.ts";
 
 /**
  * Etapa 24 — Auto-refresh do token UAPI com fallback.
@@ -121,15 +121,42 @@ async function checkSnapshotFreshness(admin: Admin): Promise<number | null> {
   try {
     const { data, error } = await admin
       .from('lalamove_uapi_snapshot')
-      .select('updated_at')
-      .order('updated_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .select('resource, updated_at');
 
     if (error) throw new Error(error.message);
 
-    const updatedAt = (data?.updated_at as string | undefined) ?? null;
+    const rows = (data ?? []) as { resource: string; updated_at: string }[];
+    const newest = rows.reduce<{ updated_at: string } | null>((acc, row) => {
+      if (!acc) return row;
+      return new Date(row.updated_at).getTime() > new Date(acc.updated_at).getTime() ? row : acc;
+    }, null);
+    const updatedAt = newest?.updated_at ?? null;
     const health = evaluateSnapshotHealth(updatedAt, Date.now(), SNAPSHOT_STALE_MINUTES);
+
+    // Frescor global esconde tela congelada: qualquer recurso gravado move o
+    // `max(updated_at)`. A regra por recurso nomeia qual tela parou de ser
+    // coletada (carteira, extrato, cupons, pedidos ou frota).
+    const freshness = evaluateResourceFreshness(rows, Date.now(), SNAPSHOT_STALE_MINUTES);
+    const frozenResources = [
+      ...freshness.missing.map((resource) => `${resource} (nunca coletado)`),
+      ...freshness.stale.map(({ resource, ageMinutes }) => `${resource} (${Math.round(ageMinutes)} min)`),
+    ];
+
+    if (frozenResources.length > 0) {
+      await raiseAlert(
+        admin,
+        'CRITICAL',
+        'Snapshot UAPI incompleto',
+        `A coleta está desatualizada ou ausente para: ${frozenResources.join(', ')}. As telas que dependem desses recursos mostram erro do gateway até a próxima coleta bem-sucedida. Verifique a tarefa agendada LalamoveUapiCollector.`,
+        {
+          frozen_resources: frozenResources,
+          missing: freshness.missing,
+          stale: freshness.stale,
+          stale_after_minutes: SNAPSHOT_STALE_MINUTES,
+        },
+        'UAPI_SNAPSHOT_INCOMPLETE',
+      );
+    }
 
     if (health.healthy) return health.ageMinutes;
 
