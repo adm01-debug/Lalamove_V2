@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `369bb44779` · branch `main` · 2026-11-26 13:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `380d9da48d` · branch `main` · 2026-11-26 13:18 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -201,6 +201,7 @@
 | `CHANGE_DRIVER_REASONS` (TS) | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', |  | `supabase/functions/lalamove-api/index.ts` |
 | `GatewayTarget` (TS) | unified \| uapi |  | `supabase/functions/lalamove-gateway/route.ts` |
 | `SnapshotHealthReason` (TS) | fresh \| stale \| empty |  | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
+| `CRITICAL_SNAPSHOT_RESOURCES` (TS) | 'wallet_balance', 'wallet_flow_list', 'coupon_list_web', 'order_list_new', 'get_fleet', |  | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
 | `RecipientRole` (TS) | pickup_contact \| delivery_contact \| internal |  | `supabase/functions/send-notification/recipients.ts` |
 | `ErrorAction` (TS) | fallback \| retry \| give_up \| alert |  | `supabase/functions/zapp-callback/payload.ts` |
 | `CALLBACK_EVENTS` (TS) | "message.status", "message.inbound", "message.outbound_manual", |  | `supabase/functions/zapp-callback/payload.ts` |

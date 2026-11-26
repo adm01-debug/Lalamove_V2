@@ -1636,11 +1636,11 @@
   {
    "arquivo": "supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 53,
+   "linhas": 141,
    "testa": [
     "supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts"
    ],
-   "casos": 6
+   "casos": 12
   },
   {
    "arquivo": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",

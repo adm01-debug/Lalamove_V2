@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `369bb44779` · branch `main` · 2026-11-26 13:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `380d9da48d` · branch `main` · 2026-11-26 13:18 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -953,6 +953,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | CHANGE_DRIVER_REASONS | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', | `supabase/functions/lalamove-api/index.ts` |
 | GatewayTarget | unified \| uapi | `supabase/functions/lalamove-gateway/route.ts` |
 | SnapshotHealthReason | fresh \| stale \| empty | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
+| CRITICAL_SNAPSHOT_RESOURCES | 'wallet_balance', 'wallet_flow_list', 'coupon_list_web', 'order_list_new', 'get_fleet', | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
 | RecipientRole | pickup_contact \| delivery_contact \| internal | `supabase/functions/send-notification/recipients.ts` |
 | ErrorAction | fallback \| retry \| give_up \| alert | `supabase/functions/zapp-callback/payload.ts` |
 | CALLBACK_EVENTS | "message.status", "message.inbound", "message.outbound_manual", | `supabase/functions/zapp-callback/payload.ts` |
@@ -2098,7 +2099,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1648 testes em 145 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1654 testes em 145 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2149,6 +2150,7 @@ _nenhum item encontrado_
 | `supabase/functions/zapp-callback/security.test.ts` | 13 | parseSignatureHeader le t e v1 · parseSignatureHeader aceita espacos e ordem invertida · parseSignatureHeader rejeita header ausente ou malformado · timingSafeEqual compara conteudo e tamanho … |
 | `supabase/functions/job-worker/eta-cadence.test.ts` | 12 | nunca medido: nao pula (primeira medicao sempre acontece) · ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado · ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo · motorista andou mais de 300 m: mede mesmo com ETA alto … |
 | `supabase/functions/lalamove-api/geocode-fallback.test.ts` | 12 | geocodeAddress devolve coordenada e place_id do gateway · geocodeAddress marca revisao quando o endereco nao tem numero · geocodeAddress marca revisao com precisao baixa · geocodeAddress nao marca revisao com precisao exact e numero … |
+| `supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts` | 12 | [watchdog] coleta recente mantém o painel servido e sem alerta · [watchdog] fronteira de 120 min ainda é considerada saudável · [watchdog] 121 min já alerta: é o que evita carteira congelada em silêncio · [watchdog] snapshot vazio alerta mesmo sem data … |
 | `supabase/functions/send-notification/static-map.test.ts` | 12 | só as aproximações levam imagem · markers na ordem coleta → entrega → motorista, com rota quando há 2+ pontos · rota de um ponto só não vira path (path exige 2) · sem nenhum ponto não gera request (Google exige center/markers/path) … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/components/orders/AddressAutocomplete.test.tsx` | 11 | AddressAutocomplete — estados de falha (etapa 40) · 429 mostra  · erro sem status (rede) tem mensagem distinta do 429 · sem resultado e sem falha sugere incluir número ou CEP … |
@@ -2213,7 +2215,6 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |
-| `supabase/functions/lalamove-token-refresh/snapshot-watchdog.test.ts` | 6 | [watchdog] coleta recente mantém o painel servido e sem alerta · [watchdog] fronteira de 120 min ainda é considerada saudável · [watchdog] 121 min já alerta: é o que evita carteira congelada em silêncio · [watchdog] snapshot vazio alerta mesmo sem data … |
 | `supabase/functions/lalamove-token-refresh/uapi-direct.test.ts` | 6 | [uapi-direct] URL pede refresh_token com cara de portal · [uapi-direct] corpo leva token e refresh_token em args · [uapi-direct] ret=0 devolve o novo par · [uapi-direct] sem refresh_token novo, mantem o atual … |
 | `supabase/functions/lalamove-uapi/session-health.test.ts` | 6 | token expirado mas verificado agora continua ativo · sem verificação recente fica inativo · sem last_refreshed_at cai para token_obtained_at · sessão vazia não é ativa nem renovável … |
 | `supabase/functions/send-notification/sms-dispatch.test.ts` | 6 | buildSmsBody junta titulo, mensagem e pedido sem partes vazias · sem provedor configurado devolve erro explicito e nao envia · dispatchSms repassa o texto montado e a referencia do pedido · dispatchSms propaga a falha do provedor com o texto que tentou … |
@@ -2585,8 +2586,10 @@ _nenhum item encontrado_
 | ── 4. Chamada com deadline ──────────────────────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | ── 5. Telemetria de rate limit (Etapa 14) ───────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | * Ação conhecida mas que não pode ser atendida sem o proxy externo. */ | `supabase/functions/lalamove-gateway/route.ts` |
+| `max(updated_at)`. A regra por recurso nomeia qual tela parou de ser | `supabase/functions/lalamove-token-refresh/index.ts` |
 | Watchdog nao pode derrubar o worker de refresh. | `supabase/functions/lalamove-token-refresh/index.ts` |
 | * Regra do watchdog do snapshot UAPI, isolada do worker para poder ser testada | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
+| `max(updated_at)`) enquanto um destes parou de ser coletado — a regra por | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
 | Anti-WAF headers required for UAPI | `supabase/functions/lalamove-uapi/index.ts` |
 | não pode cair na sessão nova — antes ele pegava "a linha ativa do | `supabase/functions/lalamove-uapi/index.ts` |
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |

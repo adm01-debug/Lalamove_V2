@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "369bb4477948788206372d5f8fd50b0ff67e574a",
+  "commit": "380d9da48d9cb2e171345d5a283ba81689543172",
   "branch": "main",
-  "data_commit": "2026-11-26T10:05:46-03:00",
+  "data_commit": "2026-11-26T10:13:13-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "380d9da",
+    "data": "2026-11-26",
+    "assunto": "feat: watchdog da UAPI nomeia o recurso que congelou (#399)"
+   },
    {
     "sha": "369bb44",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "18c1aff",
     "data": "2026-11-25",
     "assunto": "fix: watchdog do snapshot UAPI testavel e coberto por testes (#375)"
-   },
-   {
-    "sha": "3ce0ba6",
-    "data": "2026-11-25",
-    "assunto": "fix: renovacao do token UAPI pelo coletor via refresh_token (#374)"
    }
   ],
-  "arquivos_mudados_7d": 1186,
+  "arquivos_mudados_7d": 1185,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -282,7 +282,7 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/config.toml",
+    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
     "mudancas": 9
    },
    {
@@ -290,11 +290,11 @@
     "mudancas": 9
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "arquivo": "supabase/config.toml",
     "mudancas": 8
    },
    {
-    "arquivo": "supabase/functions/lalamove-token-refresh/index.ts",
+    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 8
    }
   ],
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1158,
   "arquivos_codigo": 736,
-  "linhas_codigo": 144942,
+  "linhas_codigo": 145130,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 129,
-   "linhas": 30429
+   "linhas": 30617
   },
   "tailwind.config.ts": {
    "arquivos": 1,

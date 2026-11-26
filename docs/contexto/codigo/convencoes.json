@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: watchdog da UAPI nomeia o recurso que congelou (#399)",
    "fix: status da sessão UAPI deixa de usar token_expires_at como verdade (#398)",
    "fix: status de conexão lê a sessão UAPI real em vez de listar cidades (#397)",
    "fix: le o payload cru da UAPI no saldo, perfil, extrato, veiculos e areas (#396)",
-   "fix: botao Atualizar Token grava sessao UAPI e admin real deixa de levar 403 (#395)",
-   "fix: exige admin ou manager para enviar notificacao de teste (#394)"
+   "fix: botao Atualizar Token grava sessao UAPI e admin real deixa de levar 403 (#395)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
