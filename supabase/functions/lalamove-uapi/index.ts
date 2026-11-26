@@ -17,6 +17,12 @@ import {
   statementItems,
   STATEMENT_PAGE_SIZE,
 } from "./statement-history.ts";
+import {
+  buildStatementPage,
+  isBeyondItemCount,
+  statementPageRange,
+  type StatementItem,
+} from "./statement-items.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -357,6 +363,40 @@ async function beyondStatementEnd(
     return false;
   }
   return isBeyondHistory(statementItems(data?.payload), pageSize);
+}
+
+// Página do extrato montada pela identidade do lançamento já coletado. Como a
+// chave não depende da posição, a página não repete nem pula lançamento na
+// fronteira entre a janela recente e o histórico congelado. Sem coleta na
+// tabela (ex.: antes do primeiro ciclo do coletor novo) devolve null e a edge
+// segue pelo snapshot, como antes.
+async function statementPageFromItems(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  page: number,
+  pageSize: number,
+): Promise<{ payload: unknown; endOfHistory: boolean } | null> {
+  const { from, to } = statementPageRange(page, pageSize);
+  const { data, error, count } = await supabase
+    .from('lalamove_uapi_statement_item')
+    .select('payload', { count: 'exact' })
+    .order('occurred_at_local', { ascending: false })
+    .order('item_key', { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    logger.error('Lançamentos do extrato indisponíveis:', error);
+    return null;
+  }
+  const total = typeof count === 'number' ? count : data?.length ?? 0;
+  if (!total) return null;
+  if (isBeyondItemCount(from, total)) {
+    return { payload: EMPTY_STATEMENT_PAGE, endOfHistory: true };
+  }
+  return {
+    payload: buildStatementPage((data ?? []).map((row: { payload: StatementItem }) => row.payload)),
+    endOfHistory: false,
+  };
 }
 
 // ========== UAPI Actions ==========
@@ -1006,9 +1046,22 @@ serve(async (req) => {
     // correspondente continua recebendo o erro real do gateway.
     let snapshotCollectedAt: string | null = null;
     let endOfHistory = false;
+    let servedFromItems = false;
     if (result.ret !== 0 && action) {
       const resource = SNAPSHOT_ACTIONS[action]?.(body);
-      if (resource) {
+      if (action === 'wallet-transactions') {
+        const itemPage = await statementPageFromItems(
+          supabase,
+          Number(body.page_no ?? 1),
+          Number(body.page_size) || STATEMENT_PAGE_SIZE,
+        );
+        if (itemPage) {
+          result = itemPage.payload as { ret: number; data?: unknown; msg?: string };
+          endOfHistory = itemPage.endOfHistory;
+          servedFromItems = true;
+        }
+      }
+      if (resource && !servedFromItems) {
         const snapshot = await loadSnapshot(supabase, resource);
         if (snapshot) {
           result = snapshot.payload as { ret: number; data?: unknown; msg?: string };
@@ -1034,6 +1087,7 @@ serve(async (req) => {
           tokenRefreshed: wasRefreshed,
           servedFromSnapshot: snapshotCollectedAt !== null,
           ...(snapshotCollectedAt && { snapshotCollectedAt }),
+          ...(servedFromItems && { servedFromItems: true }),
           ...(endOfHistory && { endOfHistory: true }),
         },
       }),
