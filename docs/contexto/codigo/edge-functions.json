@@ -757,7 +757,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-uapi/index.ts",
    "arquivos": 1,
-   "linhas": 905,
+   "linhas": 950,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -774,7 +774,6 @@
    ],
    "env": [
     "ALLOWED_ORIGINS",
-    "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -785,13 +784,15 @@
     "web.lalamove.com"
    ],
    "usa_shared": [
+    "auth.ts",
     "contract.ts",
     "logger.ts",
     "schemas.ts",
     "telemetry.ts"
    ],
    "chamada_pelo_front": [
-    "src/hooks/useLalamoveUapi.ts"
+    "src/hooks/useLalamoveUapi.ts",
+    "src/lib/lalamove-api.ts"
    ],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,

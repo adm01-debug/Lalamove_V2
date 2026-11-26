@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1285697935` · branch `main` · 2026-11-26 10:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `65e8adecf4` · branch `main` · 2026-11-26 11:01 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -817,8 +817,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `update_error` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `updated` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `valid` | compara | `supabase/functions/_shared/messaging/notify-driver.ts` |
-| `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts` |
-| `role` | `admin` | compara, escreve, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/_shared/auth.ts`<br>`supabase/functions/geo-admin/index.ts`<br>… +3 |
+| `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts`<br>`supabase/functions/lalamove-uapi/index.ts` |
+| `role` | `admin` | compara, escreve, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/_shared/auth.ts`<br>`supabase/functions/geo-admin/index.ts`<br>… +2 |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
 | `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/dispatch.ts`<br>`supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
@@ -2036,13 +2036,13 @@ _nenhum item encontrado_
 | Erro ao fazer retry do job | `src/pages/JobQueuePage.tsx` |
 | Erro ao processar fila | `src/pages/JobQueuePage.tsx` |
 | API Key e Secret são obrigatórios | `src/pages/LalamoveSettingsPage.tsx` |
+| Access token não pode ser vazio | `src/pages/LalamoveSettingsPage.tsx` |
 | Credenciais inválidas. | `src/pages/LalamoveSettingsPage.tsx` |
 | Erro ao atualizar credenciais V3 | `src/pages/LalamoveSettingsPage.tsx` |
 | Erro ao atualizar token | `src/pages/LalamoveSettingsPage.tsx` |
 | Erro ao renovar token | `src/pages/LalamoveSettingsPage.tsx` |
 | Não foi possível renovar. Cole um novo token manualmente. | `src/pages/LalamoveSettingsPage.tsx` |
-| Token inválido ou expirado. | `src/pages/LalamoveSettingsPage.tsx` |
-| Token não pode ser vazio | `src/pages/LalamoveSettingsPage.tsx` |
+| Refresh token não pode ser vazio | `src/pages/LalamoveSettingsPage.tsx` |
 | ${providerLabel(provider)}: ${result.message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha ao salvar padrões: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha ao salvar teto: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
@@ -2050,7 +2050,7 @@ _nenhum item encontrado_
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Escolha ao menos um canal para a rota | `src/pages/MessagingSettingsPage.tsx` |
 | Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
-| … +127 linhas — lista completa em `context.json` | |
+| … +125 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2085,7 +2085,6 @@ _nenhum item encontrado_
 | `role` | `supabase/functions/_shared/messaging/router.ts` |
 | `admin` | `supabase/functions/external-db-bridge/index.ts` |
 | `service_role` | `supabase/functions/geo-admin/index.ts` |
-| `admin` | `supabase/functions/lalamove-uapi/index.ts` |
 | `true` | `supabase/functions/mcp-query/index.ts` |
 | `service_role` | `supabase/functions/seed-fix-rls/index.ts` |
 | `delivery_contact` | `supabase/functions/send-notification/index.ts` |
@@ -2581,6 +2580,7 @@ _nenhum item encontrado_
 | Watchdog nao pode derrubar o worker de refresh. | `supabase/functions/lalamove-token-refresh/index.ts` |
 | * Regra do watchdog do snapshot UAPI, isolada do worker para poder ser testada | `supabase/functions/lalamove-token-refresh/snapshot-watchdog.ts` |
 | Anti-WAF headers required for UAPI | `supabase/functions/lalamove-uapi/index.ts` |
+| não pode cair na sessão nova — antes ele pegava "a linha ativa do | `supabase/functions/lalamove-uapi/index.ts` |
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |
 | HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |
 | Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores). | `supabase/functions/lalamove-webhook/index.ts` |

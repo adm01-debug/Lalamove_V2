@@ -1518,7 +1518,7 @@
     "useWalletBalance",
     "useWalletHistory"
    ],
-   "linhas": 197,
+   "linhas": 198,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

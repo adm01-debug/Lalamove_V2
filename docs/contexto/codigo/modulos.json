@@ -332,6 +332,7 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-gateway",
+    "lalamove-uapi",
     "route-analyzer"
    ],
    "tabelas": [
@@ -1441,7 +1442,7 @@
    "modulo": "functions",
    "arquivos": 77,
    "testes": 50,
-   "linhas": 21813,
+   "linhas": 21858,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1660,7 +1661,7 @@
    "modulo": "hooks",
    "arquivos": 87,
    "testes": 2,
-   "linhas": 16257,
+   "linhas": 16258,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2507,7 +2508,7 @@
    "modulo": "lib",
    "arquivos": 31,
    "testes": 8,
-   "linhas": 2777,
+   "linhas": 2809,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2541,7 +2542,8 @@
    "diretos": {
     "edges": [
      "geo-gateway",
-     "lalamove-gateway"
+     "lalamove-gateway",
+     "lalamove-uapi"
     ],
     "tabelas": [],
     "rpcs": []
@@ -2589,7 +2591,7 @@
    "modulo": "pages",
    "arquivos": 57,
    "testes": 3,
-   "linhas": 17755,
+   "linhas": 17782,
    "itens_menu": [
     "Dashboard Analytics",
     "Dashboard SLA",
@@ -3492,7 +3494,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "lalamove-gateway"
+    "lalamove-gateway",
+    "lalamove-uapi"
    ],
    "tabelas": [],
    "rpcs": [],

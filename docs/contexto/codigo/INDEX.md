@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `12856979358ab39a218db83fdcc1076aa0c5910e` (2026-11-26T07:14:05-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `65e8adecf4970df607dc80b9b59fe6a43c8a791a` (2026-11-26T08:00:56-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1152 |
 | arquivos_codigo | 730 |
-| linhas_codigo | 143792 |
+| linhas_codigo | 143897 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -73,7 +73,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | módulo | itens de menu | telas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
 | components/auth | 0 | 0 | 9 | 5 | 1 | 6 |
-| components/dashboard | 0 | 0 | 13 | 43 | 4 | 5 |
+| components/dashboard | 0 | 0 | 13 | 43 | 5 | 5 |
 | components/lalamove | 0 | 0 | 6 | 8 | 1 | 0 |
 | components/layout | 0 | 0 | 6 | 172 | 14 | 37 |
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
@@ -217,7 +217,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `lalamove-api` [Lalamove API v3] — tabelas: alerts, drivers, lalamove_orders, lalamove_priority_fee_history, lalamove_rate_limits, lalamove_status_history, lalamove_stops; chamada por 4 arquivo(s) do front
 - `lalamove-gateway` [Lalamove API v3] — tabelas: alerts, lalamove_rate_limits, query_telemetry; chamada por 1 arquivo(s) do front
 - `lalamove-token-refresh` [Lalamove API v3] — tabelas: alerts, lalamove_uapi_sessions, lalamove_uapi_snapshot; chamada por 0 arquivo(s) do front, por SQL/cron
-- `lalamove-uapi` [Lalamove API v3] — tabelas: lalamove_orders, lalamove_uapi_sessions, lalamove_uapi_snapshot; chamada por 1 arquivo(s) do front
+- `lalamove-uapi` [Lalamove API v3] — tabelas: lalamove_orders, lalamove_uapi_sessions, lalamove_uapi_snapshot; chamada por 2 arquivo(s) do front
 - `lalamove-webhook` [Lalamove API v3] (verify_jwt=false) — tabelas: active_tracking, alerts, driver_locations, drivers, lalamove_order_replacements, lalamove_orders, lalamove_status_history, lalamove_stop_proofs, lalamove_stops, tracking_events, webhook_events; chamada por 0 arquivo(s) do front
 - `llm-wh` [Dados externos] (verify_jwt=false) — tabelas: -; chamada por 0 arquivo(s) do front
 - `mcp-query` (verify_jwt=false) — tabelas: query_telemetry; chamada por 0 arquivo(s) do front
@@ -294,8 +294,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10055 nós · 20835 arestas · 709 comunidades · grafo do commit `12856979`
-- comunidades maiores: cn (233), lucide-react (144), 4. Componentes, hooks, libs e estado — **revisado** (111), client.ts (110), snapshot.py (104), ref_https (101), react (101), DashboardRedesigned.tsx (99), ref_node_path (95), providers/types.ts (93), badge.tsx (93), NewOrderDialog.tsx (91)
+- 10057 nós · 20856 arestas · 712 comunidades · grafo do commit `65e8adec`
+- comunidades maiores: cn (176), react (157), LiveMap.tsx (148), card.tsx (144), ref_https (138), MessagingSettingsPage.tsx (132), badge.tsx (117), client.ts (114), DashboardRedesigned.tsx (102), ref_node_path (95), geo-gateway/index.ts (86), App.tsx (85)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -397,6 +397,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-26 `65e8ade` fix: botao Atualizar Token grava sessao UAPI e admin real deixa de levar 403 (#395)
 - 2026-11-26 `1285697` fix: exige admin ou manager para enviar notificacao de teste (#394)
 - 2026-11-25 `28be79b` infra: coletor de violações de CSP e header report-only (#390)
 - 2026-11-25 `ae61223` infra: hardening de banco - search_path, indices de FK, initplan de RLS, audit_log e PK de tracking_events (#392)
@@ -411,7 +412,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-25 `a3a43e6` fix: painel deixa de receber a credencial da API do fornecedor (#384)
 - 2026-11-25 `c1a0a10` fix: busca de endereco acha sem acento e com termos fora de ordem (#383)
 - 2026-11-25 `870d6e6` fix: filial na busca de endereco mostra o fornecedor dono (#382)
-- 2026-11-25 `63359d6` fix: external-companies usa o helper de auth compartilhado (#381)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

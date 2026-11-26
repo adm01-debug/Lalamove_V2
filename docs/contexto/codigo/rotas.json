@@ -199,6 +199,7 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-gateway",
+    "lalamove-uapi",
     "route-analyzer"
    ],
    "canais_realtime": [],
@@ -943,6 +944,7 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-gateway",
+    "lalamove-uapi",
     "route-analyzer"
    ],
    "canais_realtime": [],
@@ -2819,7 +2821,8 @@
    "tabelas": [],
    "rpcs": [],
    "edges": [
-    "lalamove-gateway"
+    "lalamove-gateway",
+    "lalamove-uapi"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -3020,7 +3023,8 @@
    "tabelas": [],
    "rpcs": [],
    "edges": [
-    "lalamove-gateway"
+    "lalamove-gateway",
+    "lalamove-uapi"
    ],
    "canais_realtime": [],
    "flags": [],

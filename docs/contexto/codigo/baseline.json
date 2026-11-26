@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "12856979358ab39a218db83fdcc1076aa0c5910e",
+  "commit": "65e8adecf4970df607dc80b9b59fe6a43c8a791a",
   "branch": "main",
-  "data_commit": "2026-11-26T07:14:05-03:00",
+  "data_commit": "2026-11-26T08:00:56-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "65e8ade",
+    "data": "2026-11-26",
+    "assunto": "fix: botao Atualizar Token grava sessao UAPI e admin real deixa de levar 403 (#395)"
+   },
    {
     "sha": "1285697",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "b70d145",
     "data": "2026-11-24",
     "assunto": "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)"
-   },
-   {
-    "sha": "484eb15",
-    "data": "2026-11-24",
-    "assunto": "fix: coleta agendada nao falha quando o perfil esta em uso (#370)"
    }
   ],
-  "arquivos_mudados_7d": 539,
+  "arquivos_mudados_7d": 540,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/ui",
-    "mudancas": 65
+    "mudancas": 64
    },
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1152,
   "arquivos_codigo": 730,
-  "linhas_codigo": 143792,
+  "linhas_codigo": 143897,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -528,7 +528,7 @@
   },
   "src/hooks": {
    "arquivos": 115,
-   "linhas": 19986
+   "linhas": 19987
   },
   "src/i18n": {
    "arquivos": 1,
@@ -540,7 +540,7 @@
   },
   "src/lib": {
    "arquivos": 54,
-   "linhas": 4538
+   "linhas": 4570
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -548,7 +548,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21764
+   "linhas": 21791
   },
   "src/services": {
    "arquivos": 1,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 127,
-   "linhas": 30204
+   "linhas": 30249
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -630,7 +630,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-   "linhas": 905
+   "linhas": 950
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
@@ -691,7 +691,7 @@
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 5,
-  "arquivos_acima_500_linhas": 26
+  "arquivos_acima_500_linhas": 27
  },
  "todos": [
   {

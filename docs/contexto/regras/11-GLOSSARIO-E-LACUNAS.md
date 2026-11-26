@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1285697935` · branch `main` · 2026-11-26 10:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `65e8adecf4` · branch `main` · 2026-11-26 11:01 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -222,7 +222,7 @@ _nenhum item encontrado_
 | status | valor `creating` para `step` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/orders/NewOrderDialog.tsx` |
 | status | valor `form` para `step` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/orders/NewOrderDialog.tsx` |
 | status | valor `quoted` para `step` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/orders/NewOrderDialog.tsx` |
-| status | valor `verified` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/auth/MFASettings.tsx`<br>`compara:src/hooks/useMFA.ts`<br>`escreve:src/hooks/useMFA.ts` |
+| status | valor `verified` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/auth/MFASettings.tsx`<br>`compara:src/hooks/useMFA.ts`<br>`compara:supabase/functions/lalamove-uapi/index.ts`<br>`escreve:src/hooks/useMFA.ts` |
 | status | valor `synced` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:src/components/ui/data-refresh-indicator.tsx` |
 | status | valor `syncing` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/data-refresh-indicator.tsx`<br>`escreve:src/hooks/useOfflineStorage.ts` |
 | status | valor `Entregue` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/hover-preview.tsx` |

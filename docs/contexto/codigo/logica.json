@@ -309,14 +309,16 @@
     "LalamoveWalletHistoryResponse",
     "QuoteParams",
     "callLalamoveGateway",
-    "lalamove"
+    "lalamove",
+    "setUapiSessionToken"
    ],
    "export_default": null,
-   "linhas": 165,
+   "linhas": 201,
    "tabelas": [],
    "rpcs": [],
    "edges": [
-    "lalamove-gateway"
+    "lalamove-gateway",
+    "lalamove-uapi"
    ],
    "env": [],
    "externos": [],
@@ -841,7 +843,7 @@
     "uapi"
    ],
    "export_default": null,
-   "linhas": 87,
+   "linhas": 83,
    "tabelas": [],
    "rpcs": [],
    "edges": [],

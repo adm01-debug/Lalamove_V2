@@ -2516,6 +2516,7 @@
    "supabase/functions/lalamove-token-refresh/uapi-direct.ts"
   ],
   "supabase/functions/lalamove-uapi/index.ts": [
+   "supabase/functions/_shared/auth.ts",
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",
    "supabase/functions/_shared/schemas.ts",
