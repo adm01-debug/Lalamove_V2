@@ -32,6 +32,8 @@ export interface UapiEnvelope<T> {
 export interface UapiFreshness {
   servedFromSnapshot: boolean;
   snapshotCollectedAt: string | null;
+  /** A página pedida está depois da última do histórico (só no extrato). */
+  endOfHistory?: boolean;
 }
 
 /** Formato padrão das listas UAPI: itens + procedência do dado. */
@@ -94,6 +96,7 @@ async function invokeUapiRaw<T>(
     freshness: {
       servedFromSnapshot: meta?.servedFromSnapshot === true,
       snapshotCollectedAt: meta?.snapshotCollectedAt ?? null,
+      endOfHistory: meta?.endOfHistory === true,
     },
   };
 }
