@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: coletor pagina extrato e cupons dinamicamente (#403)",
    "feat: alerta quando a sessao UAPI nao tem renovacao automatica (#402)",
    "fix: coletor UAPI passa a rodar o collect.mjs da main (#401)",
    "feat: coletor cobre 3 páginas de extrato/cupons e 10 recibos (#400)",
-   "feat: watchdog da UAPI nomeia o recurso que congelou (#399)",
-   "fix: status da sessão UAPI deixa de usar token_expires_at como verdade (#398)"
+   "feat: watchdog da UAPI nomeia o recurso que congelou (#399)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

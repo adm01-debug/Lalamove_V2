@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "2725ebd491e053181e58edf464e57e6e70acf760",
+  "commit": "b1774dc0eede5274978dd2fc12bf83ede8ceb79a",
   "branch": "main",
-  "data_commit": "2026-11-26T14:17:56-03:00",
+  "data_commit": "2026-11-26T14:25:17-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "b1774dc",
+    "data": "2026-11-26",
+    "assunto": "feat: coletor pagina extrato e cupons dinamicamente (#403)"
+   },
    {
     "sha": "2725ebd",
     "data": "2026-11-26",
@@ -126,11 +131,6 @@
     "sha": "56e3472",
     "data": "2026-11-25",
     "assunto": "fix: busca de endereco externa usa o schema real do banco de produtos (#380)"
-   },
-   {
-    "sha": "29a49ed",
-    "data": "2026-11-25",
-    "assunto": "fix: fecha leitura anonima das views de metrica (#379)"
    }
   ],
   "arquivos_mudados_7d": 1187,
@@ -214,10 +214,6 @@
     "mudancas": 15
    },
    {
-    "arquivo": "package.json",
-    "mudancas": 14
-   },
-   {
     "arquivo": "docs/MAPBOX.md",
     "mudancas": 13
    },
@@ -226,12 +222,16 @@
     "mudancas": 13
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "package.json",
     "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 13
+   },
+   {
+    "arquivo": "package-lock.json",
+    "mudancas": 12
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
@@ -286,12 +286,12 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+    "arquivo": "scripts/uapi-collector/collect.mjs",
     "mudancas": 9
    },
    {
-    "arquivo": "scripts/uapi-collector/collect.mjs",
-    "mudancas": 8
+    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+    "mudancas": 9
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,18 +301,18 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 291
+    "commits": 292
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 9
+    "commits": 8
    }
   ]
  },
  "contagens": {
   "arquivos_total": 1160,
   "arquivos_codigo": 738,
-  "linhas_codigo": 145226,
+  "linhas_codigo": 145257,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -504,7 +504,7 @@
   },
   "scripts/uapi-collector": {
    "arquivos": 1,
-   "linhas": 586
+   "linhas": 617
   },
   "scripts/ui-audit": {
    "arquivos": 6,
@@ -658,7 +658,7 @@
   },
   {
    "arquivo": "scripts/uapi-collector/collect.mjs",
-   "linhas": 586
+   "linhas": 617
   },
   {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",
@@ -687,7 +687,7 @@
  ],
  "qualidade": {
   "any": 150,
-  "console_log": 427,
+  "console_log": 428,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 5,
