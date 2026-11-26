@@ -66,6 +66,56 @@ export function parseSnapshotMeta(res: LalamoveRawResponse | null | undefined): 
 }
 
 /** "2026-04-01 16:05:27" (hora local da UAPI) → epoch em segundos. */
+/** Fuso em que a UAPI devolve `date_time` (a conta é operada em São Paulo). */
+const UAPI_TIME_ZONE = 'America/Sao_Paulo';
+
+/** Offset (ms) do fuso `timeZone` no instante `atMs`, no sentido UTC+offset. */
+function timeZoneOffsetMs(timeZone: string, atMs: number): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hour12: false,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).formatToParts(new Date(atMs));
+  const part = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? '0');
+  const asUtc = Date.UTC(
+    part('year'),
+    part('month') - 1,
+    part('day'),
+    part('hour') % 24,
+    part('minute'),
+    part('second'),
+  );
+  return Number.isFinite(asUtc) ? asUtc - atMs : 0;
+}
+
+/**
+ * Hora local (sem offset) → epoch em segundos.
+ *
+ * O texto vem no fuso da conta, sem deslocamento: interpretá-lo com o fuso do
+ * navegador deslocaria o lançamento contábil para quem abrir o painel em outro
+ * fuso, então a conversão é ancorada no fuso da operação.
+ */
+function localToEpoch(
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+  second: number,
+): number | undefined {
+  const naive = Date.UTC(year, month - 1, day, hour, minute, second);
+  if (!Number.isFinite(naive)) return undefined;
+  // Duas passagens: o primeiro palpite pode cair do outro lado de uma virada de fuso.
+  const once = naive - timeZoneOffsetMs(UAPI_TIME_ZONE, naive);
+  const exact = naive - timeZoneOffsetMs(UAPI_TIME_ZONE, once);
+  return Number.isFinite(exact) ? Math.floor(exact / 1000) : undefined;
+}
+
 export function epochFromUapiDateTime(value?: string | null): number | undefined {
   if (!value) return undefined;
   const text = value.trim();
@@ -75,15 +125,14 @@ export function epochFromUapiDateTime(value?: string | null): number | undefined
   if (match) {
     const rawYear = Number(match[1]);
     const year = match[1].length <= 2 ? 2000 + rawYear : rawYear;
-    const date = new Date(
+    return localToEpoch(
       year,
-      Number(match[2]) - 1,
+      Number(match[2]),
       Number(match[3]),
       Number(match[4]),
       Number(match[5]),
       Number(match[6] ?? 0),
     );
-    return Number.isFinite(date.getTime()) ? Math.floor(date.getTime() / 1000) : undefined;
   }
   const ms = Date.parse(text);
   return Number.isFinite(ms) ? Math.floor(ms / 1000) : undefined;
@@ -107,10 +156,12 @@ export interface WalletFlow {
 
 interface RawFlowItem {
   name?: string;
+  description?: string;
   sub_name?: string;
   user_name?: string;
-  amount?: number;
-  balance_fen?: number;
+  amount?: number | string;
+  amount_fen?: number | string;
+  balance_fen?: number | string;
   date_time?: string;
   create_time?: number;
 }
@@ -135,14 +186,18 @@ export function parseWalletFlow(res: LalamoveRawResponse | null | undefined): Wa
       typeof tx.create_time === 'number' && tx.create_time > 0
         ? tx.create_time
         : epochFromUapiDateTime(tx.date_time);
+    // O proxy legado manda `amount_fen`/`description`; a UAPI manda `amount`/`name`.
+    const rawAmount = tx.amount ?? tx.amount_fen;
+    const amountFen = Number(rawAmount);
+    const balanceFen = tx.balance_fen == null ? undefined : Number(tx.balance_fen);
     return {
       id: `${tx.date_time ?? 'linha'}-${i}`,
-      description: (tx.name ?? '').trim() || 'Transação',
+      description: (tx.name ?? tx.description ?? '').trim() || 'Transação',
       ...(remark ? { remark } : {}),
       ...(tx.date_time ? { created_at: tx.date_time } : {}),
       ...(createTime != null ? { create_time: createTime } : {}),
-      amount_fen: Number.isFinite(Number(tx.amount)) ? Number(tx.amount) : 0,
-      ...(tx.balance_fen != null ? { balance_fen: Number(tx.balance_fen) } : {}),
+      amount_fen: Number.isFinite(amountFen) ? amountFen : 0,
+      ...(balanceFen != null && Number.isFinite(balanceFen) ? { balance_fen: balanceFen } : {}),
     };
   });
   const total = Number(data?.total);

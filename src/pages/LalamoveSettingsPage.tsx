@@ -375,33 +375,39 @@ export default function LalamoveSettingsPage() {
                 </div>
               ))}
 
-              {/* Pagination */}
-              <div className="flex items-center justify-between pt-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setWalletPage(p => Math.max(1, p - 1))}
-                  disabled={walletPage <= 1}
-                >
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  Anterior
-                </Button>
-                <span className="text-sm text-muted-foreground">Página {walletPage}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setWalletPage(p => p + 1)}
-                  disabled={transactions.length < 20}
-                >
-                  Próxima
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-6">
-              Nenhuma transação encontrada. Verifique se o token UAPI está ativo.
+              {walletPage > 1
+                ? `Nenhuma transação na página ${walletPage}.`
+                : 'Nenhuma transação encontrada. Verifique se o token UAPI está ativo.'}
             </p>
+          )}
+
+          {/* A navegação fica fora dos ramos de sucesso/vazio/erro: numa página
+              vazia ou com falha, sem ela o operador não volta à anterior. */}
+          {!historyLoading && (
+            <div className="flex items-center justify-between pt-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setWalletPage(p => Math.max(1, p - 1))}
+                disabled={walletPage <= 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Anterior
+              </Button>
+              <span className="text-sm text-muted-foreground">Página {walletPage}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setWalletPage(p => p + 1)}
+                disabled={transactions.length < 20}
+              >
+                Próxima
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
           )}
         </CardContent>
       </Card>

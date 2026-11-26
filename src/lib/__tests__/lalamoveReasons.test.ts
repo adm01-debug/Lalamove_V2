@@ -85,6 +85,24 @@ describe('extrato contábil UAPI', () => {
     });
   });
 
+  it('deixa o saldo vazio quando a movimentação não informa saldo', () => {
+    const [row] = toAccountingRows([{ flow_id: 'a', amount_fen: -5_092 }]);
+    expect(row.saldo).toBe('');
+  });
+
+  it('mantém 0,00 quando o saldo é zero explícito', () => {
+    const [row] = toAccountingRows([{ flow_id: 'a', amount_fen: 0, balance_fen: 0 }]);
+    expect(row.saldo).toBe('0.00');
+  });
+
+  it('ignora saldos ausentes ao totalizar', () => {
+    const rows = toAccountingRows([
+      { flow_id: 'a', amount_fen: -2_500, balance_fen: 7_500 },
+      { flow_id: 'b', amount_fen: 10_000 },
+    ]);
+    expect(summarizeAccountingRows(rows).saldoFinal).toBe('75.00');
+  });
+
   it('lida com extrato vazio sem quebrar', () => {
     expect(summarizeAccountingRows([])).toEqual({
       creditos: '0.00',

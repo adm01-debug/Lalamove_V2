@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractOrderPage } from '@/hooks/useLalamoveUapi';
+import { extractOrderPage, fleetDriverMatches } from '@/hooks/useLalamoveUapi';
 
 // Pedido real do snapshot do robô (order_list_new, 26/11/2026).
 const payload = {
@@ -62,5 +62,22 @@ describe('extractOrderPage', () => {
     expect(extractOrderPage({ list: [{ order_uuid: 'b1' }] }).orders[0].order_uuid).toBe('b1');
     expect(extractOrderPage(null)).toEqual({ orders: [], nextCursor: null });
     expect(extractOrderPage({ ret: 10010, msg: 'erro' })).toEqual({ orders: [], nextCursor: null });
+  });
+});
+
+describe('fleetDriverMatches', () => {
+  const ana = { driver_fid: 'f1', name: 'Ana Souza', physics_vehicle_name: 'Fiorino' };
+  const bruno = { driver_fid: 'f2', name: 'Bruno Lima', brand_series: 'HR' };
+
+  it('filtra pelo nome, placa-modelo e identificador', () => {
+    expect(fleetDriverMatches(ana, 'bruno')).toBe(false);
+    expect(fleetDriverMatches(bruno, 'bruno')).toBe(true);
+    expect(fleetDriverMatches(ana, 'fiorino')).toBe(true);
+    expect(fleetDriverMatches(bruno, 'f2')).toBe(true);
+  });
+
+  it('termo vazio ou sem correspondência', () => {
+    expect(fleetDriverMatches(ana, '')).toBe(true);
+    expect(fleetDriverMatches(ana, 'carlos')).toBe(false);
   });
 });

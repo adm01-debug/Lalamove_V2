@@ -361,12 +361,20 @@ export interface UapiFleetDriver {
 }
 
 /** Campos como a UAPI devolve em `get_fleet` (números também vêm como texto). */
-interface RawFleetDriver {
+export interface RawFleetDriver {
   driver_fid?: string;
   name?: string;
   avg_rating?: number | string;
   physics_vehicle_name?: string;
   brand_series?: string;
+}
+
+/** Busca aplicada no cliente quando a lista vem da cópia do robô (sem filtro). */
+export function fleetDriverMatches(driver: RawFleetDriver, search: string): boolean {
+  const term = search.trim().toLowerCase();
+  if (!term) return true;
+  return [driver.name, driver.driver_fid, driver.physics_vehicle_name, driver.brand_series]
+    .some((value) => (value ?? '').toLowerCase().includes(term));
 }
 
 export function useUapiFleet(kind: FleetKind, search?: string) {
@@ -382,8 +390,15 @@ export function useUapiFleet(kind: FleetKind, search?: string) {
       // A UAPI devolve a frota em `driver_info` (não em `list`/`drivers`).
       const list = record.driver_info ?? record.list ?? record.drivers ?? record.items;
       const drivers = Array.isArray(list) ? (list as RawFleetDriver[]) : [];
+      // A cópia do robô é gravada sem filtro (a chave não inclui o termo
+      // buscado), então a busca precisa ser aplicada aqui nesse caso.
+      const term = search?.trim() ?? '';
+      const filtered =
+        freshness.servedFromSnapshot && term
+          ? drivers.filter((d) => fleetDriverMatches(d, term))
+          : drivers;
       return {
-        items: drivers
+        items: filtered
           .filter((d) => typeof d?.driver_fid === 'string' && d.driver_fid)
           .map((d) => {
             const rating = toFiniteNumber(d.avg_rating);

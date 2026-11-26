@@ -179,19 +179,50 @@ describe('compatibilidade com o proxy legado', () => {
 });
 
 describe('epochFromUapiDateTime', () => {
-  it('converte o texto da UAPI (hora local) em epoch de segundos', () => {
-    const epoch = epochFromUapiDateTime('2026-04-01 16:05:27');
-    expect(epoch).toBe(Math.floor(new Date(2026, 3, 1, 16, 5, 27).getTime() / 1000));
+  it('converte o texto da UAPI (hora local de São Paulo) em epoch de segundos', () => {
+    // 16:05:27 em UTC-3 equivale a 19:05:27Z, independente do fuso do navegador.
+    expect(epochFromUapiDateTime('2026-04-01 16:05:27')).toBe(Date.UTC(2026, 3, 1, 19, 5, 27) / 1000);
   });
 
   it('aceita o formato curto "YY-MM-DD HH:mm" dos pedidos', () => {
-    expect(epochFromUapiDateTime('01-04-01 16:05')).toBe(Math.floor(new Date(2001, 3, 1, 16, 5, 0).getTime() / 1000));
+    expect(epochFromUapiDateTime('01-04-01 16:05')).toBe(Date.UTC(2001, 3, 1, 19, 5, 0) / 1000);
+  });
+
+  it('não depende do fuso do navegador', () => {
+    const sp = epochFromUapiDateTime('2026-03-09 16:03:16');
+    const asSp = new Date(sp! * 1000).toLocaleString('en-US', {
+      timeZone: 'America/Sao_Paulo',
+      hour12: false,
+    });
+    expect(asSp).toContain('16:03:16');
   });
 
   it('devolve undefined sem data válida', () => {
     expect(epochFromUapiDateTime('')).toBeUndefined();
     expect(epochFromUapiDateTime(null)).toBeUndefined();
     expect(epochFromUapiDateTime('sem data')).toBeUndefined();
+  });
+});
+
+describe('parseWalletFlow — proxy legado', () => {
+  it('lê `amount_fen` e `description` quando o proxy antigo responde', () => {
+    const flow = parseWalletFlow({
+      ret: 0,
+      data: {
+        list: [{ amount_fen: -5_092, description: 'Reembolso', balance_fen: 12_000, date_time: '2026-03-09 16:03:16' }],
+      },
+    });
+    expect(flow.items[0]).toMatchObject({
+      description: 'Reembolso',
+      amount_fen: -5_092,
+      balance_fen: 12_000,
+      create_time: Date.UTC(2026, 2, 9, 19, 3, 16) / 1000,
+    });
+  });
+
+  it('omite o saldo quando a movimentação não traz `balance_fen`', () => {
+    const flow = parseWalletFlow({ ret: 0, data: { flow_item_arr: [{ name: 'Débito', amount: -5_092 }] } });
+    expect(flow.items[0]).not.toHaveProperty('balance_fen');
   });
 });
 
