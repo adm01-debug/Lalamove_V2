@@ -619,6 +619,57 @@ serve(async (req) => {
       contract.data as Record<string, unknown>,
     );
 
+    // Status da sessão: alimenta os cards de conexão do painel sem chamar a
+    // UAPI nem consumir rate limit. Devolve apenas metadados — o token sai
+    // mascarado e nunca completo.
+    if (action === 'status') {
+      // Qualquer perfil autenticado pode saber SE existe sessão ativa (o card do
+      // painel é para a operação toda). Os metadados da credencial — token
+      // mascarado, user_fid, cidade, datas — só para admin, que é quem acessa
+      // /settings/uapi e o `token-status`. Antes a resposta completa vazava para
+      // viewer/operator.
+      const adminCheck = await requireRole(req, ['admin'], corsHeaders);
+      const isAdmin = !adminCheck.error;
+      if (!isAdmin) {
+        const anyRoleCheck = await requireRole(
+          req,
+          ['admin', 'manager', 'operator', 'viewer'],
+          corsHeaders,
+        );
+        if (anyRoleCheck.error) return anyRoleCheck.error;
+      }
+
+      const { data: sessions } = await supabase
+        .from('lalamove_uapi_sessions')
+        .select('access_token, user_fid, city_id, refresh_method, token_obtained_at, token_expires_at, last_refreshed_at')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      const session = sessions?.[0];
+      const expiresAt = session?.token_expires_at ? Date.parse(session.token_expires_at) : NaN;
+      const expired = Number.isFinite(expiresAt) && expiresAt <= Date.now();
+      const token = typeof session?.access_token === 'string' ? session.access_token : '';
+      const active = !!session && !expired;
+
+      return new Response(
+        JSON.stringify({
+          ok: active,
+          session: {
+            is_active: active,
+            token_preview: isAdmin && token ? `${token.slice(0, 6)}…${token.slice(-4)}` : null,
+            user_fid: isAdmin ? (session?.user_fid ?? null) : null,
+            city_id: isAdmin ? (session?.city_id ?? null) : null,
+            refresh_method: isAdmin ? (session?.refresh_method ?? null) : null,
+            token_obtained_at: isAdmin ? (session?.token_obtained_at ?? null) : null,
+            token_expires_at: isAdmin ? (session?.token_expires_at ?? null) : null,
+            last_refreshed_at: isAdmin ? (session?.last_refreshed_at ?? null) : null,
+          },
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
+    }
+
     // Special action: set initial token — requer role admin para evitar que
     // qualquer usuário autenticado sobrescreva a sessão UAPI ativa.
     if (action === 'set-token') {

@@ -5,6 +5,10 @@ import { parseSnapshotMeta, parseWallet, uapiData } from '@/lib/lalamoveUapiPayl
 export function useUAPIStatus() {
   return useQuery({
     queryKey: ['uapi', 'status'],
+    // A edge `lalamove-uapi` responde `{ ok, session }` a partir de
+    // `lalamove_uapi_sessions`. Antes o gateway mandava `status` para `cities`,
+    // que não informa sessão alguma, e o card ficava "Desconectado" com a UAPI
+    // respondendo.
     queryFn: () => uapi.getStatus(),
     refetchInterval: 60_000,
     refetchIntervalInBackground: false,
