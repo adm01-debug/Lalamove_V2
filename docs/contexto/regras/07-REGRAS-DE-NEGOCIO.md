@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `28be79bfb4` · branch `main` · 2026-11-26 00:54 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1285697935` · branch `main` · 2026-11-26 10:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -818,7 +818,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `updated` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `valid` | compara | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts` |
-| `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/geo-admin/index.ts`<br>`supabase/functions/lalamove-uapi/index.ts`<br>… +2 |
+| `role` | `admin` | compara, escreve, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/_shared/auth.ts`<br>`supabase/functions/geo-admin/index.ts`<br>… +3 |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
 | `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/dispatch.ts`<br>`supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
@@ -2606,6 +2606,7 @@ _nenhum item encontrado_
 | * Somente o caminho do documento — nunca query string nem origin completo. */ | `supabase/functions/telemetry-csp-report/report.ts` |
 | * Extrai no máximo `limit` violações de um corpo de relatório (string JSON). */ | `supabase/functions/telemetry-csp-report/report.ts` |
 | * Limite por IP em memória do isolate. Não é um contador global (cada isolate tem | `supabase/functions/telemetry-csp-report/report.ts` |
+| com a anon key esperando 422, por isso a validação de contrato vem antes). | `supabase/functions/test-notification/index.ts` |
 | de banco nao pode virar uma fila de retentativas identicas. | `supabase/functions/zapp-callback/index.ts` |
 | 200 de proposito: evento que nao sabemos tratar nao pode ser reenviado | `supabase/functions/zapp-callback/index.ts` |
 | para que os testes injetem um fake e exercitem a regra sem banco: e aqui que | `supabase/functions/zapp-callback/ledger.ts` |

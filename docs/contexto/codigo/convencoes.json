@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: exige admin ou manager para enviar notificacao de teste (#394)",
    "infra: coletor de violações de CSP e header report-only (#390)",
    "infra: hardening de banco - search_path, indices de FK, initplan de RLS, audit_log e PK de tracking_events (#392)",
    "fix: seed-fix-rls exige admin/manager e nao abre policies para anon (#393)",
-   "feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)",
-   "fix: le o limiar de LATE_DELIVERY no canal whatsapp do job-worker (#389)"
+   "feat: filial mostra o fornecedor dono e aba sem tabela some do painel (#391)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

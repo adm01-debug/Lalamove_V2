@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "28be79bfb4ab6dc8857cd33027c1e46e48891e1b",
+  "sha": "12856979358ab39a218db83fdcc1076aa0c5910e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-26 00:54 UTC",
+  "generated_at": "2026-11-26 10:17 UTC",
   "files_total": 1146,
   "code_files": 963,
-  "code_lines": 166334
+  "code_lines": 166341
  },
  "version": "1.3.2",
- "facts_hash": "189ea0796c1f17c2",
+ "facts_hash": "af36621fe990dae2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -20062,7 +20062,8 @@
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [
-     "bitrix24_tokens"
+     "bitrix24_tokens",
+     "user_roles"
     ],
     "env": [
      "RESEND_API_KEY",
@@ -23316,7 +23317,7 @@
   {
    "module": "supabase/functions",
    "files": 127,
-   "lines": 30197,
+   "lines": 30204,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -29452,6 +29453,10 @@
    {
     "file": "supabase/functions/telemetry-csp-report/report.ts",
     "text": "* Limite por IP em memória do isolate. Não é um contador global (cada isolate tem"
+   },
+   {
+    "file": "supabase/functions/test-notification/index.ts",
+    "text": "com a anon key esperando 422, por isso a validação de contrato vem antes)."
    },
    {
     "file": "supabase/functions/zapp-callback/index.ts",
@@ -36493,6 +36498,12 @@
     "file": "src/utils/webVitals.ts",
     "field": "type",
     "value": "web-vitals",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/auth.ts",
+    "field": "role",
+    "value": "admin",
     "kind": "escreve"
    },
    {
@@ -50964,6 +50975,7 @@
       "compara:src/pages/PermissionsPage.tsx",
       "compara:src/pages/ProfilePage.tsx",
       "compara:supabase/functions/lalamove-uapi/index.ts",
+      "escreve:supabase/functions/_shared/auth.ts",
       "filtra:supabase/functions/geo-admin/index.ts",
       "filtra:supabase/functions/seed-fix-rls/index.ts",
       "filtra:supabase/functions/simulate-driver-movement/index.ts"
@@ -74174,7 +74186,7 @@
   },
   "supabase/functions/_shared/auth.ts": {
    "path": "supabase/functions/_shared/auth.ts",
-   "lines": 91,
+   "lines": 92,
    "exports": [
     "function requireRole",
     "function requireAdmin"
@@ -74196,6 +74208,13 @@
     "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
+   ],
+   "status_values": [
+    {
+     "field": "role",
+     "value": "admin",
+     "kind": "escreve"
+    }
    ],
    "role_checks": [
     "claimRole"
@@ -79678,7 +79697,7 @@
   },
   "supabase/functions/test-notification/index.ts": {
    "path": "supabase/functions/test-notification/index.ts",
-   "lines": 271,
+   "lines": 277,
    "tables": [
     {
      "table": "bitrix24_tokens",
@@ -79701,6 +79720,9 @@
      "value": "TEST",
      "kind": "escreve"
     }
+   ],
+   "rule_comments": [
+    "com a anon key esperando 422, por isso a validação de contrato vem antes)."
    ],
    "pagination": [
     "1"
@@ -81213,10 +81235,20 @@
   }
  },
  "git": {
-  "sha": "28be79bfb4ab6dc8857cd33027c1e46e48891e1b",
+  "sha": "12856979358ab39a218db83fdcc1076aa0c5910e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "1285697",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "fix: exige admin ou manager para enviar notificacao de teste (#394)",
+    "files": [
+     "supabase/functions/_shared/auth.ts",
+     "supabase/functions/test-notification/index.ts"
+    ]
+   },
    {
     "sha": "28be79b",
     "date": "2026-11-25",
@@ -81533,26 +81565,6 @@
      "src/pages/SLODashboardPage.tsx",
      "src/pages/error-state.test.tsx"
     ]
-   },
-   {
-    "sha": "569b237",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)",
-    "files": [
-     "src/components/dashboard/UAPIStatusCards.tsx",
-     "src/components/lalamove/UapiCouponsPanel.tsx",
-     "src/components/lalamove/UapiFleetPanel.tsx",
-     "src/components/lalamove/UapiOrderHistoryPanel.tsx",
-     "src/components/lalamove/UapiSessionRequired.tsx",
-     "src/components/lalamove/UapiStatementPanel.tsx",
-     "src/components/lalamove/__tests__/UapiSessionRequired.test.tsx",
-     "src/hooks/useLalamoveUapi.ts",
-     "src/lib/__tests__/uapiErrors.test.ts",
-     "src/lib/edge-error.test.ts",
-     "src/lib/edge-error.ts",
-     "src/lib/uapiErrors.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -81585,24 +81597,12 @@
     2
    ],
    [
-    "src/components/lalamove/UapiCouponsPanel.tsx",
-    2
+    "supabase/functions/_shared/auth.ts",
+    1
    ],
    [
-    "src/components/lalamove/UapiFleetPanel.tsx",
-    2
-   ],
-   [
-    "src/components/lalamove/UapiOrderHistoryPanel.tsx",
-    2
-   ],
-   [
-    "src/components/lalamove/UapiStatementPanel.tsx",
-    2
-   ],
-   [
-    "src/hooks/useLalamoveUapi.ts",
-    2
+    "supabase/functions/test-notification/index.ts",
+    1
    ],
    [
     "supabase/config.toml",
@@ -81634,6 +81634,18 @@
    ],
    [
     "supabase/migrations/20261126200000_rls_auth_initplan.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261126210000_tracking_events_pk.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261126230000_revoke_authenticated_manutencao.sql",
     1
    ]
   ]

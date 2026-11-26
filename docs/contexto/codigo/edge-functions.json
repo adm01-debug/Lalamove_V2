@@ -1231,7 +1231,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/test-notification/index.ts",
    "arquivos": 1,
-   "linhas": 271,
+   "linhas": 277,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1254,6 +1254,7 @@
     "api.resend.com"
    ],
    "usa_shared": [
+    "auth.ts",
     "contract.ts",
     "schemas.ts",
     "telemetry.ts",

@@ -4,10 +4,10 @@
  "presente": true,
  "como_gerar": "npm run graph:setup (uma vez) e `graphify update .` depois de mexer no código; saída em graphify-out/, não versionada. Consulta: graphify query/path/explain.",
  "relatorio": null,
- "commit_do_grafo": "28be79bfb4ab6dc8857cd33027c1e46e48891e1b",
+ "commit_do_grafo": "12856979358ab39a218db83fdcc1076aa0c5910e",
  "grafo_atual": true,
  "nos": 10055,
- "arestas": 20833,
+ "arestas": 20835,
  "comunidades_total": 709,
  "relacoes": {
   "calls": 2678,
@@ -17,8 +17,8 @@
   "defines": 11,
   "dynamic_import": 122,
   "implements": 2,
-  "imports": 3995,
-  "imports_from": 3535,
+  "imports": 3996,
+  "imports_from": 3536,
   "indexes": 251,
   "indirect_call": 138,
   "inherits": 16,
@@ -30,7 +30,7 @@
   "triggers": 33
  },
  "origem": {
-  "EXTRACTED": 19573,
+  "EXTRACTED": 19575,
   "INFERRED": 1260
  },
  "comunidades": [

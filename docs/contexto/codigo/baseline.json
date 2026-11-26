@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "28be79bfb4ab6dc8857cd33027c1e46e48891e1b",
+  "commit": "12856979358ab39a218db83fdcc1076aa0c5910e",
   "branch": "main",
-  "data_commit": "2026-11-25T21:48:42-03:00",
+  "data_commit": "2026-11-26T07:14:05-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1285697",
+    "data": "2026-11-26",
+    "assunto": "fix: exige admin ou manager para enviar notificacao de teste (#394)"
+   },
    {
     "sha": "28be79b",
     "data": "2026-11-25",
@@ -126,18 +131,13 @@
     "sha": "484eb15",
     "data": "2026-11-24",
     "assunto": "fix: coleta agendada nao falha quando o perfil esta em uso (#370)"
-   },
-   {
-    "sha": "086c06e",
-    "data": "2026-11-24",
-    "assunto": "feat: renovacao automatica do token UAPI pelo perfil do navegador (#369)"
    }
   ],
   "arquivos_mudados_7d": 539,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 76
+    "mudancas": 77
    },
    {
     "pasta": "src/components/map",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1152,
   "arquivos_codigo": 730,
-  "linhas_codigo": 143785,
+  "linhas_codigo": 143792,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 127,
-   "linhas": 30197
+   "linhas": 30204
   },
   "tailwind.config.ts": {
    "arquivos": 1,
