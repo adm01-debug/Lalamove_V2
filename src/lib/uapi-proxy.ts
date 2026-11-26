@@ -13,15 +13,31 @@ export interface UAPIResponse<T = unknown> {
   httpCode: number;
   ms: number;
   bytes: number;
-  body: {
+  /** Payload cru da UAPI (`{ ret, msg, data }`) — é o que a edge devolve hoje. */
+  ret: number;
+  msg: string;
+  data: T;
+  /**
+   * Bloco acrescentado pela edge `lalamove-uapi`. `servedFromSnapshot` avisa
+   * que o dado veio da última coleta do robô, não de uma leitura ao vivo.
+   */
+  _meta?: {
+    tokenRefreshed?: boolean;
+    servedFromSnapshot?: boolean;
+    snapshotCollectedAt?: string;
+  };
+  /** @deprecated envelope do proxy externo legado (não configurado em produção). */
+  body?: {
     ret: number;
     msg: string;
     data: T;
   };
+  /** @deprecated idem. */
+  formatted?: string;
   tokenPreview: string;
   sessionId: string;
-  formatted?: string;
   session?: ProxySession;
+  [key: string]: unknown;
 }
 
 export interface UAPIUserData {

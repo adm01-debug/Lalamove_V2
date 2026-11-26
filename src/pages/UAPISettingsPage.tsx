@@ -87,10 +87,10 @@ export default function UAPISettingsPage() {
           </CardHeader>
           <CardContent>
             <p className="font-medium text-foreground truncate">
-              {user?.body?.data?.nickname || user?.body?.data?.real_name || '—'}
+              {user?.nickname || user?.real_name || '—'}
             </p>
             <p className="text-xs text-muted-foreground truncate">
-              {user?.body?.data?.email || ''}
+              {user?.email || ''}
             </p>
           </CardContent>
         </Card>
