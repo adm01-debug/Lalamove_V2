@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "86c8ed98a49490dc353103d20c97b5663cf9a8c9",
+  "commit": "d771fb658f2f7fef54b24d97f4bc4ca9d15c8666",
   "branch": "main",
-  "data_commit": "2026-11-26T18:20:15-03:00",
+  "data_commit": "2026-11-26T18:39:05-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d771fb6",
+    "data": "2026-11-26",
+    "assunto": "chore: aplica os 6 bumps seguros do Dependabot (#415)"
+   },
    {
     "sha": "86c8ed9",
     "data": "2026-11-26",
@@ -126,11 +131,6 @@
     "sha": "c1a0a10",
     "data": "2026-11-25",
     "assunto": "fix: busca de endereco acha sem acento e com termos fora de ordem (#383)"
-   },
-   {
-    "sha": "870d6e6",
-    "data": "2026-11-25",
-    "assunto": "fix: filial na busca de endereco mostra o fornecedor dono (#382)"
    }
   ],
   "arquivos_mudados_7d": 1190,
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 294
+    "commits": 295
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 6
+    "commits": 5
    }
   ]
  },

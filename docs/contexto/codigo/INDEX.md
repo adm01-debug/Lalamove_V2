@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `86c8ed98a49490dc353103d20c97b5663cf9a8c9` (2026-11-26T18:20:15-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d771fb658f2f7fef54b24d97f4bc4ca9d15c8666` (2026-11-26T18:39:05-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -294,7 +294,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10140 nós · 21038 arestas · 709 comunidades · grafo do commit `86c8ed98`
+- 10140 nós · 21038 arestas · 709 comunidades · grafo do commit `d771fb65`
 - comunidades maiores: cn (211), react (158), badge.tsx (150), App.tsx (143), client.ts (135), ref_https (123), DashboardRedesigned.tsx (122), job-worker/index.ts (93), geo-gateway/index.ts (86), ref_node_assert (85), dependencies (81), 4. Componentes, hooks, libs e estado — **revisado** (78)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -397,6 +397,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-26 `d771fb6` chore: aplica os 6 bumps seguros do Dependabot (#415)
 - 2026-11-26 `86c8ed9` feat: fim do extrato devolve lista vazia em vez de erro do gateway (#414)
 - 2026-11-26 `b086638` feat: extrato completo (580 paginas) com varredura profunda diaria (#404)
 - 2026-11-26 `b1774dc` feat: coletor pagina extrato e cupons dinamicamente (#403)
@@ -411,7 +412,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-26 `1285697` fix: exige admin ou manager para enviar notificacao de teste (#394)
 - 2026-11-25 `28be79b` infra: coletor de violações de CSP e header report-only (#390)
 - 2026-11-25 `ae61223` infra: hardening de banco - search_path, indices de FK, initplan de RLS, audit_log e PK de tracking_events (#392)
-- 2026-11-25 `1a40403` fix: seed-fix-rls exige admin/manager e nao abre policies para anon (#393)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

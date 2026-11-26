@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "86c8ed98a49490dc353103d20c97b5663cf9a8c9",
+  "sha": "d771fb658f2f7fef54b24d97f4bc4ca9d15c8666",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-26 21:24 UTC",
+  "generated_at": "2026-11-26 21:47 UTC",
   "files_total": 1157,
   "code_files": 973,
   "code_lines": 168100
  },
  "version": "1.3.2",
- "facts_hash": "1639cf4b528d57b4",
+ "facts_hash": "ec415eccdf54a732",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -27,7 +27,7 @@
     "in": "package.json"
    },
    "@tanstack/react-query": {
-    "version": "^5.83.0",
+    "version": "^5.108.4",
     "role": "Cache/fetch de dados (TanStack Query)",
     "in": "package.json"
    },
@@ -52,7 +52,7 @@
     "in": "package.json"
    },
    "pg": {
-    "version": "^8.23.0",
+    "version": "^8.23.1",
     "role": "PostgreSQL driver",
     "in": "package.json"
    },
@@ -62,7 +62,7 @@
     "in": "package.json"
    },
    "react-hook-form": {
-    "version": "^7.79.0",
+    "version": "^7.92.0",
     "role": "Forms (react-hook-form)",
     "in": "package.json"
    },
@@ -81914,10 +81914,20 @@
   }
  },
  "git": {
-  "sha": "86c8ed98a49490dc353103d20c97b5663cf9a8c9",
+  "sha": "d771fb658f2f7fef54b24d97f4bc4ca9d15c8666",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d771fb6",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "chore: aplica os 6 bumps seguros do Dependabot (#415)",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
    {
     "sha": "86c8ed9",
     "date": "2026-11-26",
@@ -82245,22 +82255,6 @@
     "files": [
      "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql"
     ]
-   },
-   {
-    "sha": "6736c92",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "feat: painel UAPI avisa a idade dos dados coletados pelo robo (#377)",
-    "files": [
-     "src/components/lalamove/UapiCouponsPanel.tsx",
-     "src/components/lalamove/UapiFleetPanel.tsx",
-     "src/components/lalamove/UapiOrderHistoryPanel.tsx",
-     "src/components/lalamove/UapiSnapshotBadge.tsx",
-     "src/components/lalamove/UapiStatementPanel.tsx",
-     "src/hooks/useLalamoveUapi.ts",
-     "src/lib/uapiSnapshot.test.ts",
-     "src/lib/uapiSnapshot.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -82285,10 +82279,6 @@
     4
    ],
    [
-    "src/hooks/useLalamoveUapi.ts",
-    3
-   ],
-   [
     "src/hooks/useLalamove.ts",
     3
    ],
@@ -82297,7 +82287,7 @@
     3
    ],
    [
-    "src/components/lalamove/UapiStatementPanel.tsx",
+    "src/hooks/useLalamoveUapi.ts",
     2
    ],
    [
@@ -82314,10 +82304,6 @@
    ],
    [
     "supabase/functions/_shared/schemas.ts",
-    2
-   ],
-   [
-    "src/components/lalamove/UapiFleetPanel.tsx",
     2
    ],
    [
@@ -82341,7 +82327,15 @@
     2
    ],
    [
-    "supabase/functions/lalamove-uapi/statement-history.test.ts",
+    "package-lock.json",
+    1
+   ],
+   [
+    "package.json",
+    1
+   ],
+   [
+    "src/components/lalamove/UapiStatementPanel.tsx",
     1
    ]
   ]

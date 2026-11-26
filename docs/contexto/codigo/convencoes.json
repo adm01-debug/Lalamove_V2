@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "chore: aplica os 6 bumps seguros do Dependabot (#415)",
    "feat: fim do extrato devolve lista vazia em vez de erro do gateway (#414)",
    "feat: extrato completo (580 paginas) com varredura profunda diaria (#404)",
    "feat: coletor pagina extrato e cupons dinamicamente (#403)",
-   "feat: alerta quando a sessao UAPI nao tem renovacao automatica (#402)",
-   "fix: coletor UAPI passa a rodar o collect.mjs da main (#401)"
+   "feat: alerta quando a sessao UAPI nao tem renovacao automatica (#402)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
