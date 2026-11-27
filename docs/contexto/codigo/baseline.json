@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "f81f8ee369c3eaa2c5159dabbc2a4b6bcda51697",
+  "commit": "abd4a289322c57deefda3b7c845041a7f6f68c2e",
   "branch": "main",
-  "data_commit": "2026-11-26T20:01:48-03:00",
+  "data_commit": "2026-11-26T20:39:27-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "abd4a28",
+    "data": "2026-11-26",
+    "assunto": "chore: preserva no repositorio os workflows n8n da operacao (#418)"
+   },
    {
     "sha": "f81f8ee",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "b3e820b",
     "data": "2026-11-25",
     "assunto": "fix: sessao UAPI registra a ultima verificacao real do token (#385)"
-   },
-   {
-    "sha": "a3a43e6",
-    "data": "2026-11-25",
-    "assunto": "fix: painel deixa de receber a credencial da API do fornecedor (#384)"
    }
   ],
-  "arquivos_mudados_7d": 1191,
+  "arquivos_mudados_7d": 1198,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -234,10 +234,6 @@
     "mudancas": 11
    },
    {
-    "arquivo": "package.json",
-    "mudancas": 11
-   },
-   {
     "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 11
    },
@@ -250,7 +246,7 @@
     "mudancas": 10
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "package.json",
     "mudancas": 10
    },
    {
@@ -294,6 +290,10 @@
     "mudancas": 10
    },
    {
+    "arquivo": "package-lock.json",
+    "mudancas": 9
+   },
+   {
     "arquivo": "supabase/config.toml",
     "mudancas": 8
    }
@@ -301,16 +301,16 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 296
+    "commits": 297
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 4
+    "commits": 3
    }
   ]
  },
  "contagens": {
-  "arquivos_total": 1164,
+  "arquivos_total": 1171,
   "arquivos_codigo": 741,
   "linhas_codigo": 145626,
   "rotas": 57,
@@ -327,7 +327,7 @@
   "testes": 198,
   "workflows": 5,
   "scripts": 109,
-  "docs_md": 115
+  "docs_md": 116
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {

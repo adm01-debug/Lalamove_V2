@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "f81f8ee369c3eaa2c5159dabbc2a4b6bcda51697",
+  "sha": "abd4a289322c57deefda3b7c845041a7f6f68c2e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-26 23:06 UTC",
-  "files_total": 1158,
+  "generated_at": "2026-11-27 00:37 UTC",
+  "files_total": 1165,
   "code_files": 974,
   "code_lines": 168175
  },
@@ -81949,10 +81949,25 @@
   }
  },
  "git": {
-  "sha": "f81f8ee369c3eaa2c5159dabbc2a4b6bcda51697",
+  "sha": "abd4a289322c57deefda3b7c845041a7f6f68c2e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "abd4a28",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "chore: preserva no repositorio os workflows n8n da operacao (#418)",
+    "files": [
+     "n8n/README.md",
+     "n8n/workflows/bundle-import.json",
+     "n8n/workflows/f00-bootstrap.json",
+     "n8n/workflows/f01-cotacao.json",
+     "n8n/workflows/f02-pedido.json",
+     "n8n/workflows/f03-rastreamento.json",
+     "n8n/workflows/f04-pop-pod.json"
+    ]
+   },
    {
     "sha": "f81f8ee",
     "date": "2026-11-26",
@@ -82283,15 +82298,6 @@
      "src/lib/bitrix-config.ts",
      "supabase/functions/external-companies/index.ts"
     ]
-   },
-   {
-    "sha": "29a49ed",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix: fecha leitura anonima das views de metrica (#379)",
-    "files": [
-     "supabase/migrations/20261126160000_revoke_anon_metric_views.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -82372,7 +82378,7 @@
     2
    ],
    [
-    "src/components/ui/__tests__/button-aschild.test.tsx",
+    "n8n/README.md",
     1
    ]
   ]
