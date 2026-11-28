@@ -183,6 +183,8 @@ Uso e tamanho em `stats.md`.
 | public.lalamove_uapi_sessions | lalamove_uapi_sessions_pkey | btree | id | sim | sim |  |
 | public.lalamove_uapi_snapshot | lalamove_uapi_snapshot_expires_at_idx | btree | expires_at | não | sim |  |
 | public.lalamove_uapi_snapshot | lalamove_uapi_snapshot_pkey | btree | resource | sim | sim |  |
+| public.lalamove_uapi_statement_item | lalamove_uapi_statement_item_paginate_idx | btree | occurred_at_local, item_key | não | sim |  |
+| public.lalamove_uapi_statement_item | lalamove_uapi_statement_item_pkey | btree | item_key | sim | sim |  |
 | public.lalamove_webhook_config | lalamove_webhook_config_pkey | btree | id | sim | sim |  |
 | public.lalamove_webhook_config | lalamove_webhook_config_registered_by_idx | btree | registered_by | não | sim |  |
 | public.lalamove_webhook_config | uq_webhook_config_active_env | btree | environment | sim | sim | `is_active` |

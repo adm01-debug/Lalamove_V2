@@ -217,3 +217,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261126210000 | [tracking_events_pk](migrations/20261126210000_tracking_events_pk.sql) | 1 |
 | 20261126220000 | [revoke_anon_funcoes_definer](migrations/20261126220000_revoke_anon_funcoes_definer.sql) | 0 |
 | 20261126230000 | [revoke_authenticated_manutencao](migrations/20261126230000_revoke_authenticated_manutencao.sql) | 0 |
+| 20261127010000 | [lalamove_uapi_statement_item](migrations/20261127010000_lalamove_uapi_statement_item.sql) | 8 |

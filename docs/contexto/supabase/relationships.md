@@ -639,6 +639,14 @@ erDiagram
         text collected_by
         timestamp_with_time_zone updated_at
     }
+    public_lalamove_uapi_statement_item {
+        text item_key PK
+        integer city_id
+        timestamp_without_time_zone occurred_at_local
+        jsonb payload
+        timestamp_with_time_zone first_seen_at
+        timestamp_with_time_zone last_seen_at
+    }
     public_lalamove_webhook_config {
         uuid id PK
         text environment

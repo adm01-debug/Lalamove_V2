@@ -8378,6 +8378,84 @@
         "type": "timestamp with time zone"
       },
       {
+        "comment": "Identidade do lançamento: city_id|date_time|amount|order_display_id|name|sub_name|user_fid|topup_tx_no.",
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "item_key",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "city_id",
+        "nullable": true,
+        "position": 2,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item",
+        "type": "integer"
+      },
+      {
+        "comment": "date_time do gateway (hora local da cidade, sem fuso) — usado só para ordenar.",
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "occurred_at_local",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item",
+        "type": "timestamp without time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "payload",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "first_seen_at",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_seen_at",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item",
+        "type": "timestamp with time zone"
+      },
+      {
         "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
@@ -17330,6 +17408,23 @@
       },
       {
         "columns": [
+          "item_key"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (item_key)",
+        "name": "lalamove_uapi_statement_item_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "environment"
         ],
         "deferrable": false,
@@ -24214,6 +24309,12 @@
           "table": "lalamove_uapi_snapshot"
         },
         {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "lalamove_uapi_statement_item"
+        },
+        {
           "grantee": "authenticated",
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
@@ -27415,6 +27516,35 @@
       },
       {
         "columns": [
+          "occurred_at_local",
+          "item_key"
+        ],
+        "definition": "CREATE INDEX lalamove_uapi_statement_item_paginate_idx ON public.lalamove_uapi_statement_item USING btree (occurred_at_local DESC, item_key DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "lalamove_uapi_statement_item_paginate_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item"
+      },
+      {
+        "columns": [
+          "item_key"
+        ],
+        "definition": "CREATE UNIQUE INDEX lalamove_uapi_statement_item_pkey ON public.lalamove_uapi_statement_item USING btree (item_key)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "lalamove_uapi_statement_item_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_uapi_statement_item"
+      },
+      {
+        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX lalamove_webhook_config_pkey ON public.lalamove_webhook_config USING btree (id)",
@@ -29494,6 +29624,12 @@
         "severity": "MÉDIA"
       },
       {
+        "code": "rls_no_policies",
+        "detail": "RLS ligado sem policies: inacessível via API (só service_role).",
+        "object": "public.lalamove_uapi_statement_item",
+        "severity": "MÉDIA"
+      },
+      {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.check_login_lockout_v2(p_email text, p_ip_address inet)",
@@ -30590,6 +30726,12 @@
         "name": "revoke_authenticated_manutencao",
         "statements": null,
         "version": "20261126230000"
+      },
+      {
+        "name": "lalamove_uapi_statement_item",
+        "statements": 8,
+        "statements_sha": "c2b916a2cc720624",
+        "version": "20261127010000"
       }
     ],
     "policies": [
@@ -34423,6 +34565,21 @@
         "is_partition": false,
         "kind": "table",
         "name": "lalamove_uapi_snapshot",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": "Lançamentos do extrato UAPI deduplicados por conteúdo (item_key). Base da paginação por chave montada na edge.",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "lalamove_uapi_statement_item",
         "owner": "postgres",
         "parent": null,
         "partition_bound": null,

@@ -2,6 +2,16 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-28 11:12 UTC
+
+- **colunas** adicionado (6): `public.lalamove_uapi_statement_item.city_id`, `public.lalamove_uapi_statement_item.first_seen_at`, `public.lalamove_uapi_statement_item.item_key`, `public.lalamove_uapi_statement_item.last_seen_at`, `public.lalamove_uapi_statement_item.occurred_at_local`, `public.lalamove_uapi_statement_item.payload`
+- **constraints** adicionado (1): `public.lalamove_uapi_statement_item.lalamove_uapi_statement_item_pkey`
+- **grants** adicionado (1): `public.lalamove_uapi_statement_item:service_role`
+- **indexes** adicionado (2): `public.lalamove_uapi_statement_item_paginate_idx`, `public.lalamove_uapi_statement_item_pkey`
+- **lints** adicionado (1): `rls_no_policies:public.lalamove_uapi_statement_item`
+- **migrations** adicionado (1): `20261127010000_lalamove_uapi_statement_item`
+- **tabelas** adicionado (1): `public.lalamove_uapi_statement_item`
+
 ## 2026-11-26 00:35 UTC
 
 - **functions** alterado (6): `public.check_login_lockout_v2(p_email text, p_ip_address inet)`, `public.has_role(_user_id uuid, _role app_role)`, `public.is_phone_opted_out(p_phone text)`, `public.messaging_month_cost_cents(p_month date)`, `public.record_failed_login_v2(p_email text, p_ip_address inet, p_user_agent text)`, `public.refresh_cache_view(p_view_name text, p_triggered_by text)`
