@@ -55,7 +55,7 @@ export function useAccessibility() {
  * Hook para anúncios de screen reader
  */
 export function useAnnounce() {
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
     const announcer = document.getElementById('sr-announcer') || createAnnouncer();
