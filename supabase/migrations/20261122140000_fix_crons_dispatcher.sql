@@ -116,7 +116,10 @@ BEGIN
   PERFORM cron.schedule('escalate-unacknowledged-alerts', '*/5 * * * *', $cmd1$
     select net.http_post(
       url:='https://iecgydonctmabiijadsf.supabase.co/functions/v1/escalate-alerts',
-      headers:='{"Content-Type": "application/json", "apikey": "sb_publishable_3Hefdii3_kdWpyxdGKkaWQ_6sJhd8yB"}'::jsonb,
+      headers:=jsonb_build_object(
+        'Content-Type','application/json',
+        'apikey', COALESCE((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1), '')
+      ),
       body:=concat('{"time": "', now(), '"}')::jsonb
     ) as request_id;
   $cmd1$);
@@ -130,7 +133,10 @@ BEGIN
   PERFORM cron.schedule('lalamove_uapi_token_refresh_hourly', '17 * * * *', $cmd2$
     select net.http_post(
       url:='https://iecgydonctmabiijadsf.supabase.co/functions/v1/lalamove-token-refresh',
-      headers:='{"Content-Type": "application/json", "apikey": "sb_publishable_3Hefdii3_kdWpyxdGKkaWQ_6sJhd8yB"}'::jsonb,
+      headers:=jsonb_build_object(
+        'Content-Type','application/json',
+        'apikey', COALESCE((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1), '')
+      ),
       body:=concat('{"time": "', now(), '"}')::jsonb
     ) as request_id;
   $cmd2$);

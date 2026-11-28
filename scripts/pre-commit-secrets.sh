@@ -16,6 +16,11 @@ echo -e "${YELLOW}🔍 Scanning for secrets in staged files...${NC}"
 # Patterns to detect
 PATTERNS=(
     # API Keys
+    'pk_prod_[A-Za-z0-9]{16,}'               # Lalamove API key de producao
+    'sk_prod_[A-Za-z0-9]{16,}'               # Lalamove HMAC secret de producao
+    'sb_publishable_[A-Za-z0-9_-]{20,}'      # Supabase chave publicavel
+    'sb_secret_[A-Za-z0-9_-]{20,}'           # Supabase chave secreta
+    'sbp_[a-f0-9]{40}'                       # Supabase Management API token
     'sk-[a-zA-Z0-9]{20,}'                    # OpenAI
     'sk_live_[a-zA-Z0-9]{24,}'               # Stripe Live
     'sk_test_[a-zA-Z0-9]{24,}'               # Stripe Test
@@ -51,7 +56,6 @@ EXCLUDE_PATTERNS=(
     'dist/'
     'build/'
     '\.env\.example'
-    '\.md$'
     'types\.ts$'           # Supabase generated types
 )
 

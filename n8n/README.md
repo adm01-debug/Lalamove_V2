@@ -52,9 +52,22 @@ Depois de importar, revise:
 
 ## Segredos
 
-Nenhum segredo literal está versionado: as assinaturas usam expressões n8n (`{{ }}`) e o token do
-Bitrix24 é concatenado a partir de variável de ambiente. Chaves, tokens e URLs privadas de webhook
-devem continuar apenas em credenciais/variáveis do n8n, nunca neste diretório.
+Os exports originais traziam a **API key e o segredo HMAC de produção da Lalamove em texto puro**
+dentro dos nós `Crypto`/`Set`. Foram substituídos por expressões n8n:
+
+| Expressão usada agora | Variável n8n a criar | Onde aparecia |
+| --- | --- | --- |
+| `{{ $env.LALAMOVE_API_KEY }}` | `LALAMOVE_API_KEY` | header `Authorization` (`hmac <chave>:<ts>:<sig>`) |
+| `{{ $env.LALAMOVE_HMAC_SECRET }}` | `LALAMOVE_HMAC_SECRET` | chave do `crypto.createHmac('sha256', …)` |
+
+Configure em **Settings → Variables** do n8n (ou por variável de ambiente da instância).
+
+Como esses valores ficaram públicos no GitHub (commit `abd4a28` e os commits locais de 22–23/11),
+eles precisam ser **rotacionados** no painel da Lalamove antes de voltar a valer, e o mesmo par deve
+ser atualizado nos secrets das edges (`supabase secrets set LALAMOVE_API_KEY=… LALAMOVE_API_SECRET=…`).
+
+Nunca versione chave, token ou URL privada de webhook neste diretório. Guarda automática:
+`node scripts/ci/check-repo-secrets.mjs`.
 
 ## Origem
 
