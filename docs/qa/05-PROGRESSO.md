@@ -33,8 +33,11 @@ Total: **300 etapas** · 79 aguardam aprovação humana.
 - [ ] 004 — Qualquer usuário autenticado pode se promover a admin (user_roles com INSERT/UPDATE WITH CHECK/USING true) — onda 1 — Crítica
 - [ ] 005 — Nome, telefone e score de risco dos motoristas expostos sem login: materialized view driver_stats_cache com GRANT SELECT para anon — onda 1 — Crítica
 - [ ] 006 — bitrix24-sync entrega o BITRIX24_CLIENT_SECRET para um domínio escolhido pelo chamador, e o domínio fica salvo no banco — onda 1 — Crítica
-- [ ] 007 — external-db-bridge: qualquer usuário autenticado faz CRUD e RPC arbitrários no banco externo com a service_role dele — onda 1 — Crítica
-- [ ] 008 — evaluate-driver: sem nenhuma autenticação em código, e o score de risco é calculado com números enviados pelo próprio chamador — dá para bloquear qualquer motorista — onda 1 — Crítica
+- [x] 007 — external-db-bridge: qualquer usuário autenticado faz CRUD e RPC arbitrários no banco externo com a service_role dele — onda 1 — Crítica
+- [x] 008 — evaluate-driver: sem nenhuma autenticação em código, e o score de risco é calculado com números enviados pelo próprio chamador — dá para bloquear qualquer motorista — onda 1 — Crítica
+
+  - **Corrigido.** Antes: o handler não tinha nenhuma checagem — qualquer sessão autenticada ou a chave publishable recalculava o risco e bloqueava motorista. Agora (`evaluate-driver/index.ts:496-509`) o chamador confiável é reconhecido pelo Bearer da `SUPABASE_SERVICE_ROLE_KEY` (job-worker e lalamove-webhook); os demais passam por `requireRole(req, ["admin","manager","operator"])`. O payload deixou de mandar no cálculo para quem não é confiável: `payloadEstatistico = chamadorConfiavel && totalDeliveries != null` controla as médias de entrega e o `rating` só usa o enviado quando o chamador é confiável, caindo para o rating já gravado do motorista (ou 5). Verificação: `deno check --node-modules-dir=auto` limpo; `deno test` de `_shared/contract.test.ts` 217/217.
+
 - [ ] 009 — lalamove-api nao tem nenhuma checagem de papel: qualquer usuario logado cria pedido pago, cancela, aumenta taxa e redireciona o webhook da conta — onda 1 — Crítica
 - [ ] 010 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove — onda 1 — Crítica
 - [ ] 011 — requireAdmin da lalamove-uapi aceita papel escrito pelo proprio usuario (escalonamento) e nunca reconhece o admin de verdade — onda 1 — Crítica
