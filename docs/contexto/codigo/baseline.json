@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "abd4a289322c57deefda3b7c845041a7f6f68c2e",
+  "commit": "db76ad8b9cd4854959e2872b9c222eb2eac8325a",
   "branch": "main",
-  "data_commit": "2026-11-26T20:39:27-03:00",
+  "data_commit": "2026-11-28T07:55:44-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "db76ad8",
+    "data": "2026-11-28",
+    "assunto": "feat: extrato paginado pela identidade do lancamento (#416)"
+   },
    {
     "sha": "abd4a28",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "9a49234",
     "data": "2026-11-25",
     "assunto": "chore: CI executa os testes do lalamove-token-refresh (#376)"
-   },
-   {
-    "sha": "b3e820b",
-    "data": "2026-11-25",
-    "assunto": "fix: sessao UAPI registra a ultima verificacao real do token (#385)"
    }
   ],
-  "arquivos_mudados_7d": 1198,
+  "arquivos_mudados_7d": 536,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
@@ -234,6 +234,10 @@
     "mudancas": 11
    },
    {
+    "arquivo": "scripts/uapi-collector/collect.mjs",
+    "mudancas": 11
+   },
+   {
     "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 11
    },
@@ -242,15 +246,11 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "package.json",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "scripts/uapi-collector/collect.mjs",
     "mudancas": 10
    },
    {
@@ -282,16 +282,16 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-    "mudancas": 10
-   },
-   {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 10
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "package.json",
     "mudancas": 9
+   },
+   {
+    "arquivo": "package-lock.json",
+    "mudancas": 8
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,18 +301,18 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 297
+    "commits": 298
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 3
+    "commits": 2
    }
   ]
  },
  "contagens": {
-  "arquivos_total": 1171,
-  "arquivos_codigo": 741,
-  "linhas_codigo": 145626,
+  "arquivos_total": 1174,
+  "arquivos_codigo": 743,
+  "linhas_codigo": 145781,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -321,10 +321,10 @@
   "componentes": 224,
   "hooks": 102,
   "edge_functions": 29,
-  "tabelas": 94,
-  "migrations": 213,
+  "tabelas": 95,
+  "migrations": 214,
   "cron_jobs": 24,
-  "testes": 198,
+  "testes": 199,
   "workflows": 5,
   "scripts": 109,
   "docs_md": 116
@@ -504,7 +504,7 @@
   },
   "scripts/uapi-collector": {
    "arquivos": 1,
-   "linhas": 764
+   "linhas": 819
   },
   "scripts/ui-audit": {
    "arquivos": 6,
@@ -567,8 +567,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 133,
-   "linhas": 30812
+   "arquivos": 135,
+   "linhas": 30912
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -609,12 +609,12 @@
    "linhas": 1130
   },
   {
-   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 1079
+   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+   "linhas": 1104
   },
   {
-   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-   "linhas": 1051
+   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+   "linhas": 1079
   },
   {
    "arquivo": "supabase/functions/_shared/schemas.ts",
@@ -642,7 +642,7 @@
   },
   {
    "arquivo": "scripts/uapi-collector/collect.mjs",
-   "linhas": 764
+   "linhas": 819
   },
   {
    "arquivo": "src/pages/AdvancedReportsPage.tsx",
@@ -686,7 +686,7 @@
   }
  ],
  "qualidade": {
-  "any": 151,
+  "any": 152,
   "console_log": 432,
   "ts_ignore": 0,
   "eslint_disable": 1,

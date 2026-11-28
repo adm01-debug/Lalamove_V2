@@ -2530,6 +2530,10 @@
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/lalamove-uapi/session-health.ts",
+   "supabase/functions/lalamove-uapi/statement-history.ts",
+   "supabase/functions/lalamove-uapi/statement-items.ts"
+  ],
+  "supabase/functions/lalamove-uapi/statement-items.ts": [
    "supabase/functions/lalamove-uapi/statement-history.ts"
   ],
   "supabase/functions/lalamove-webhook/index.ts": [

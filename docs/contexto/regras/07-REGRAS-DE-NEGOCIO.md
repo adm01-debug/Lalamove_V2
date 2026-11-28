@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `abd4a28932` · branch `main` · 2026-11-27 00:37 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `db76ad8b9c` · branch `main` · 2026-11-28 10:56 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -550,7 +550,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `password_reset_requests` | `reviewed_by` | FK → users.id |
 | `password_reset_requests` | `expires_at` | default (now() |
 | `password_reset_requests` | `created_at` | default now() |
-| … +329 linhas — lista completa em `context.json` | | |
+| … +334 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -2100,7 +2100,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1669 testes em 148 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1671 testes em 149 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2252,6 +2252,7 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/polyline.test.ts` | 3 | polyline: exemplo oficial do Google (precisão 5) · polyline6: ida e volta preserva 6 casas · simplify: remove pontos colineares, mantém extremos e curvas |
 | `src/hooks/__tests__/realtimeChannels.test.ts` | 2 | canais realtime · dois consumidores do mesmo hook nao reutilizam o canal ja subscrito |
 | `src/lib/__tests__/realtimeTopic.test.ts` | 2 | uniqueTopic · nao repete o topic entre duas montagens |
+| `supabase/functions/lalamove-uapi/statement-items.test.ts` | 2 | faixa da página segue a regra do range · página montada mantém o formato da UAPI |
 
 ## L. Eventos de webhook tratados (contratos com sistemas externos)
 
@@ -2599,6 +2600,7 @@ _nenhum item encontrado_
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |
 | UAPI nem consumir rate limit. Devolve apenas metadados — o token sai | `supabase/functions/lalamove-uapi/index.ts` |
 | * `token_expires_at` é apenas a estimativa de 24 h da última renovação e NÃO | `supabase/functions/lalamove-uapi/session-health.ts` |
+| * Faixa de linhas da página (mesma regra do `range` do PostgREST). */ | `supabase/functions/lalamove-uapi/statement-items.ts` |
 | HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |
 | Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores). | `supabase/functions/lalamove-webhook/index.ts` |
 | ── HMAC Validation (FAIL-CLOSED) ── | `supabase/functions/lalamove-webhook/security.ts` |

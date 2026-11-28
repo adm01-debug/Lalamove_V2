@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `abd4a28932` · branch `main` · 2026-11-27 00:37 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `db76ad8b9c` · branch `main` · 2026-11-28 10:56 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -68,6 +68,7 @@
 | `lalamove_stops` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `lalamove_uapi_sessions` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
 | `lalamove_uapi_snapshot` | enabled | authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public<br>service_role: true | service_role: true | service_role: true | service_role: true |
+| `lalamove_uapi_statement_item` | enabled | — | — | — | — |
 | `lalamove_webhook_config` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
 | `login_attempts` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) | public: has_role(auth.uid(), 'admin'::app_role) |
 | `map_settings_overrides` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
@@ -115,7 +116,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 136 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 137 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -253,6 +254,7 @@
 - `supabase/migrations/20261126190000_audit_log_policies_restritas.sql`
 - `supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql`
 - `supabase/migrations/20261126230000_revoke_authenticated_manutencao.sql`
+- `supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -417,7 +419,7 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated, anon, service_role | select | `driver_stats_cache`, `delivery_metrics_cache`, `hourly_metrics_cache`, `cache_status` |
 | grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +8 |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
-| grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants`, `cache_refresh_log`, `job_queue_processing_log` |
+| grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants`, `cache_refresh_log`, `job_queue_processing_log` … +1 |
 | grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +44 |
 | grant | service_role, authenticated | execute | `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `messaging_month_cost_cents` |
 | revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs`, `geo_budget_notify_if_needed`, `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `notification_messages_scrub_bodies`, `record_messaging_usage`, `messaging_month_cost_cents`, `refresh_geo_jobs` |
@@ -430,6 +432,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | anon | all privileges | `public`, `public` |
 | revoke | anon | execute | `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `get_cron_jobs_health`, `get_active_uapi_token`, `get_user_permissions`, `get_user_roles`, `is_aal2`, `is_known_device`, `clear_login_attempts`, `clear_login_attempts`, `has_role` … +1 |
 | revoke | anon | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view`, `driver_stats_cache`, `delivery_metrics_cache`, `hourly_metrics_cache`, `cache_status` |
+| revoke | anon, authenticated | all | `lalamove_uapi_statement_item` |
 | revoke | anon, authenticated | execute | `cleanup_old_login_attempts`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `test_rls_policies`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `ensure_tracking_events_partition`, `rollup_contract_version_usage`, `increment_contract_usage`, `update_updated_at_column`, `trigger_bitrix24_sync`, `invalidate_old_tokens` … +21 |
 | revoke | anon, public | execute | `claim_alert_notification`, `get_pending_escalations`, `acknowledge_alert`, `claim_alert_notification` |
 | revoke | authenticated | all | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view` |
@@ -455,6 +458,7 @@ Middleware matcher (Next.js): nenhum
 | `geo_settings` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts`<br>`src/hooks/useMapProviderPolicy.ts` |
 | `geo_usage_month` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useGeoAdmin.ts` |
 | `hourly_metrics_cache` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
+| `lalamove_uapi_statement_item` | RLS ligado sem nenhuma política → só service_role acessa |  |
 
 ## Multi-tenancy
 

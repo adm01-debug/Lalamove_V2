@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "abd4a289322c57deefda3b7c845041a7f6f68c2e",
+  "sha": "db76ad8b9cd4854959e2872b9c222eb2eac8325a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-27 00:37 UTC",
-  "files_total": 1165,
-  "code_files": 974,
-  "code_lines": 168175
+  "generated_at": "2026-11-28 10:56 UTC",
+  "files_total": 1168,
+  "code_files": 977,
+  "code_lines": 168363
  },
  "version": "1.3.2",
- "facts_hash": "9374192f36486cf7",
+ "facts_hash": "c94f35c6b20b5e12",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,9 +187,9 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 380,
+   ".ts": 382,
    ".tsx": 247,
-   ".sql": 224,
+   ".sql": 225,
    ".mjs": 110,
    ".py": 8,
    ".js": 4,
@@ -6984,6 +6984,56 @@
     "constraints": [],
     "src": "supabase/migrations/20261126140000_uapi_snapshot.sql",
     "comment": "Ultimo estado conhecido das respostas UAPI capturadas por navegador; fallback da edge lalamove-uapi quando o gateway assinado recusa a chamada direta (ret 10010).",
+    "origin": "migration"
+   },
+   "lalamove_uapi_statement_item": {
+    "columns": [
+     {
+      "name": "item_key",
+      "type": "text primary key",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+     },
+     {
+      "name": "city_id",
+      "type": "integer",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+     },
+     {
+      "name": "occurred_at_local",
+      "type": "timestamp without time zone not null",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+     },
+     {
+      "name": "payload",
+      "type": "jsonb not null",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+     },
+     {
+      "name": "first_seen_at",
+      "type": "timestamptz not null default now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+     },
+     {
+      "name": "last_seen_at",
+      "type": "timestamptz not null default now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql",
+    "comment": "Lançamentos do extrato UAPI deduplicados por conteúdo (item_key). Base da paginação por chave montada na edge.",
     "origin": "migration"
    },
    "fixture_route_curitiba": {
@@ -15300,6 +15350,14 @@
     "src": "supabase/migrations/20261126180000_hardening_searchpath_indices_fk.sql"
    },
    {
+    "name": "lalamove_uapi_statement_item_paginate_idx",
+    "table": "lalamove_uapi_statement_item",
+    "columns": "occurred_at_local desc, item_key desc",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+   },
+   {
     "name": "uq_job_queue_dedup_open",
     "table": "job_queue",
     "columns": "dedup_key",
@@ -15614,6 +15672,7 @@
    "supabase/migrations/20261126210000_tracking_events_pk.sql",
    "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
    "supabase/migrations/20261126230000_revoke_authenticated_manutencao.sql",
+   "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql",
    "supabase/tests/00_stubs.sql",
    "supabase/tests/01_functions.sql",
    "supabase/tests/02_scenarios.sql",
@@ -15702,7 +15761,8 @@
    "message_templates": "enabled",
    "notification_routes": "enabled",
    "messaging_usage": "enabled",
-   "lalamove_uapi_snapshot": "enabled"
+   "lalamove_uapi_snapshot": "enabled",
+   "lalamove_uapi_statement_item": "enabled"
   },
   "grants": [
    {
@@ -18240,6 +18300,22 @@
     "objkind": "function",
     "roles": "authenticated, service_role",
     "src": "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "lalamove_uapi_statement_item",
+    "objkind": "table",
+    "roles": "anon, authenticated",
+    "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "lalamove_uapi_statement_item",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
    }
   ],
   "raises": [
@@ -18420,7 +18496,10 @@
    "table:notification_routes": "Rota evento x papel (etapa 78): canais em ordem, espera antes do fallback e se exige resposta.",
    "table:messaging_usage": "Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5).",
    "table:lalamove_uapi_snapshot": "Ultimo estado conhecido das respostas UAPI capturadas por navegador; fallback da edge lalamove-uapi quando o gateway assinado recusa a chamada direta (ret 10010).",
-   "column:lalamove_uapi_snapshot.expires_at": "Apos esta data a linha nao e servida pela edge; o painel recebe o erro do gateway."
+   "column:lalamove_uapi_snapshot.expires_at": "Apos esta data a linha nao e servida pela edge; o painel recebe o erro do gateway.",
+   "table:lalamove_uapi_statement_item": "Lançamentos do extrato UAPI deduplicados por conteúdo (item_key). Base da paginação por chave montada na edge.",
+   "column:lalamove_uapi_statement_item.item_key": "Identidade do lançamento: city_id|date_time|amount|order_display_id|name|sub_name|user_fid|topup_tx_no.",
+   "column:lalamove_uapi_statement_item.occurred_at_local": "date_time do gateway (hora local da cidade, sem fuso) — usado só para ordenar."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -19730,6 +19809,7 @@
      "lalamove_orders",
      "lalamove_uapi_sessions",
      "lalamove_uapi_snapshot",
+     "lalamove_uapi_statement_item",
      "user_roles"
     ],
     "env": [
@@ -22236,7 +22316,7 @@
   {
    "module": "scripts",
    "files": 147,
-   "lines": 33593,
+   "lines": 33648,
    "tables": [
     "a",
     "active_tracking",
@@ -23319,8 +23399,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 133,
-   "lines": 30812,
+   "files": 135,
+   "lines": 30912,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -23353,6 +23433,7 @@
     "lalamove_stops",
     "lalamove_uapi_sessions",
     "lalamove_uapi_snapshot",
+    "lalamove_uapi_statement_item",
     "message_templates",
     "messaging_settings",
     "new_device_alerts",
@@ -23513,8 +23594,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 213,
-   "lines": 14565,
+   "files": 214,
+   "lines": 14598,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -24197,6 +24278,11 @@
      "supabase/functions/lalamove-uapi/index.ts"
     ]
    },
+   "lalamove_uapi_statement_item": {
+    "select": [
+     "supabase/functions/lalamove-uapi/index.ts"
+    ]
+   },
    "map_settings_overrides": {
     "upsert": [
      "src/hooks/useMapSettings.ts"
@@ -24834,6 +24920,9 @@
     "payload",
     "resource",
     "updated_at"
+   ],
+   "lalamove_uapi_statement_item": [
+    "payload"
    ],
    "map_settings_overrides": [
     "context_key"
@@ -29398,6 +29487,10 @@
     "text": "* `token_expires_at` é apenas a estimativa de 24 h da última renovação e NÃO"
    },
    {
+    "file": "supabase/functions/lalamove-uapi/statement-items.ts",
+    "text": "* Faixa de linhas da página (mesma regra do `range` do PostgREST). */"
+   },
+   {
     "file": "supabase/functions/lalamove-webhook/index.ts",
     "text": "HMAC validation."
    },
@@ -32441,6 +32534,31 @@
    {
     "table": "lalamove_uapi_snapshot",
     "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_uapi_statement_item",
+    "column": "item_key",
+    "rule": "PK"
+   },
+   {
+    "table": "lalamove_uapi_statement_item",
+    "column": "occurred_at_local",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "lalamove_uapi_statement_item",
+    "column": "payload",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "lalamove_uapi_statement_item",
+    "column": "first_seen_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_uapi_statement_item",
+    "column": "last_seen_at",
     "rule": "default now()"
    },
    {
@@ -44717,6 +44835,14 @@
     "name": "statementItems le flow_item_arr do snapshot"
    },
    {
+    "file": "supabase/functions/lalamove-uapi/statement-items.test.ts",
+    "name": "faixa da página segue a regra do range"
+   },
+   {
+    "file": "supabase/functions/lalamove-uapi/statement-items.test.ts",
+    "name": "página montada mantém o formato da UAPI"
+   },
+   {
     "file": "supabase/functions/lalamove-webhook/security.test.ts",
     "name": "[HMAC] FAIL-CLOSED: secret ausente rejeita mesmo com assinatura válida presente"
    },
@@ -52223,6 +52349,13 @@
      "service_role: true"
     ]
    },
+   "lalamove_uapi_statement_item": {
+    "rls": "enabled",
+    "SELECT": [],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
+   },
    "lalamove_webhook_config": {
     "rls": "enabled",
     "SELECT": [
@@ -52885,6 +53018,11 @@
     "files": [
      "src/hooks/useCachedStats.ts"
     ]
+   },
+   {
+    "table": "lalamove_uapi_statement_item",
+    "issue": "RLS ligado sem nenhuma política → só service_role acessa",
+    "files": []
    }
   ],
   "service_role_files": [
@@ -53023,7 +53161,8 @@
    "supabase/migrations/20261126150000_least_privilege_funcoes_manutencao.sql",
    "supabase/migrations/20261126190000_audit_log_policies_restritas.sql",
    "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql",
-   "supabase/migrations/20261126230000_revoke_authenticated_manutencao.sql"
+   "supabase/migrations/20261126230000_revoke_authenticated_manutencao.sql",
+   "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
@@ -55638,6 +55777,22 @@
     "objkind": "function",
     "roles": "authenticated, service_role",
     "src": "supabase/migrations/20261126220000_revoke_anon_funcoes_definer.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "lalamove_uapi_statement_item",
+    "objkind": "table",
+    "roles": "anon, authenticated",
+    "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "lalamove_uapi_statement_item",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
    }
   ],
   "guards": [
@@ -56714,6 +56869,7 @@
    "lalamove_uapi_snapshot": [
     "updated_at"
    ],
+   "lalamove_uapi_statement_item": [],
    "fixture_route_curitiba": [],
    "auth.users": [],
    "geo_blocks": [
@@ -57591,6 +57747,11 @@
     ]
    },
    {
+    "kind": "rls",
+    "msg": "`lalamove_uapi_statement_item`: RLS ligado sem nenhuma política → só service_role acessa",
+    "where": []
+   },
+   {
     "kind": "edge",
     "msg": "edge function `edge` invocada mas não existe em supabase/functions/",
     "where": [
@@ -57795,7 +57956,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "20/96 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
+   "20/97 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -61707,7 +61868,7 @@
   },
   "scripts/uapi-collector/collect.mjs": {
    "path": "scripts/uapi-collector/collect.mjs",
-   "lines": 764,
+   "lines": 819,
    "env": [
     "CHROMIUM_PATH",
     "PLAYWRIGHT_ROOT",
@@ -61745,7 +61906,8 @@
     "UAPI_STATEMENT_SWEEP_HOURS  intervalo minimo entre varreduras profundas (default 24)",
     "a paginacao e dinamica — ver `PAGED_SOURCES` — e estes sao apenas os tetos.",
     "unica regra confiavel e parar quando a pagina vier incompleta — menos itens que",
-    "&limit=2000`,"
+    "&limit=2000`,",
+    "Guardar o lancamento nao pode derrubar a coleta do snapshot."
    ],
    "doc": "!/usr/bin/env node",
    "temporal": [
@@ -79067,7 +79229,7 @@
   },
   "supabase/functions/lalamove-uapi/index.ts": {
    "path": "supabase/functions/lalamove-uapi/index.ts",
-   "lines": 1051,
+   "lines": 1104,
    "tables": [
     {
      "table": "lalamove_uapi_sessions",
@@ -79079,6 +79241,10 @@
     },
     {
      "table": "lalamove_uapi_snapshot",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_uapi_statement_item",
      "op": "select"
     },
     {
@@ -79108,6 +79274,9 @@
      "expires_at",
      "payload",
      "resource"
+    ],
+    "lalamove_uapi_statement_item": [
+     "payload"
     ],
     "lalamove_uapi_sessions": [
      "access_token",
@@ -79250,6 +79419,28 @@
     }
    ],
    "doc": "Fim do histórico do extrato. O gateway pagina por posição e não informa quando o histórico acaba: pedir a página seguinte à última devolve erro (ret 10010) e o painel mostrava falha em vez de \"fim do histórico\". A última página do histórico sempre vem com menos itens que o tamanho pedido, então o ta …"
+  },
+  "supabase/functions/lalamove-uapi/statement-items.test.ts": {
+   "path": "supabase/functions/lalamove-uapi/statement-items.test.ts",
+   "lines": 16,
+   "is_test": true,
+   "tests": [
+    "faixa da página segue a regra do range",
+    "página montada mantém o formato da UAPI"
+   ]
+  },
+  "supabase/functions/lalamove-uapi/statement-items.ts": {
+   "path": "supabase/functions/lalamove-uapi/statement-items.ts",
+   "lines": 31,
+   "exports": [
+    "type StatementItem",
+    "function statementPageRange",
+    "function buildStatementPage"
+   ],
+   "rule_comments": [
+    "* Faixa de linhas da página (mesma regra do `range` do PostgREST). */"
+   ],
+   "doc": "Página do extrato montada pela identidade do lançamento. O gateway pagina por posição e não informa id por lançamento. Como o coletor guarda cada lançamento pela própria identidade (chave definida em `scripts/uapi-collector/collect.mjs`), a página passa a ser montada por chave: lançamento novo entra …"
   },
   "supabase/functions/lalamove-webhook/index.ts": {
    "path": "supabase/functions/lalamove-webhook/index.ts",
@@ -81895,6 +82086,11 @@
    "lines": 88,
    "uses_service_role": true
   },
+  "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql": {
+   "path": "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql",
+   "lines": 33,
+   "uses_service_role": true
+  },
   "supabase/tests/00_stubs.sql": {
    "path": "supabase/tests/00_stubs.sql",
    "lines": 146,
@@ -81949,10 +82145,25 @@
   }
  },
  "git": {
-  "sha": "abd4a289322c57deefda3b7c845041a7f6f68c2e",
+  "sha": "db76ad8b9cd4854959e2872b9c222eb2eac8325a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "db76ad8",
+    "date": "2026-11-28",
+    "author": "adm01-debug",
+    "subject": "feat: extrato paginado pela identidade do lancamento (#416)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "scripts/uapi-collector/README.md",
+     "scripts/uapi-collector/collect.mjs",
+     "supabase/functions/lalamove-uapi/index.ts",
+     "supabase/functions/lalamove-uapi/statement-items.test.ts",
+     "supabase/functions/lalamove-uapi/statement-items.ts",
+     "supabase/migrations/20261127010000_lalamove_uapi_statement_item.sql"
+    ]
+   },
    {
     "sha": "abd4a28",
     "date": "2026-11-26",
@@ -82287,31 +82498,20 @@
     "files": [
      "supabase/functions/external-companies/index.ts"
     ]
-   },
-   {
-    "sha": "56e3472",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix: busca de endereco externa usa o schema real do banco de produtos (#380)",
-    "files": [
-     "src/lib/bitrix-config.test.ts",
-     "src/lib/bitrix-config.ts",
-     "supabase/functions/external-companies/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
-    "supabase/functions/external-companies/index.ts",
-    7
+    "supabase/functions/lalamove-uapi/index.ts",
+    6
    ],
    [
-    "supabase/functions/lalamove-uapi/index.ts",
-    5
+    "supabase/functions/external-companies/index.ts",
+    6
    ],
    [
     "scripts/uapi-collector/collect.mjs",
-    4
+    5
    ],
    [
     "src/lib/uapi-proxy.ts",
@@ -82322,12 +82522,20 @@
     4
    ],
    [
+    ".github/workflows/ci.yml",
+    3
+   ],
+   [
     "src/hooks/useLalamove.ts",
     3
    ],
    [
     "src/hooks/useUAPI.ts",
     3
+   ],
+   [
+    "scripts/uapi-collector/README.md",
+    2
    ],
    [
     "package-lock.json",
@@ -82366,20 +82574,12 @@
     2
    ],
    [
-    ".github/workflows/ci.yml",
-    2
-   ],
-   [
     "src/hooks/useExternalData.ts",
     2
    ],
    [
     "src/pages/ExternalDataPage.tsx",
     2
-   ],
-   [
-    "n8n/README.md",
-    1
    ]
   ]
  }

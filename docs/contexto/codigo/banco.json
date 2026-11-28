@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 213,
+ "migrations": 214,
  "seeds": [],
  "avisos": [
   "19 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -7755,6 +7755,70 @@
    "usada_no_front": 0,
    "usada_em_edges": [
     "lalamove-token-refresh",
+    "lalamove-uapi"
+   ],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": false
+  },
+  "lalamove_uapi_statement_item": {
+   "colunas": {
+    "city_id": {
+     "tipo": "integer",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "first_seen_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "item_key": {
+     "tipo": "text",
+     "nn": false,
+     "pk": true,
+     "default": null,
+     "ref": null
+    },
+    "last_seen_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "occurred_at_local": {
+     "tipo": "timestamp without time zone",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "payload": {
+     "tipo": "jsonb",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [],
+   "indices": [
+    {
+     "nome": "lalamove_uapi_statement_item_paginate_idx",
+     "colunas": "occurred_at_local desc, item_key desc",
+     "unico": false
+    }
+   ],
+   "fks": [],
+   "criada_em": "20261127010000_lalamove_uapi_statement_item.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [
     "lalamove-uapi"
    ],
    "triggers": [],
