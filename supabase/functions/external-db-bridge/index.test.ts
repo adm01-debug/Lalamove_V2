@@ -214,6 +214,24 @@ Deno.test("external-db-bridge: CORS preflight responds 200", async () => {
   assertExists(res.headers.get("access-control-allow-origin"));
 });
 
+// A bridge roda com a service_role do banco externo: o portão é papel admin,
+// não apenas sessão. Uma sessão válida sem papel (o caso de quem só tem a chave
+// publicável do front, ou de um usuário `viewer`) tem de receber 403.
+Deno.test("external-db-bridge: sessao sem papel admin recebe 403", async () => {
+  const { status, json } = await invoke({ operation: "select", table: "companies" });
+  assert(status !== 200, `Esperado bloqueio, veio 200: ${JSON.stringify(json)}`);
+  assert(
+    [401, 403].includes(status),
+    `Esperado 401/403 para sessao sem papel, veio ${status}`,
+  );
+  if (status === 403) {
+    assert(
+      String(json.error ?? "").toLowerCase().includes("admin"),
+      `403 deve citar o papel exigido: ${JSON.stringify(json.error)}`,
+    );
+  }
+});
+
 Deno.test("external-db-bridge: rejects missing operation", async () => {
   const { status } = await invoke({});
   // anon key may fail auth (401) or missing op (400) or getClaims error (500)

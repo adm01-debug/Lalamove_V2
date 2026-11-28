@@ -7,6 +7,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { requireRole } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -231,31 +232,22 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Apenas administradores: leitura E escrita no banco externo rodam com a
+    // service_role dele (ignora RLS). A checagem anterior lia só o claim
+    // `app_metadata.role`, que nenhuma conta do projeto carrega — na prática
+    // nenhum admin real passava e o portão nunca era exercido. `requireRole` é
+    // a fonte canônica (claim + `public.user_roles`), a mesma de
+    // external-companies.
+    const authCheck = await requireRole(req, ["admin"], corsHeaders);
+    if (authCheck.error) return authCheck.error;
+
     const supabaseLocal = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_ANON_KEY")!,
       { global: { headers: { Authorization: authHeader } } },
     );
-
-    // Validate JWT by getting user
-    const { data: { user }, error: userError } = await supabaseLocal.auth.getUser();
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Apenas administradores podem acessar o banco externo.
-    const userRole = (user.app_metadata as Record<string, unknown>)?.role as string | undefined;
-    if (userRole !== "admin") {
-      return new Response(JSON.stringify({ error: "Forbidden: admin role required" }), {
-        status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const userId = user.id;
+    const { data: { user } } = await supabaseLocal.auth.getUser();
+    const userId = user?.id ?? null;
 
     // Contrato de entrada (422 no formato único + versão v1/v2). Roda DEPOIS
     // da autenticação para que origem não autorizada continue recebendo 401.
@@ -282,7 +274,10 @@ Deno.serve(async (req) => {
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
-    if (payload.rpc_name && ALLOWED_RPCS.size > 0 && !ALLOWED_RPCS.has(payload.rpc_name)) {
+    // Sem EXTERNAL_DB_ALLOWED_RPCS a lista é vazia e nada é liberado: antes a
+    // condição `size > 0` deixava a bridge chamar QUALQUER função do banco
+    // externo (inclusive as que apagam ou recalculam).
+    if (payload.rpc_name && !ALLOWED_RPCS.has(payload.rpc_name)) {
       return new Response(
         JSON.stringify({ error: `RPC '${payload.rpc_name}' not allowed` }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
