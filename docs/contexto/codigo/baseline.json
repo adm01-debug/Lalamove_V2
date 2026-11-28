@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "db76ad8b9cd4854959e2872b9c222eb2eac8325a",
+  "commit": "3b9de85eeb144d384876dd736261995dde8704bd",
   "branch": "main",
-  "data_commit": "2026-11-28T07:55:44-03:00",
+  "data_commit": "2026-11-28T08:09:00-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "3b9de85",
+    "data": "2026-11-28",
+    "assunto": "chore: sobe React para 19.3.1 com os types e o react-dom (#419)"
+   },
    {
     "sha": "db76ad8",
     "data": "2026-11-28",
@@ -126,14 +131,9 @@
     "sha": "3d6697c",
     "data": "2026-11-25",
     "assunto": "feat: painel lista as filiais dos fornecedores (#386)"
-   },
-   {
-    "sha": "9a49234",
-    "data": "2026-11-25",
-    "assunto": "chore: CI executa os testes do lalamove-token-refresh (#376)"
    }
   ],
-  "arquivos_mudados_7d": 536,
+  "arquivos_mudados_7d": 537,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 298
+    "commits": 299
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 2
+    "commits": 1
    }
   ]
  },

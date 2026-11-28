@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "db76ad8b9cd4854959e2872b9c222eb2eac8325a",
+  "sha": "3b9de85eeb144d384876dd736261995dde8704bd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-28 10:56 UTC",
+  "generated_at": "2026-11-28 11:09 UTC",
   "files_total": 1168,
   "code_files": 977,
   "code_lines": 168363
  },
  "version": "1.3.2",
- "facts_hash": "c94f35c6b20b5e12",
+ "facts_hash": "ed6400d8e80851f0",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -57,7 +57,7 @@
     "in": "package.json"
    },
    "react": {
-    "version": "^18.3.1",
+    "version": "^19.3.1",
     "role": "Frontend React",
     "in": "package.json"
    },
@@ -82145,10 +82145,21 @@
   }
  },
  "git": {
-  "sha": "db76ad8b9cd4854959e2872b9c222eb2eac8325a",
+  "sha": "3b9de85eeb144d384876dd736261995dde8704bd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "3b9de85",
+    "date": "2026-11-28",
+    "author": "adm01-debug",
+    "subject": "chore: sobe React para 19.3.1 com os types e o react-dom (#419)",
+    "files": [
+     "package-lock.json",
+     "package.json",
+     "src/hooks/useAccessibility.tsx"
+    ]
+   },
    {
     "sha": "db76ad8",
     "date": "2026-11-28",
@@ -82489,15 +82500,6 @@
     "files": [
      "supabase/functions/external-companies/index.ts"
     ]
-   },
-   {
-    "sha": "63359d6",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix: external-companies usa o helper de auth compartilhado (#381)",
-    "files": [
-     "supabase/functions/external-companies/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -82506,11 +82508,11 @@
     6
    ],
    [
-    "supabase/functions/external-companies/index.ts",
-    6
+    "scripts/uapi-collector/collect.mjs",
+    5
    ],
    [
-    "scripts/uapi-collector/collect.mjs",
+    "supabase/functions/external-companies/index.ts",
     5
    ],
    [
@@ -82520,6 +82522,14 @@
    [
     "src/pages/UAPISettingsPage.tsx",
     4
+   ],
+   [
+    "package-lock.json",
+    3
+   ],
+   [
+    "package.json",
+    3
    ],
    [
     ".github/workflows/ci.yml",
@@ -82535,14 +82545,6 @@
    ],
    [
     "scripts/uapi-collector/README.md",
-    2
-   ],
-   [
-    "package-lock.json",
-    2
-   ],
-   [
-    "package.json",
     2
    ],
    [

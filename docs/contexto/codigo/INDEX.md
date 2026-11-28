@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `db76ad8b9cd4854959e2872b9c222eb2eac8325a` (2026-11-28T07:55:44-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3b9de85eeb144d384876dd736261995dde8704bd` (2026-11-28T08:09:00-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -294,7 +294,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 10159 nós · 21075 arestas · 724 comunidades · grafo do commit `db76ad8b`
+- 10159 nós · 21075 arestas · 724 comunidades · grafo do commit `3b9de85e`
 - comunidades maiores: lucide-react (251), react (245), cn (233), button.tsx (151), ref_https (125), AlertsPage.tsx (116), geo-gateway/index.ts (105), ref_node_fs (102), EvaluationsPage.tsx (83), dependencies (81), DashboardRedesigned.tsx (79), lalamove-api/index.ts (77)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -397,6 +397,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-28 `3b9de85` chore: sobe React para 19.3.1 com os types e o react-dom (#419)
 - 2026-11-28 `db76ad8` feat: extrato paginado pela identidade do lancamento (#416)
 - 2026-11-26 `abd4a28` chore: preserva no repositorio os workflows n8n da operacao (#418)
 - 2026-11-26 `f81f8ee` chore: atualiza @radix-ui/react-slot para 1.5.0 (#417)
@@ -411,7 +412,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-26 `369bb44` fix: status da sessão UAPI deixa de usar token_expires_at como verdade (#398)
 - 2026-11-26 `70d6fad` fix: status de conexão lê a sessão UAPI real em vez de listar cidades (#397)
 - 2026-11-26 `81000bb` fix: le o payload cru da UAPI no saldo, perfil, extrato, veiculos e areas (#396)
-- 2026-11-26 `65e8ade` fix: botao Atualizar Token grava sessao UAPI e admin real deixa de levar 403 (#395)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

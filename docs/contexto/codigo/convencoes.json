@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "chore: sobe React para 19.3.1 com os types e o react-dom (#419)",
    "feat: extrato paginado pela identidade do lancamento (#416)",
    "chore: preserva no repositorio os workflows n8n da operacao (#418)",
    "chore: atualiza @radix-ui/react-slot para 1.5.0 (#417)",
-   "chore: aplica os 6 bumps seguros do Dependabot (#415)",
-   "feat: fim do extrato devolve lista vazia em vez de erro do gateway (#414)"
+   "chore: aplica os 6 bumps seguros do Dependabot (#415)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
