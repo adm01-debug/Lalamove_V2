@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3b9de85eeb144d384876dd736261995dde8704bd",
+  "sha": "e53b214db42d57dc59b6f34590caa4f4ca3b0982",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-28 11:09 UTC",
+  "generated_at": "2026-11-28 11:15 UTC",
   "files_total": 1168,
   "code_files": 977,
   "code_lines": 168363
  },
  "version": "1.3.2",
- "facts_hash": "ed6400d8e80851f0",
+ "facts_hash": "99fbf01b393f83bc",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -37,7 +37,7 @@
     "in": "package.json"
    },
    "i18next": {
-    "version": "^25.7.4",
+    "version": "^27.2.10",
     "role": "i18n",
     "in": "package.json"
    },
@@ -82145,10 +82145,20 @@
   }
  },
  "git": {
-  "sha": "3b9de85eeb144d384876dd736261995dde8704bd",
+  "sha": "e53b214db42d57dc59b6f34590caa4f4ca3b0982",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "e53b214",
+    "date": "2026-11-28",
+    "author": "adm01-debug",
+    "subject": "chore: TypeScript 6.0.3 com i18next 27 (TS 7 bloqueado pelo typescript-eslint) (#420)",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
    {
     "sha": "3b9de85",
     "date": "2026-11-28",
@@ -82491,15 +82501,6 @@
     "files": [
      "supabase/functions/external-companies/index.ts"
     ]
-   },
-   {
-    "sha": "870d6e6",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix: filial na busca de endereco mostra o fornecedor dono (#382)",
-    "files": [
-     "supabase/functions/external-companies/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -82512,8 +82513,12 @@
     5
    ],
    [
-    "supabase/functions/external-companies/index.ts",
-    5
+    "package-lock.json",
+    4
+   ],
+   [
+    "package.json",
+    4
    ],
    [
     "src/lib/uapi-proxy.ts",
@@ -82524,12 +82529,8 @@
     4
    ],
    [
-    "package-lock.json",
-    3
-   ],
-   [
-    "package.json",
-    3
+    "supabase/functions/external-companies/index.ts",
+    4
    ],
    [
     ".github/workflows/ci.yml",

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "3b9de85eeb144d384876dd736261995dde8704bd",
+  "commit": "e53b214db42d57dc59b6f34590caa4f4ca3b0982",
   "branch": "main",
-  "data_commit": "2026-11-28T08:09:00-03:00",
+  "data_commit": "2026-11-28T08:14:32-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "e53b214",
+    "data": "2026-11-28",
+    "assunto": "chore: TypeScript 6.0.3 com i18next 27 (TS 7 bloqueado pelo typescript-eslint) (#420)"
+   },
    {
     "sha": "3b9de85",
     "data": "2026-11-28",
@@ -126,11 +131,6 @@
     "sha": "962d1b5",
     "data": "2026-11-25",
     "assunto": "fix: limita \"hoje\" do dashboard ao fuso de São Paulo (#388)"
-   },
-   {
-    "sha": "3d6697c",
-    "data": "2026-11-25",
-    "assunto": "feat: painel lista as filiais dos fornecedores (#386)"
    }
   ],
   "arquivos_mudados_7d": 537,
@@ -254,6 +254,10 @@
     "mudancas": 10
    },
    {
+    "arquivo": "package.json",
+    "mudancas": 10
+   },
+   {
     "arquivo": "src/App.tsx",
     "mudancas": 10
    },
@@ -286,10 +290,6 @@
     "mudancas": 10
    },
    {
-    "arquivo": "package.json",
-    "mudancas": 9
-   },
-   {
     "arquivo": "package-lock.json",
     "mudancas": 8
    },
@@ -301,11 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 299
-   },
-   {
-    "autor": "dependabot[bot]",
-    "commits": 1
+    "commits": 300
    }
   ]
  },

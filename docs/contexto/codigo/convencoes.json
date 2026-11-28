@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "chore: TypeScript 6.0.3 com i18next 27 (TS 7 bloqueado pelo typescript-eslint) (#420)",
    "chore: sobe React para 19.3.1 com os types e o react-dom (#419)",
    "feat: extrato paginado pela identidade do lancamento (#416)",
    "chore: preserva no repositorio os workflows n8n da operacao (#418)",
-   "chore: atualiza @radix-ui/react-slot para 1.5.0 (#417)",
-   "chore: aplica os 6 bumps seguros do Dependabot (#415)"
+   "chore: atualiza @radix-ui/react-slot para 1.5.0 (#417)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
