@@ -13,7 +13,9 @@ Total: **300 etapas** · 79 aguardam aprovação humana.
 ### Onda 1 — Segurança e risco de perda de dado
 
 - [ ] 001 — Rotacionar a chave e o segredo HMAC da Lalamove e atualizar os secrets das edges — onda 1 — Crítica
-- [ ] 002 — Remover do repositório os 11 arquivos com credencial e travar reincidência no guard de segredos — onda 1 — Crítica
+- [x] 002 — Remover do repositório os 11 arquivos com credencial e travar reincidência no guard de segredos — onda 1 — Crítica
+  - **Concluída em 28/11/2026 (commit da branch `claude/fix-remove-credenciais-lalamove-n8n`).** A reincidência aconteceu: os exports `n8n/workflows/{f00-bootstrap,f01-cotacao,f02-pedido,f03-rastreamento,f04-pop-pod,bundle-import}.json` voltaram à `main` com a API key e o segredo HMAC de produção em texto puro (28 ocorrências). Sanitizados para `{{ $env.LALAMOVE_API_KEY }}` e `{{ $env.LALAMOVE_HMAC_SECRET }}`, com a tabela de variáveis documentada em `n8n/README.md`.
+  - Trava criada: `scripts/ci/check-repo-secrets.mjs` (formatos `pk_prod_`, `sk_prod_`, `sb_publishable_`, `sb_secret_`, `sbp_`, token Mapbox, webhook Bitrix24) ligada ao job `security` da CI e ao `scripts/pre-commit-secrets.sh`. Antes do fix ela reprovava 3 arquivos e a varredura antiga não conhecia nenhum desses formatos.
   - **Parcialmente executada em 23/11/2026 — segue `[ ]` porque a etapa não foi concluída como definida.** Feito: os 11 arquivos removidos da `main`
     (`lalamove_documentacao_completa.{md,html,docx}`, `lalamove_suplemento_v2.{md,html}`,
     `lalamove_bundle_import.json`, `lalamove_f0{0,1,2,3,4}_*.json`). Evidência:
@@ -27,8 +29,12 @@ Total: **300 etapas** · 79 aguardam aprovação humana.
     `scripts/ci/check-bundle-secrets.mjs` para varrer `*.md/*.json/*.html/*.py` da raiz, que era a parte
     de "travar reincidência" desta etapa — fora do pedido "só apaga".
 - [ ] 003 — O repositório está PÚBLICO no GitHub, com credenciais de produção no histórico — onda 1 — Crítica
-- [ ] 004 — Qualquer usuário autenticado pode se promover a admin (user_roles com INSERT/UPDATE WITH CHECK/USING true) — onda 1 — Crítica
-- [ ] 005 — Nome, telefone e score de risco dos motoristas expostos sem login: materialized view driver_stats_cache com GRANT SELECT para anon — onda 1 — Crítica
+  - **Bloqueada no dono — não é código.** Confirmado por `gh api repos/adm01-debug/Lalamove_V2`: `"visibility": "public"`. Sanitizar o HEAD (etapa 002) não apaga o histórico: o par `pk_prod_`/`sk_prod_` continua legível nos commits anteriores. Requer decisão de negócio (tornar o repo privado) e ação no painel — o agente não consegue reescrever histórico público de forma confiável sem force-push coordenado.
+- [x] 004 — Qualquer usuário autenticado pode se promover a admin (user_roles com INSERT/UPDATE WITH CHECK/USING true) — onda 1 — Crítica
+  - **Migration escrita e testada em Postgres 16 local; aguarda aplicação (PR aberta — DDL).** `20261128140000_harden_user_roles_rls.sql`: droppa as policies `Authenticated users can insert/update/view roles` de 20260828000003:17-19 e devolve a leitura a `auth.uid() = user_id or has_role(admin)`; desfaz o auto-admin em massa de 20260828000002:24-30/20260828000003:23-27 usando `assigned_by is null` como sinal, com a lista gravada em `audit_log` antes do delete.
+  - Evidência: 3 cenários executados contra Postgres 16 com stubs de `auth`/`user_roles`/`audit_log` — só auto-admins → aborta e **rollback devolve as 3 policies permissivas** (verificado); admin legítimo presente → remove só os automáticos, preserva `manager` e `viewer`, policy final é a restrita; segunda execução idempotente. Segurança do front confirmada: `/roles` e `/security` são `requiredRole="admin"` (`src/App.tsx:159-160`), então a policy restrita não quebra tela de usuário comum. `usePermissions.test.ts` 5/5.
+- [~] 005 — não aplicável: outro agente já fechou — onda 1 — Crítica
+  - **Fechada antes desta auditoria:** `supabase/migrations/20261126160000_revoke_anon_metric_views.sql` faz `revoke select on public.driver_stats_cache from anon` (e nas outras três: `delivery_metrics_cache`, `hourly_metrics_cache`, `cache_status`), com um bloco `DO` que assere `grantee = 'anon'` ausente e aborta se sobrar. A evidência do plano apontava `20261122090000:164`, que é anterior ao revoke — o plano foi escrito antes de 26/11. Nada a implementar.
 - [ ] 006 — bitrix24-sync entrega o BITRIX24_CLIENT_SECRET para um domínio escolhido pelo chamador, e o domínio fica salvo no banco — onda 1 — Crítica
 - [ ] 007 — external-db-bridge: qualquer usuário autenticado faz CRUD e RPC arbitrários no banco externo com a service_role dele — onda 1 — Crítica
 - [ ] 008 — evaluate-driver: sem nenhuma autenticação em código, e o score de risco é calculado com números enviados pelo próprio chamador — dá para bloquear qualquer motorista — onda 1 — Crítica

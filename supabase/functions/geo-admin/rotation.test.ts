@@ -29,7 +29,8 @@ Deno.test("kindOfListedToken usa `usage` porque a listagem nao traz o valor", ()
 });
 
 Deno.test("tokenFingerprint nao expoe o valor: prefixo, sufixo e tamanho", () => {
-  const secret = "sk.eyJ1IjoicHJvbW9icmluZGVzIiwiYSI6ImNtajcifQ.abcdefghij";
+  // Valor sintetico: so precisa do prefixo sk. e de 40+ caracteres para exercitar o mascaramento.
+  const secret = "sk.NAO_E_SEGREDO_TESTE";
   const fp = tokenFingerprint(secret);
   assertEquals(fp.includes(secret), false);
   assertStringIncludes(fp, "sk.eyJ");

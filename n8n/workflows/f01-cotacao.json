@@ -133,7 +133,7 @@
         320
       ],
       "parameters": {
-        "jsCode": "const crypto = require('crypto');\nconst ts  = Date.now().toString();\nconst method  = $json.http_method || 'POST';\nconst path    = $json.http_path;\nconst bodyStr = $json.http_body || '';\nconst raw = ts + '\\r\\n' + method + '\\r\\n' + path + '\\r\\n\\r\\n' + bodyStr;\nconst sig = crypto.createHmac('sha256', 'sk_prod_v30Ci06vXqPeizCg6e461VZEymmFzMDAXZQwTm3NdYcwyLaS8nxrQEX0JKcp0mAM').update(raw).digest('hex');\nreturn [{ json: { ...$json,\n  _auth: 'hmac pk_prod_d38621223012b9ec71d0634589126e3b:' + ts + ':' + sig,\n  _ts: ts\n}}];"
+        "jsCode": "const crypto = require('crypto');\nconst ts  = Date.now().toString();\nconst method  = $json.http_method || 'POST';\nconst path    = $json.http_path;\nconst bodyStr = $json.http_body || '';\nconst raw = ts + '\\r\\n' + method + '\\r\\n' + path + '\\r\\n\\r\\n' + bodyStr;\nconst sig = crypto.createHmac('sha256', '{{ $env.LALAMOVE_HMAC_SECRET }}').update(raw).digest('hex');\nreturn [{ json: { ...$json,\n  _auth: 'hmac {{ $env.LALAMOVE_API_KEY }}:' + ts + ':' + sig,\n  _ts: ts\n}}];"
       }
     },
     {

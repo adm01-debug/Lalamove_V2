@@ -62,7 +62,7 @@
         480
       ],
       "parameters": {
-        "jsCode": "const crypto = require('crypto');\nconst body  = $input.first().json;\nconst ts    = body.headers?.['x-llm-timestamp'] || body.headers?.['x-request-timestamp'] || '';\nconst sig   = body.headers?.['x-llm-signature']  || body.headers?.['x-request-signature']  || '';\nif (!ts || !sig) return [{ json:{ valid:false, reason:'Missing signature headers', body } }];\nconst payload = JSON.stringify(body.body || body);\nconst raw     = ts + '\\r\\nPOST\\r\\n/webhook/lalamove-eventos\\r\\n\\r\\n' + payload;\nconst expected = crypto.createHmac('sha256','sk_prod_v30Ci06vXqPeizCg6e461VZEymmFzMDAXZQwTm3NdYcwyLaS8nxrQEX0JKcp0mAM').update(raw).digest('hex');\nreturn [{ json:{ valid: sig === expected, body: body.body || body } }];"
+        "jsCode": "const crypto = require('crypto');\nconst body  = $input.first().json;\nconst ts    = body.headers?.['x-llm-timestamp'] || body.headers?.['x-request-timestamp'] || '';\nconst sig   = body.headers?.['x-llm-signature']  || body.headers?.['x-request-signature']  || '';\nif (!ts || !sig) return [{ json:{ valid:false, reason:'Missing signature headers', body } }];\nconst payload = JSON.stringify(body.body || body);\nconst raw     = ts + '\\r\\nPOST\\r\\n/webhook/lalamove-eventos\\r\\n\\r\\n' + payload;\nconst expected = crypto.createHmac('sha256','{{ $env.LALAMOVE_HMAC_SECRET }}').update(raw).digest('hex');\nreturn [{ json:{ valid: sig === expected, body: body.body || body } }];"
       }
     },
     {
