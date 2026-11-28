@@ -9,6 +9,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { resolverDominioBitrix24, urlPortalBitrix24 } from "../_shared/bitrix24-domain.ts";
 import {
   missingTemplateVars,
   renderTemplate,
@@ -1397,6 +1398,12 @@ async function sendBitrix24Task(
     }
 
     const token = tokenData as { access_token: string; domain: string };
+
+    // C-007: nao confiar no dominio gravado; o secret manda.
+    const dominio = resolverDominioBitrix24(Deno.env, token.domain);
+    if (!dominio.ok) {
+      return { success: false, error: dominio.motivo };
+    }
     const priorityMap: Record<string, number> = {
       "CRITICAL": 2,
       "WARNING": 1,
@@ -1417,7 +1424,7 @@ async function sendBitrix24Task(
     };
 
     const response = await fetch(
-      `https://${token.domain}/rest/tasks.task.add?auth=${token.access_token}`,
+      `${urlPortalBitrix24(dominio.domain)}/rest/tasks.task.add?auth=${token.access_token}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

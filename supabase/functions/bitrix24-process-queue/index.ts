@@ -8,6 +8,7 @@ import {
   validateContract,
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
+import { resolverDominioBitrix24, urlPortalBitrix24 } from "../_shared/bitrix24-domain.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
@@ -90,6 +91,17 @@ serve(async (req) => {
       );
     }
 
+    // O dominio gravado pode ter sido envenenado por um callback antigo (C-007):
+    // o secret BITRIX24_DOMAIN tem precedencia e a requisicao nunca o define.
+    const dominio = resolverDominioBitrix24(Deno.env, tokenData.domain);
+    if (!dominio.ok) {
+      logger.error(`Dominio Bitrix24 invalido: ${dominio.motivo}`);
+      return new Response(
+        JSON.stringify({ error: dominio.motivo }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     // Check if token needs refresh
     if (new Date(tokenData.expires_at) < new Date()) {
       logger.log("Token expired, refreshing...");
@@ -105,7 +117,7 @@ serve(async (req) => {
         );
       }
 
-      const tokenResponse = await fetch(`https://${tokenData.domain}/oauth/token/`, {
+      const tokenResponse = await fetch(`${urlPortalBitrix24(dominio.domain)}/oauth/token/`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
@@ -186,7 +198,7 @@ serve(async (req) => {
 
         // Update deal in Bitrix24
         const updateResponse = await fetch(
-          `https://${tokenData.domain}/rest/crm.deal.update`,
+          `${urlPortalBitrix24(dominio.domain)}/rest/crm.deal.update`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -203,7 +215,7 @@ serve(async (req) => {
 
         // Create activity for status change
         const activityResponse = await fetch(
-          `https://${tokenData.domain}/rest/crm.activity.add`,
+          `${urlPortalBitrix24(dominio.domain)}/rest/crm.activity.add`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

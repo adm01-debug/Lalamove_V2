@@ -9,6 +9,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { resolverDominioBitrix24, urlPortalBitrix24 } from "../_shared/bitrix24-domain.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -66,8 +67,16 @@ serve(async (req) => {
     switch (action) {
       case "get_auth_url": {
         const clientId = Deno.env.get("BITRIX24_CLIENT_ID");
-        const domain = params.domain;
-        
+        // O dominio nunca vem da requisicao: so do secret ou do que ja esta gravado.
+        const dominio = resolverDominioBitrix24(Deno.env, null);
+        if (!dominio.ok) {
+          return new Response(
+            JSON.stringify({ error: dominio.motivo }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          );
+        }
+        const domain = dominio.domain;
+
         if (!clientId) {
           return new Response(
             JSON.stringify({ error: "BITRIX24_CLIENT_ID not configured" }),
@@ -89,8 +98,18 @@ serve(async (req) => {
         // But let's keep it for now and handle it safely
         const url = new URL(req.url);
         const code = url.searchParams.get("code");
-        const domain = url.searchParams.get("domain") || (params && params.domain);
-        
+
+        // `domain` da query era o vetor de C-007: o secret ia para o host do
+        // chamador e o valor envenenado era gravado em bitrix24_tokens.domain.
+        const dominio = resolverDominioBitrix24(Deno.env, null);
+        if (!dominio.ok) {
+          return new Response(JSON.stringify({ error: dominio.motivo }), {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const domain = dominio.domain;
+
         if (!code) {
           return new Response("Authorization code missing", { status: 400 });
         }
@@ -149,7 +168,15 @@ serve(async (req) => {
         const clientId = Deno.env.get("BITRIX24_CLIENT_ID");
         const clientSecret = Deno.env.get("BITRIX24_CLIENT_SECRET");
 
-        const tokenResponse = await fetch(`https://${tokenData.domain}/oauth/token/`, {
+        const dominioRefresh = resolverDominioBitrix24(Deno.env, tokenData.domain);
+        if (!dominioRefresh.ok) {
+          return new Response(JSON.stringify({ error: dominioRefresh.motivo }), {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        const tokenResponse = await fetch(`${urlPortalBitrix24(dominioRefresh.domain)}/oauth/token/`, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams({
@@ -189,6 +216,16 @@ serve(async (req) => {
           return new Response(
             JSON.stringify({ error: "Bitrix24 not connected" }),
             { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        // Dominio confiavel: o gravado em bitrix24_tokens pode ter sido envenenado
+        // por um callback antigo, entao o secret tem precedencia.
+        const dominioSync = resolverDominioBitrix24(Deno.env, tokenData.domain);
+        if (!dominioSync.ok) {
+          return new Response(
+            JSON.stringify({ error: dominioSync.motivo }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
           );
         }
 
@@ -241,7 +278,7 @@ serve(async (req) => {
         };
 
         const updateResponse = await fetch(
-          `https://${tokenData.domain}/rest/crm.deal.update?` +
+          `${urlPortalBitrix24(dominioSync.domain)}/rest/crm.deal.update?` +
           new URLSearchParams({
             auth: tokenData.access_token,
             id: dealId.toString(),
@@ -253,7 +290,7 @@ serve(async (req) => {
 
         // Create activity
         const activityResponse = await fetch(
-          `https://${tokenData.domain}/rest/crm.activity.add?` +
+          `${urlPortalBitrix24(dominioSync.domain)}/rest/crm.activity.add?` +
           new URLSearchParams({
             auth: tokenData.access_token,
             fields: JSON.stringify({
@@ -330,8 +367,16 @@ serve(async (req) => {
           );
         }
 
+        const dominioLista = resolverDominioBitrix24(Deno.env, tokenData.domain);
+        if (!dominioLista.ok) {
+          return new Response(
+            JSON.stringify({ error: dominioLista.motivo }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          );
+        }
+
         const response = await fetch(
-          `https://${tokenData.domain}/rest/crm.deal.list?` +
+          `${urlPortalBitrix24(dominioLista.domain)}/rest/crm.deal.list?` +
           new URLSearchParams({
             auth: tokenData.access_token,
             select: JSON.stringify(["ID", "TITLE", "STAGE_ID", "DATE_CREATE"]),

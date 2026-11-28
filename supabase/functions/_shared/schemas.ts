@@ -364,9 +364,11 @@ const simulateDriverMovementV2 = simulateDriverMovementV1;
 
 // ── bitrix24-sync ────────────────────────────────────────────────────────────
 //
-// `action` é o discriminador (index.ts:44). `oauth_callback` recebe `code` e
-// `domain` pela QUERY (index.ts:71-72), por isso a edge mescla os parâmetros no
-// input antes de validar.
+// `action` é o discriminador (index.ts:44). `oauth_callback` recebe `code` pela
+// QUERY (index.ts:53), por isso a edge mescla o parâmetro no input antes de
+// validar. `domain` NÃO faz parte do contrato: o portal é fixado pelo secret
+// BITRIX24_DOMAIN (_shared/bitrix24-domain.ts, achado C-007). O campo continua
+// aceito e ignorado para não quebrar chamador antigo.
 const bitrix24SyncV1 = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("get_auth_url"),

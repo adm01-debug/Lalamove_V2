@@ -100,11 +100,15 @@ export function useBitrix24() {
     },
   });
 
-  const connect = async (domain: string) => {
+  // O domínio do portal é fixado no secret BITRIX24_DOMAIN da edge: mandar o
+  // domínio da tela era o vetor do achado C-007 (o client_secret ia para o host
+  // informado). O parâmetro fica só na assinatura para não mexer na página.
+  const connect = async (_domain?: string) => {
+    void _domain;
     setIsConnecting(true);
     try {
       const { data, error } = await supabase.functions.invoke("bitrix24-sync", {
-        body: { action: "get_auth_url", domain },
+        body: { action: "get_auth_url" },
       });
       
       if (error) throw error;
