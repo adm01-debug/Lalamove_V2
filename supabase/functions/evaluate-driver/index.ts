@@ -5,6 +5,7 @@ import { logger } from "../_shared/logger.ts";
 import { resolveContractVersion, parseJsonBody, validateContract, errorResponse } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { requireRole } from "../_shared/auth.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -490,6 +491,23 @@ serve(async (req) => {
   }
 
   try {
+    // C-003: a function e chamada por job-worker e lalamove-webhook com
+    // service_role, e pelo painel (useEvaluateDriver). Sem gate em codigo,
+    // qualquer sessao autenticada — ou a chave publicavel do front — recalculava
+    // o risco e bloqueava motorista.
+    //
+    // O chamador confiavel e reconhecido pelo Bearer da service_role. Os demais
+    // precisam de papel operator+; para eles o payload deixa de mandar no
+    // calculo (ver `confiaNoPayload` abaixo).
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const bearer = authHeader.replace(/^Bearer\s+/i, "").trim();
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const chamadorConfiavel = serviceKey.length > 0 && bearer === serviceKey;
+    if (!chamadorConfiavel) {
+      const authCheck = await requireRole(req, ["admin", "manager", "operator"], corsHeaders);
+      if (authCheck.error) return authCheck.error;
+    }
+
     const contractVersion = resolveContractVersion(req);
     trackContractUsage("evaluate-driver", contractVersion);
     const parsedBody = await parseJsonBody(req, contractVersion);
@@ -659,8 +677,14 @@ serve(async (req) => {
     logger.log(`[evaluate-driver] Found ${(orders || []).length} orders, ${incidentCount} unresolved incidents (${hasCriticalIncidents ? 'HAS' : 'NO'} critical)`);
 
     // Calculate stats - prefer manual payload, then from orders if available, else from driver record
+    //
+    // C-003: os numeros do corpo SO valem para chamador confiavel (job-worker
+    // com service_role). Para operador no painel eles eram o caminho mais curto
+    // para bloquear um motorista: 100 entregas, 100 falhas e nota 1 inventadas
+    // davam score >= 8 e disparavam o bloqueio automatico.
     let stats: DriverStats;
-    if (parseResult.data.totalDeliveries !== undefined && parseResult.data.totalDeliveries !== null) {
+    const payloadEstatistico = chamadorConfiavel && parseResult.data.totalDeliveries !== undefined && parseResult.data.totalDeliveries !== null;
+    if (payloadEstatistico) {
       stats = {
         totalDeliveries: parseResult.data.totalDeliveries || 0,
         completedDeliveries: parseResult.data.completedDeliveries || 0,
@@ -706,7 +730,7 @@ serve(async (req) => {
       stats,
       incidentCount,
       hasCriticalIncidents,
-      parseResult.data.rating ?? evaluatedDriver.rating ?? 5
+      (chamadorConfiavel ? parseResult.data.rating : null) ?? evaluatedDriver.rating ?? 5
     );
 
     // Add rule bonus to score
