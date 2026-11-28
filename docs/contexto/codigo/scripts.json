@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 109,
+ "total": 110,
  "nota": "scripts soltos na raiz de scripts/ são legado de sessões antigas (alguns com segredo commitado) — ver AGENTS.md; automação nova vai em scripts/<nome>/ com README.",
  "scripts": [
   {
@@ -318,6 +318,19 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-repo-secrets.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Impede que repositório, n8n workflows ou docs voltem a carregar credencial de produção. MOTIVO (28/11/2026): a API key e o segredo HMAC da Lalamove estavam em texto puro nos",
+   "linhas": 116,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "ci.yml"
+   ],
    "solto_na_raiz_de_scripts": false,
    "orfao": false
   },
@@ -1071,7 +1084,7 @@
    "arquivo": "scripts/pre-commit-secrets.sh",
    "pasta": "scripts",
    "descricao": "============================================================================= PRE-COMMIT HOOK: Secret Detection",
-   "linhas": 137,
+   "linhas": 141,
    "env": [],
    "npm_scripts": [],
    "workflows": [],

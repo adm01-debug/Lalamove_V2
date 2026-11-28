@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e53b214db42d57dc59b6f34590caa4f4ca3b0982",
+  "commit": "2a2a553bc59e68508bbc8df008f510f1ee089dcc",
   "branch": "main",
-  "data_commit": "2026-11-28T08:14:32-03:00",
+  "data_commit": "2026-11-28T13:50:58-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2a2a553",
+    "data": "2026-11-28",
+    "assunto": "fix: tira credenciais de producao dos workflows n8n e trava reincidencia (#421)"
+   },
    {
     "sha": "e53b214",
     "data": "2026-11-28",
@@ -126,14 +131,9 @@
     "sha": "0bd75b9",
     "data": "2026-11-25",
     "assunto": "fix: religa alertas que nasceram desligados e morriam em silencio (#387)"
-   },
-   {
-    "sha": "962d1b5",
-    "data": "2026-11-25",
-    "assunto": "fix: limita \"hoje\" do dashboard ao fuso de São Paulo (#388)"
    }
   ],
-  "arquivos_mudados_7d": 537,
+  "arquivos_mudados_7d": 518,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -192,7 +192,7 @@
     "mudancas": 19
    },
    {
-    "pasta": "src/components/dashboard",
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 18
    }
   ],
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
@@ -306,9 +306,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1174,
-  "arquivos_codigo": 743,
-  "linhas_codigo": 145781,
+  "arquivos_total": 1175,
+  "arquivos_codigo": 744,
+  "linhas_codigo": 145899,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -322,7 +322,7 @@
   "cron_jobs": 24,
   "testes": 199,
   "workflows": 5,
-  "scripts": 109,
+  "scripts": 110,
   "docs_md": 116
  },
  "por_pasta": {
@@ -415,8 +415,8 @@
    "linhas": 72
   },
   "scripts/ci": {
-   "arquivos": 56,
-   "linhas": 11426
+   "arquivos": 57,
+   "linhas": 11542
   },
   "scripts/db-audit": {
    "arquivos": 29,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 135,
-   "linhas": 30912
+   "linhas": 30914
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -683,7 +683,7 @@
  ],
  "qualidade": {
   "any": 152,
-  "console_log": 432,
+  "console_log": 433,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 5,
@@ -824,9 +824,7 @@
    "VITE_GOOGLE_MAPS_MAP_ID"
   ],
   "ciclos_de_import": 2,
-  "possiveis_segredos_no_codigo": [
-   "supabase/functions/geo-admin/rotation.test.ts:32"
-  ]
+  "possiveis_segredos_no_codigo": []
  },
  "erros_do_gerador": []
 }

@@ -5,8 +5,8 @@
   "linguagens": [
    "TypeScript (629)",
    "SQL (225)",
+   "JavaScript (116)",
    "Markdown (116)",
-   "JavaScript (115)",
    "JSON (37)",
    "Shell (11)",
    "Python (8)",
@@ -170,7 +170,8 @@
    ],
    "permissoes": [],
    "scripts_usados": [
-    "scripts/ci/check-agents-md-integrity.mjs"
+    "scripts/ci/check-agents-md-integrity.mjs",
+    "scripts/ci/check-repo-secrets.mjs"
    ],
    "npm_scripts": [
     "build",
@@ -178,7 +179,8 @@
    ],
    "secrets": [
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "mjs"
    ],
    "actions": [
     "actions/checkout",
@@ -636,7 +638,8 @@
    "SUPABASE_ACCESS_TOKEN",
    "SUPABASE_DB_URL",
    "VITE_SUPABASE_PUBLISHABLE_KEY",
-   "VITE_SUPABASE_URL"
+   "VITE_SUPABASE_URL",
+   "mjs"
   ]
  },
  "deploy": {

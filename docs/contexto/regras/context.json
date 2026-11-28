@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e53b214db42d57dc59b6f34590caa4f4ca3b0982",
+  "sha": "2a2a553bc59e68508bbc8df008f510f1ee089dcc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-28 11:15 UTC",
-  "files_total": 1168,
-  "code_files": 977,
-  "code_lines": 168363
+  "generated_at": "2026-11-28 16:51 UTC",
+  "files_total": 1169,
+  "code_files": 978,
+  "code_lines": 168487
  },
  "version": "1.3.2",
- "facts_hash": "99fbf01b393f83bc",
+ "facts_hash": "68765ca282c498a9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -190,7 +190,7 @@
    ".ts": 382,
    ".tsx": 247,
    ".sql": 225,
-   ".mjs": 110,
+   ".mjs": 111,
    ".py": 8,
    ".js": 4,
    ".cjs": 1
@@ -22315,8 +22315,8 @@
   },
   {
    "module": "scripts",
-   "files": 147,
-   "lines": 33648,
+   "files": 148,
+   "lines": 33764,
    "tables": [
     "a",
     "active_tracking",
@@ -22363,6 +22363,7 @@
     "check-i18n-parity.mjs: AQUI, RAIZ, DIR_LOCALES, IDIOMA_REFERENCIA, achatar, placeholders",
     "check-pr-workflow-secrets.mjs: BRANCHES_CONFIAVEIS, hasPullRequestTrigger, hasPushTriggerUnrestricted, findPullRequestSecretLeaks, findPushSecretLeaks, scanWorkflowDirectory",
     "check-quarantine.mjs: RAIZ, CAMINHO_PADRAO, hojeISO, carregarQuarentena, validar, specsEmQuarentena",
+    "check-repo-secrets.mjs: FORMATOS, ehArquivoVarrido, listarArquivos, detectar, varrer, main",
     "check-test-inventory.mjs: RAIZ, ALLOWLIST_NODE, padroesNodeDeWorkflow, casaPadrao, orfaosNode, suitesCobertasPorImport",
     "check-workflow-pins-resolvem.mjs: resolverExecutavel, coletarPins, commitDaTag, verificarPins",
     "check-workflow-pins.mjs: TOOLCHAIN_PATH, TOOLCHAIN_KEYS, findMutableActionRefs, findUnauthorizedActionOwners, findUnpinnedImages, loadToolchain",
@@ -22385,8 +22386,7 @@
     "check-realtime-subscriptions.mjs: MIGRATIONS_DIR_PADRAO, baselineDaPublicacao, loadRealtimeBaseline, extractRealtimeSubscriptions, evaluateRealtimeSubscriptions",
     "database-identity.mjs: SUPABASE_CA_PATH, SUPABASE_CA_FILE_SHA256, SUPABASE_CA_FINGERPRINT256, sha256, validarSupabaseCa, extrairProjectRef",
     "dry-run-plan.mjs: CABECALHO_DRY_RUN, parseDryRunPlan, avaliarPlanoDoDryRun, mensagemDoPlano, avaliarPlanoDoDryRunApplyAll",
-    "manifest-lib.mjs: MANIFEST_FORMAT_VERSION, MANIFEST_SECTIONS, validarManifesto, compararManifestos, imprimirComparacao",
-    "psql-environment.mjs: parseConnection, withPsqlEnvironment"
+    "manifest-lib.mjs: MANIFEST_FORMAT_VERSION, MANIFEST_SECTIONS, validarManifesto, compararManifestos, imprimirComparacao"
    ],
    "docs": [
     "add-security-manage.ts: Aplica permissão security.manage via Management API",
@@ -22484,6 +22484,7 @@
     "scripts/ci/check-pr-workflow-secrets.unit.mjs",
     "scripts/ci/check-quarantine.mjs",
     "scripts/ci/check-quarantine.unit.mjs",
+    "scripts/ci/check-repo-secrets.mjs",
     "scripts/ci/check-test-inventory.mjs",
     "scripts/ci/check-test-inventory.unit.mjs",
     "scripts/ci/check-workflow-pins-resolvem.mjs",
@@ -22512,8 +22513,7 @@
     "scripts/ci/render-workflow-docs.unit.mjs",
     "scripts/ci/typecheck-ratchet.mjs",
     "scripts/ci/typecheck-ratchet.unit.mjs",
-    "scripts/ci/vercel-env-baseline.mjs",
-    "scripts/ci/vercel-env-baseline.unit.mjs"
+    "scripts/ci/vercel-env-baseline.mjs"
    ]
   },
   {
@@ -23400,7 +23400,7 @@
   {
    "module": "supabase/functions",
    "files": 135,
-   "lines": 30912,
+   "lines": 30914,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -23595,7 +23595,7 @@
   {
    "module": "supabase/migrations",
    "files": 214,
-   "lines": 14598,
+   "lines": 14604,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -59772,6 +59772,22 @@
     }
    ]
   },
+  "scripts/ci/check-repo-secrets.mjs": {
+   "path": "scripts/ci/check-repo-secrets.mjs",
+   "lines": 116,
+   "exports": [
+    "const FORMATOS",
+    "function ehArquivoVarrido",
+    "function listarArquivos",
+    "function detectar",
+    "function varrer",
+    "function main"
+   ],
+   "rule_comments": [
+    "* Retorna true se o arquivo deve ser varrido. */"
+   ],
+   "doc": "!/usr/bin/env node Impede que repositório, n8n workflows ou docs voltem a carregar credencial de produção. MOTIVO (28/11/2026): a API key e o segredo HMAC da Lalamove estavam em texto puro nos exports dos workflows n8n e foram mergeados em `main` por a varredura anterior so procurar formatos que nao …"
+  },
   "scripts/ci/check-test-inventory.mjs": {
    "path": "scripts/ci/check-test-inventory.mjs",
    "lines": 229,
@@ -77445,7 +77461,7 @@
   },
   "supabase/functions/geo-admin/rotation.test.ts": {
    "path": "supabase/functions/geo-admin/rotation.test.ts",
-   "lines": 88,
+   "lines": 90,
    "is_test": true,
    "tests": [
     "tokenKind separa segredo, publico e temporario",
@@ -81910,7 +81926,7 @@
   },
   "supabase/migrations/20261122140000_fix_crons_dispatcher.sql": {
    "path": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
-   "lines": 161,
+   "lines": 167,
    "temporal": [
     "AND started_at < now() - interval '10 minutes'"
    ]
@@ -82145,10 +82161,31 @@
   }
  },
  "git": {
-  "sha": "e53b214db42d57dc59b6f34590caa4f4ca3b0982",
+  "sha": "2a2a553bc59e68508bbc8df008f510f1ee089dcc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "2a2a553",
+    "date": "2026-11-28",
+    "author": "adm01-debug",
+    "subject": "fix: tira credenciais de producao dos workflows n8n e trava reincidencia (#421)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "docs/qa/05-PROGRESSO.md",
+     "n8n/README.md",
+     "n8n/workflows/bundle-import.json",
+     "n8n/workflows/f00-bootstrap.json",
+     "n8n/workflows/f01-cotacao.json",
+     "n8n/workflows/f02-pedido.json",
+     "n8n/workflows/f03-rastreamento.json",
+     "n8n/workflows/f04-pop-pod.json",
+     "scripts/ci/check-repo-secrets.mjs",
+     "scripts/pre-commit-secrets.sh",
+     "supabase/functions/geo-admin/rotation.test.ts",
+     "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
+    ]
+   },
    {
     "sha": "e53b214",
     "date": "2026-11-28",
@@ -82492,15 +82529,6 @@
     "files": [
      "supabase/functions/external-companies/index.ts"
     ]
-   },
-   {
-    "sha": "c1a0a10",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix: busca de endereco acha sem acento e com termos fora de ordem (#383)",
-    "files": [
-     "supabase/functions/external-companies/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -82511,6 +82539,10 @@
    [
     "scripts/uapi-collector/collect.mjs",
     5
+   ],
+   [
+    ".github/workflows/ci.yml",
+    4
    ],
    [
     "package-lock.json",
@@ -82529,20 +82561,44 @@
     4
    ],
    [
-    "supabase/functions/external-companies/index.ts",
-    4
-   ],
-   [
-    ".github/workflows/ci.yml",
-    3
-   ],
-   [
     "src/hooks/useLalamove.ts",
     3
    ],
    [
     "src/hooks/useUAPI.ts",
     3
+   ],
+   [
+    "supabase/functions/external-companies/index.ts",
+    3
+   ],
+   [
+    "n8n/README.md",
+    2
+   ],
+   [
+    "n8n/workflows/bundle-import.json",
+    2
+   ],
+   [
+    "n8n/workflows/f00-bootstrap.json",
+    2
+   ],
+   [
+    "n8n/workflows/f01-cotacao.json",
+    2
+   ],
+   [
+    "n8n/workflows/f02-pedido.json",
+    2
+   ],
+   [
+    "n8n/workflows/f03-rastreamento.json",
+    2
+   ],
+   [
+    "n8n/workflows/f04-pop-pod.json",
+    2
    ],
    [
     "scripts/uapi-collector/README.md",
@@ -82554,34 +82610,6 @@
    ],
    [
     "src/lib/lalamoveUapiPayload.test.ts",
-    2
-   ],
-   [
-    "src/lib/lalamoveUapiPayload.ts",
-    2
-   ],
-   [
-    "supabase/functions/lalamove-token-refresh/index.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/schemas.ts",
-    2
-   ],
-   [
-    "src/lib/lalamove-api.ts",
-    2
-   ],
-   [
-    "src/pages/LalamoveSettingsPage.tsx",
-    2
-   ],
-   [
-    "src/hooks/useExternalData.ts",
-    2
-   ],
-   [
-    "src/pages/ExternalDataPage.tsx",
     2
    ]
   ]

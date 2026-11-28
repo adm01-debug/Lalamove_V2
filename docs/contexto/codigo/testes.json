@@ -1477,7 +1477,7 @@
   {
    "arquivo": "supabase/functions/geo-admin/rotation.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 88,
+   "linhas": 90,
    "testa": [
     "supabase/functions/geo-admin/rotation.ts"
    ],
