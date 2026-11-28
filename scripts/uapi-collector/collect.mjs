@@ -246,6 +246,55 @@ async function sbFetch(pathname, init = {}) {
   return text ? JSON.parse(text) : null;
 }
 
+// Lancamentos do extrato guardados pela propria identidade. O gateway pagina
+// por posicao e a posicao muda quando a janela recente e refeita; com a chave do
+// lancamento a edge monta a pagina sem repetir nem pular item.
+function statementItemKey(item, city) {
+  const dateTime = String(item?.date_time ?? '').trim();
+  if (!dateTime) return null;
+  return [
+    Number(city) || '',
+    dateTime,
+    String(item?.amount ?? ''),
+    String(item?.order_display_id ?? ''),
+    String(item?.name ?? ''),
+    String(item?.sub_name ?? ''),
+    String(item?.user_fid ?? ''),
+    String(item?.topup_tx_no ?? ''),
+  ].join('|');
+}
+
+function occurredAtLocal(dateTime) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})$/.exec(String(dateTime ?? '').trim());
+  return match ? `${match[1]}-${match[2]}-${match[3]} ${match[4]}:${match[5]}:${match[6]}` : null;
+}
+
+async function saveStatementItems(items, city) {
+  const lastSeenAt = new Date().toISOString();
+  // O upsert nao aceita a mesma chave duas vezes no mesmo lote; dois lancamentos
+  // identicos no mesmo segundo (mesmo valor, sem pedido nem recarga) colapsam
+  // numa linha so em vez de derrubar a pagina inteira.
+  const rows = new Map();
+  for (const item of items) {
+    const itemKey = statementItemKey(item, city);
+    const occurredAt = occurredAtLocal(item?.date_time);
+    if (!itemKey || !occurredAt) continue;
+    rows.set(itemKey, {
+      item_key: itemKey,
+      city_id: Number(city) || null,
+      occurred_at_local: occurredAt,
+      payload: item,
+      last_seen_at: lastSeenAt,
+    });
+  }
+  if (!rows.size) return;
+  await sbFetch('/rest/v1/lalamove_uapi_statement_item?on_conflict=item_key', {
+    method: 'POST',
+    headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify([...rows.values()]),
+  });
+}
+
 async function activeSession() {
   const rows = await sbFetch(
     '/rest/v1/lalamove_uapi_sessions?select=id,access_token,refresh_token,city_id,user_fid&is_active=eq.true&order=token_obtained_at.desc&limit=1',
@@ -659,6 +708,12 @@ async function main() {
           break;
         }
         lastPage = pageNo;
+        if (source.resource === 'wallet_flow_list') {
+          // Guardar o lancamento nao pode derrubar a coleta do snapshot.
+          await saveStatementItems(items, city).catch((error) =>
+            console.error(`aviso: lancamentos do extrato nao salvos (pagina ${pageNo}): ${error.message}`),
+          );
+        }
         oldest = items[items.length - 1]?.date_time ?? oldest;
         if (items.length < PAGE_SIZE) {
           ended = 'end';

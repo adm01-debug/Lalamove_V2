@@ -67,11 +67,13 @@ o fim: a única regra confiável é parar quando a página vem incompleta. Como 
 O estado da última varredura fica em `UAPI_SWEEP_STATE` (arquivo local, não é segredo). Se ele for
 apagado, o pior caso é uma varredura profunda a mais.
 
-**Limitação conhecida:** a paginação do gateway é por posição. Quando entra um lançamento novo, os
-demais mudam de página; entre uma varredura profunda e a seguinte, os lançamentos que cruzam a borda
-30/31 (um por lançamento novo) ficam sem snapshot até a varredura seguinte. Hoje isso é zero na prática
-(último lançamento em 04/2026). A correção definitiva é passar a guardar lançamento por id estável e
-montar as páginas no servidor.
+**Lançamentos por identidade:** além do snapshot por página, cada página do extrato é gravada em
+`lalamove_uapi_statement_item`, uma linha por lançamento com chave de conteúdo
+(`cidade|data|valor|pedido|nome|usuário|recarga`). A edge `lalamove-uapi` monta a página a partir dessa
+tabela quando o gateway recusa a chamada de servidor, então a borda 30/31 deixa de existir. A tabela
+não tem TTL próprio: ela só é servida quando a página 1 do extrato está fresca (`SNAPSHOT_TTL_HOURS`),
+e páginas ainda não cobertas pela coleta continuam vindo do snapshot. Dois lançamentos idênticos no
+mesmo segundo (sem pedido e sem recarga) viram uma linha só — o gateway não manda id para separá-los.
 
 ## Token
 
@@ -96,3 +98,7 @@ Espere no log a linha do ciclo (`wallet_flow_list: ciclo coletou 30 pagina(s) at
 couber varredura, `wallet_flow_list: varredura profunda coletou <N> pagina(s) ate <data> (end|cap|failure)`.
 Depois de uma varredura, todo ciclo também imprime a cobertura apenas para leitura:
 `wallet_flow_list: cobertura de <N> pagina(s) ate <data> (varredura de <quando>)`.
+
+Depois de um ciclo, os lançamentos guardados por identidade aparecem em
+`select count(*), max(occurred_at_local) from lalamove_uapi_statement_item;` — a contagem deve chegar
+perto de `páginas coletadas × 20` e o maior `occurred_at_local` deve ser o lançamento mais novo.

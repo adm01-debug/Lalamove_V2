@@ -167,6 +167,12 @@ jobs:
       # credencial morre. Sem teste, um bug aqui revoga o token errado em producao.
       - name: Run geo-admin token rotation tests
         run: deno test supabase/functions/geo-admin/
+      # Extrato: fim do historico e pagina montada por identidade do lancamento.
+      # Regressao aqui faz o painel mostrar erro do gateway no fim do historico ou
+      # repetir/pular lancamento na fronteira entre janela recente e historico
+      # congelado. Nenhum destes arquivos era executado por workflow nenhum.
+      - name: Run lalamove-uapi tests (extrato, saude da sessao)
+        run: deno test --allow-net --allow-env supabase/functions/lalamove-uapi/
 
   sql-geo-tests:
     name: SQL Geo Trigger Tests

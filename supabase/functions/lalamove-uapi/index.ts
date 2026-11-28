@@ -17,6 +17,11 @@ import {
   statementItems,
   STATEMENT_PAGE_SIZE,
 } from "./statement-history.ts";
+import {
+  buildStatementPage,
+  statementPageRange,
+  type StatementItem,
+} from "./statement-items.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -357,6 +362,36 @@ async function beyondStatementEnd(
     return false;
   }
   return isBeyondHistory(statementItems(data?.payload), pageSize);
+}
+
+// Página do extrato montada pela identidade do lançamento já coletado: a chave
+// não depende da posição, então a página não repete nem pula lançamento na
+// fronteira entre a janela recente e o histórico congelado. Devolve null — e a
+// edge segue pelo snapshot — quando a faixa pedida ainda não está coberta pela
+// coleta. Página incompleta também devolve null: página curta é a única prova de
+// fim do histórico, então ela continua vindo do snapshot.
+async function statementPageFromItems(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  page: number,
+  pageSize: number,
+): Promise<unknown | null> {
+  const { from, to } = statementPageRange(page, pageSize);
+  const { data, error } = await supabase
+    .from('lalamove_uapi_statement_item')
+    .select('payload')
+    .order('occurred_at_local', { ascending: false })
+    .order('item_key', { ascending: false })
+    .range(from, to);
+
+  // PGRST103 = faixa pedida depois do último lançamento coletado; é o fluxo
+  // esperado da última página e não é falha.
+  if (error) {
+    if (error.code !== 'PGRST103') logger.error('Lançamentos do extrato indisponíveis:', error);
+    return null;
+  }
+  if (!data || data.length < pageSize) return null;
+  return buildStatementPage((data as { payload: StatementItem }[]).map((row) => row.payload));
 }
 
 // ========== UAPI Actions ==========
@@ -1006,9 +1041,26 @@ serve(async (req) => {
     // correspondente continua recebendo o erro real do gateway.
     let snapshotCollectedAt: string | null = null;
     let endOfHistory = false;
+    let servedFromItems = false;
     if (result.ret !== 0 && action) {
       const resource = SNAPSHOT_ACTIONS[action]?.(body);
-      if (resource) {
+      if (action === 'wallet-transactions') {
+        // A tabela de lançamentos não tem TTL próprio: só serve com a janela
+        // recente fresca, senão o operador exportaria extrato vencido sem aviso.
+        const recent = await loadSnapshot(supabase, 'wallet_flow_list');
+        if (recent) {
+          const itemsPage = await statementPageFromItems(
+            supabase,
+            Number(body.page_no ?? 1),
+            Number(body.page_size) || STATEMENT_PAGE_SIZE,
+          );
+          if (itemsPage) {
+            result = itemsPage as { ret: number; data?: unknown; msg?: string };
+            servedFromItems = true;
+          }
+        }
+      }
+      if (resource && !servedFromItems) {
         const snapshot = await loadSnapshot(supabase, resource);
         if (snapshot) {
           result = snapshot.payload as { ret: number; data?: unknown; msg?: string };
@@ -1034,6 +1086,7 @@ serve(async (req) => {
           tokenRefreshed: wasRefreshed,
           servedFromSnapshot: snapshotCollectedAt !== null,
           ...(snapshotCollectedAt && { snapshotCollectedAt }),
+          ...(servedFromItems && { servedFromItems: true }),
           ...(endOfHistory && { endOfHistory: true }),
         },
       }),
